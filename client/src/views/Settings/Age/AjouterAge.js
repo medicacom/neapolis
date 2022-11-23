@@ -1,0 +1,143 @@
+import React, { useEffect, useCallback } from "react";
+import Select from "react-select";
+
+// react-bootstrap components
+import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
+import { useParams, useHistory } from "react-router-dom";
+import {
+  ageAdded,
+  ageGetById,
+} from "../../../Redux/ageReduce";
+
+import { useDispatch } from "react-redux";
+import { verification } from "../../../Redux/usersReduce";
+import { toast, ToastContainer } from "react-toastify";
+import MaterialReactTable from 'material-react-table';
+
+function AjouterAge() {
+  const dispatch = useDispatch();
+  const location = useParams();
+  const navigate = useHistory();
+  if (isNaN(location.id) === true) document.title = "Ajouter age";
+  else document.title = "Modifier le age";
+  const [description, setDescription] = React.useState("");
+  const [id, setId] = React.useState(0);
+
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(
+        <strong>
+          <i className="fas fa-check-circle"></i>
+          {msg}
+        </strong>
+      );
+    else
+      toast.error(
+        <strong>
+          <i className="fas fa-exclamation-circle"></i>
+          {msg}
+        </strong>
+      );
+  };
+  function submitForm(event) {
+    dispatch(ageAdded({ description:description, id:id}));
+    if (isNaN(location.id) === true) {
+      notify(1, "Insertion avec succes")
+    } else {
+      notify(1, "Modifier avec succes");
+    }
+  }
+
+  useEffect(() => {
+    async function getAge() {
+      if (isNaN(location.id) === false) {
+        var age = await dispatch(ageGetById(location.id));
+        var entities = age.payload;
+        if (entities === false) {
+          listeAge();
+        } else {
+          setDescription(entities.description);
+          setId(location.id);
+        }
+      }
+    }
+    getAge();
+  }, [location.id, dispatch, navigate]);
+
+  function listeAge() {
+    navigate.push("/listAge");
+  }
+  return (
+    <>
+      <Container fluid>
+        <ToastContainer />
+        <div className="section-image">
+          <Container>
+            <Row>
+              <Col md="12">
+                <Button
+                  id="saveBL"
+                  className="btn-wd  mr-1 float-left"
+                  type="button"
+                  variant="success"
+                  onClick={listeAge}
+                >
+                  <span className="btn-label">
+                    <i className="fas fa-list"></i>
+                  </span>
+                  Retour à la liste
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col md="12">
+                <Form action="" className="form" method="">
+                  <Card>
+                    <Card.Header>
+                      <Card.Header>
+                        <Card.Title as="h4">
+                          {typeof location.id == "undefined"
+                            ? "Ajouter age"
+                            : "Modifier age"}
+                        </Card.Title>
+                      </Card.Header>
+                    </Card.Header>
+                    <Card.Body>
+                      <Row>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>Age * </label>
+                            <Form.Control
+                              defaultValue={description}
+                              placeholder="Age"
+                              type="text"
+                              onChange={(value) => {
+                                setDescription(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+
+                      <Button
+                        className="btn-fill pull-right"
+                        type="button"
+                        variant="success"
+                        onClick={submitForm}
+                      >
+                        Enregistrer
+                      </Button>
+                      <div className="clearfix"></div>
+                    </Card.Body>
+                  </Card>
+                </Form>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </Container>
+    </>
+  );
+}
+
+export default AjouterAge;
