@@ -16,13 +16,14 @@ import LoginPage from "./views/Settings/User/LoginPage";
 import jwt_decode from "jwt-decode";
 import RootBase from "./RootBase";
 import { openDB } from "idb";
+import Declaration from "./views/Global/Declaration";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
 var testLogin = 0;
-console.log("activeStep 123")
+console.log("onClick")
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -146,7 +147,8 @@ root.render(
         {testLogin === 0 ? (
           <Switch>
             <Route path="/login" render={() => <LoginPage />} key={"1"} />
-            <Redirect from="/" to="/login" />
+            <Route path="/declaration" render={() => <Declaration />} key={"2"} />
+            <Redirect from="/" to="/declaration" />
           </Switch>
         ) : (
           <RootBase id={id}/>

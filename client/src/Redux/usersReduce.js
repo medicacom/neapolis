@@ -301,7 +301,6 @@ export const userChangeEtat = createAsyncThunk(
 );
 
 export const validationUser = createAsyncThunk("user/validation", async (action) => {
-    console.log("validation",action)
     var users = await fetch(
       Configuration.BACK_BASEURL + "user/validation/" + action.id,
       {

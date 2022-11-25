@@ -28,7 +28,6 @@ function RootBase({id}) {
   const getRoutes = (routes) => {
     var id_role = onlineStatus === 1?users.user.id_role:usersOff.id_role;
     var obj = onlineStatus === 1?users:usersOff;
-    console.log("first",users,usersOff)
     return routes.map((prop, key) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
@@ -256,14 +255,12 @@ function RootBase({id}) {
     
     dispatch(getDetailUser(id)).then(val=>{
       if(val.payload.status){
-        console.log("1")
         setOnlineStatus(0);
         initRoot();
         initUser();
         setLoaderTable(false);
       }
       else {
-        console.log("12")
         setOnlineStatus(1);
         var res = val.payload.data;
         setUsers(res);

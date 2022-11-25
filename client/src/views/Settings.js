@@ -20,7 +20,6 @@ function Settings() {
   const [name, setName] = React.useState("");
 
   function submitForm() {
-    console.log("event")
     /* const dataArray = new FormData();
     dataArray.append("image", logo);
     dataArray.append("name", logo.name);

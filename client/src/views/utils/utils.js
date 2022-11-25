@@ -24,7 +24,6 @@ export async function send(id) {
 
   // Send Push Notification
   console.log("Sending Push...");
-  console.log(Configuration.BACK_BASEURL + "news/subscribe/"+id)
   await fetch(Configuration.BACK_BASEURL + "news/subscribe/"+id, {
     method: "POST",
     body: JSON.stringify(subscription),

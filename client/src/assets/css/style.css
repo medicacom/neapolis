@@ -846,11 +846,14 @@ a.dropdown-item {
 .declaration {
   background-color: #f1f1f1;
   border-radius: 50px;
-  margin: 0 auto;
+  margin: 50px auto;
   padding: 0 38px;
-  width: 40%;
+  width: 800px;
 }
-
+.submit-dec{
+  text-align: right;
+  padding-bottom: 15px;
+}
 .MuiStepConnector-horizontal.Mui-completed span, .MuiStepConnector-horizontal.Mui-active span {
   border-color: #0885c8;
   border-top-width: 3px;
@@ -859,7 +862,9 @@ a.dropdown-item {
 .main-panel .content {
   background-color: white !important;
 }
-
+.declaration .row .btn {
+  margin-top: 35px;
+}
 .MuiBox-root.css-8atqhb .card {
   background-color: transparent;
 }
@@ -869,6 +874,26 @@ a.dropdown-item {
 }
 
 .declaration img {
-  width: calc(100% - 100px);
+  width: 130px;
   margin: 20px 0;
+}
+
+.MuiButton-root {
+  background-color: #87cb16 !important;
+  border: 1px solid #87cb16 !important;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.css-8atqhb {
+  width: calc(100% - 100px);
+  margin: 20px auto;
+}
+
+.declaration .container-fluid {
+  padding: 0;
+}
+
+.declaration .container {
+  padding: 0;
 }

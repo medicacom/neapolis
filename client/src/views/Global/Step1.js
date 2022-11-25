@@ -79,6 +79,21 @@ function Step1(props) {
                           </Form.Group>
                           <div className="error"></div>
                         </Col>
+                        <Col md="12">
+                          <Form.Group>
+                            <label>Password* </label>
+                            <Form.Control
+                              defaultValue={props.password}
+                              placeholder="Password"
+                              className="required"
+                              name="Password"
+                              type="password"
+                              onChange={(value) => {
+                                props.setPassword(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
                       </Row>
                       <Row>
                         <Col md="12">

@@ -14,7 +14,6 @@ import { fetchAnnee } from "../Redux/anneeReduce";
 import { fetchGouvernorat } from "../Redux/gouvernoratReduce";
 
 function Profile({ obj,onlineStatus }) {
-  console.log(obj)
   let db;
   const notify = (type, msg) => {
     if (type === 1)

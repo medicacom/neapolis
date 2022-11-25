@@ -73,16 +73,6 @@ function Inscription({ onlineStatus }) {
     label: "Specialite",
   });
   async function submitForm(event) {
-    console.log("submitForm",
-      nom,
-      prenom,
-      email,
-      tel,
-      login,
-      password,
-      role,
-      id_sp,
-      id_gouvernorat,)
     var required = document.getElementsByClassName("required");
     var testPassword = true;
     for (var i = 0; i < required.length + 1; i++) {
