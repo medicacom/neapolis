@@ -46,7 +46,7 @@ router.post("/addVoix_administration", auth, (req, res) => {
   }
 });
 
-router.post("/getActive", auth, (req, res) => {
+router.post("/getActive", (req, res) => {
   voix_administration
     .findAll({
       where: { etat: 1 },

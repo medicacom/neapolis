@@ -69,7 +69,7 @@ router.delete("/deleteIndication/:id", auth, (req, res) => {
   });
 });
 
-router.post("/getActive", auth, (req, res) => {
+router.post("/getActive", (req, res) => {
   indication
     .findAll({
       where: { etat: 1 },

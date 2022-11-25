@@ -46,7 +46,7 @@ router.post("/addEffet_indesirable", auth, (req, res) => {
   }
 });
 
-router.post("/getActive", auth, (req, res) => {
+router.post("/getActive", (req, res) => {
   effet_indesirable
     .findAll({
       where: { etat: 1 },

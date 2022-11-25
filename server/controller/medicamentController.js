@@ -100,7 +100,7 @@ router.post("/getMedicament", auth, (req, res) => {
     });
 });
 
-router.post("/getActive", auth, (req, res) => {
+router.post("/getActive", (req, res) => {
   medicament
     .findAll({
       where: { etat: 1 },

@@ -24,7 +24,7 @@ db.serialize(() => {
 db.close(); */
 app.use(cors());
 
-/* app.use(express.static(path.join(__dirname, "../client/build"))); */
+app.use(express.static(path.join(__dirname, "../client/build")));
 // Used for sending the Json Data to Node API 
 app.use(express.json());
 
@@ -43,10 +43,11 @@ app.use("/effet_indesirable/", require("./controller/effet_indesirableController
 app.use("/medicament/", require("./controller/medicamentController"));
 app.use("/specialite/", require("./controller/specialiteController"));
 app.use("/age/", require("./controller/ageController"));
+app.use("/declaration/", require("./controller/declarationController")); 
 
-/* app.get("*", (req, res) => { 
+app.get("*", (req, res) => { 
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-});  */
+}); 
 
 const PORT = 4000 || 5000 || 6000;
 app.listen(PORT, (err) =>

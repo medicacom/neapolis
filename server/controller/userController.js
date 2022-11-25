@@ -72,7 +72,6 @@ router.post("/addUser", (req, res) => {
   var id_sp = req.body.id_sp;
   var id_gouvernorat = req.body.id_gouvernorat;
   var valide = req.body.valide;
-  console.log("addUser",req.body)
   if (id == 0) {
     user
       .create({

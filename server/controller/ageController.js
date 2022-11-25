@@ -41,7 +41,7 @@ router.post("/addAge", auth, (req, res) => {
     });
   }
 });
-router.post("/allAge",auth, (req, res) => {
+router.post("/allAge",(req, res) => {
   age.findAll({order:["id"]}).then(function (r) {
     return res.status(200).send(r);
   });
