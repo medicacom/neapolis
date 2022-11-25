@@ -100,6 +100,16 @@ router.post("/getMedicament", auth, (req, res) => {
     });
 });
 
+router.post("/getActive", auth, (req, res) => {
+  medicament
+    .findAll({
+      where: { etat: 1 },
+    })
+    .then(function (r) {
+      return res.status(200).send(r);
+    });
+});
+
 router.put("/changeEtat/:id", auth, (req, res) => {
   var id = req.params.id;
   medicament.findOne({ where: { id: id } }).then(function (u) {

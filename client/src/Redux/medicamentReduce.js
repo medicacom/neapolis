@@ -41,8 +41,8 @@ export const medicamentDeleted = createAsyncThunk("medicament/deleteMedicament",
       'x-access-token':token
     },
   });
-  const rootBase = await response.json();
-  return rootBase;
+  const medicament = await response.json();
+  return medicament;
 });
 
 export const medicamentAdded = createAsyncThunk("medicament/addMedicament", async (action) => {
@@ -82,20 +82,23 @@ export const medicamentChangeEtat = createAsyncThunk(
     return medicament;
   }
 );
-
-/* export const subscribe = createAsyncThunk("medicament/subscribe", async (action) => {
-  const response = await fetch(Configuration.BACK_BASEURL + "medicament/subscribe", {
-    method: 'POST',
+export const getActiveMedicament = createAsyncThunk("medicament/getActive", async () => {
+  var medicament = await fetch(Configuration.BACK_BASEURL + "medicament/getActive", {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-access-token':token
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-access-token": token,
     },
-    body: JSON.stringify(action)
-  });
-  const medicament = await response.status;
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      return { status: 403, error: error };
+    });
   return medicament;
-}); */
+});
 
 const medicamentReduce = createSlice({
   name: "medicament",
@@ -104,18 +107,6 @@ const medicamentReduce = createSlice({
     loading: false,
   },
   reducers: {
-    /* medicamentDeleted(state, action) {
-      const { id } = action.payload;
-      fetch(Configuration.BACK_BASEURL + "medicament/deleteMedicament/"+id, {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'x-access-token':token
-        },
-      });
-    }, */
-
   },
   extraReducers: {
 

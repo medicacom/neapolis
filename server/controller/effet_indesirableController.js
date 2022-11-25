@@ -45,6 +45,16 @@ router.post("/addEffet_indesirable", auth, (req, res) => {
     });
   }
 });
+
+router.post("/getActive", auth, (req, res) => {
+  effet_indesirable
+    .findAll({
+      where: { etat: 1 },
+    })
+    .then(function (r) {
+      return res.status(200).send(r);
+    });
+});
 router.post("/allEffet_indesirable",auth, (req, res) => {
   effet_indesirable.findAll({order:["id"]}).then(function (r) {
     return res.status(200).send(r);

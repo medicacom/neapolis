@@ -8,9 +8,42 @@ import Typography from "@mui/material/Typography";
 // react component used to create alerts
 // react-bootstrap components
 import Step1 from "./Step1";
+import Step2 from "./Step2";
+import Step3 from "./Step3";
+import Step4 from "./Step4";
+import { useEffect, useCallback } from "react";
+import { fetchAge } from "../../Redux/ageReduce";
+import { getActiveMedicament } from "../../Redux/medicamentReduce";
+import { getActiveEffet } from "../../Redux/effet_indesirableReduce";
+import { getActiveIndication } from "../../Redux/indicationReduce";
+import { getActiveVoix } from "../../Redux/voix_administrationReduce";
+import { useDispatch } from "react-redux";
+import validator from "validator";
+import { toast, ToastContainer } from "react-toastify";
+import { Row, Col } from "react-bootstrap";
 
 function Declaration() {
-  const steps = ["1", "2", "3"];
+  const dispatch = useDispatch();
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(
+        <strong>
+          <i className="fas fa-check-circle"></i>
+          {msg}
+        </strong>
+      );
+    else
+      toast.error(
+        <strong>
+          <i className="fas fa-exclamation-circle"></i>
+          {msg}
+        </strong>
+      );
+  };
+  const steps = ["1", "2", "3", "4"];
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [completed, setCompleted] = React.useState({});
+  //step1
   const [nom, setNom] = React.useState("");
   const [prenom, setPrenom] = React.useState("");
   const [tel, setTel] = React.useState("");
@@ -19,9 +52,143 @@ function Declaration() {
     value: 0,
     label: "Specialite",
   });
+  //step2
+  const [initiales, setInitiales] = React.useState("");
+  const [age, setAge] = React.useState("");
+  const [sexe, setSexe] = React.useState("");
+  const [dateNaissance, setDateNaissance] = React.useState("");
+  const [agePatient, setAgePatient] = React.useState("");
+  const [ageCategorie, setAgeCategorie] = React.useState({
+    value: 0,
+    label: "Age",
+  });
+  const [optionsAge, setOptionsAge] = React.useState([
+    {
+      value: 0,
+      label: "Age",
+      isDisabled: true,
+    },
+  ]);
+  const [indication, setIndication] = React.useState({
+    value: 0,
+    label: "--Choissisez dans cette liste --",
+  });
+  const [optionsIndication, setOptionsIndication] = React.useState([
+    {
+      value: 0,
+      label: "--Choissisez dans cette liste --",
+      isDisabled: true,
+    },
+  ]);
 
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+  //step3
+  const [effet, setEffet] = React.useState({
+    value: 0,
+    label: "--Choissisez dans cette liste --",
+  });
+  const [optionsEffet, setOptionsEffet] = React.useState([
+    {
+      value: 0,
+      label: "--Choissisez dans cette liste --",
+      isDisabled: true,
+    },
+  ]);
+  const [dateDebut, setDateDebut] = React.useState("");
+  const [dateFin, setDateFin] = React.useState("");
+  const [information, setInformation] = React.useState("");
+  const [complementaires, setComplementaires] = React.useState("");
+  //step4
+  const [medicament, setMedicament] = React.useState({
+    value: 0,
+    label: "--Choissisez dans cette liste --",
+  });
+  const [optionsMedicament, setOptionsMedicament] = React.useState([
+    {
+      value: 0,
+      label: "--Choissisez dans cette liste --",
+      isDisabled: true,
+    },
+  ]);
+  const [dateDebutAdmin, setDateDebutAdmin] = React.useState("");
+  const [dateFinAdmin, setDateFinAdmin] = React.useState("");
+  const [numero, setNumero] = React.useState("");
+  const [posologie, setPosologie] = React.useState("");
+  const [voix, setVoix] = React.useState({
+    value: 0,
+    label: "--Choissisez dans cette liste --",
+  });
+  const [optionsVoix, setOptionsVoix] = React.useState([
+    {
+      value: 0,
+      label: "--Choissisez dans cette liste --",
+      isDisabled: true,
+    },
+  ]);
+
+  /** start Age **/
+  const getAges = useCallback(async () => {
+    var res = await dispatch(fetchAge());
+    var entities = res.payload;
+    var arrayOption = [];
+    arrayOption.push({ value: 0, label: "Age" });
+    entities.forEach((e) => {
+      arrayOption.push({ value: e.id, label: e.description });
+    });
+    setOptionsAge(arrayOption);
+  }, [dispatch]);
+  /** end Age **/
+
+  /** start Indication **/
+  const getIndication = useCallback(async () => {
+    var res = await dispatch(getActiveIndication());
+    var entities = res.payload;
+    var arrayOption = [];
+    arrayOption.push({ value: 0, label: "Indication" });
+    entities.forEach((e) => {
+      arrayOption.push({ value: e.id, label: e.description });
+    });
+    setOptionsIndication(arrayOption);
+  }, [dispatch]);
+  /** end Indication **/
+
+  /** start Effet **/
+  const getEffet = useCallback(async () => {
+    var res = await dispatch(getActiveEffet());
+    var entities = res.payload;
+    var arrayOption = [];
+    arrayOption.push({ value: 0, label: "Effet indesirables" });
+    entities.forEach((e) => {
+      arrayOption.push({ value: e.id, label: e.description });
+    });
+    setOptionsEffet(arrayOption);
+  }, [dispatch]);
+  /** end Effet **/
+
+  /** start Medicament **/
+  const getMedicament = useCallback(async () => {
+    var res = await dispatch(getActiveMedicament());
+    var entities = res.payload;
+    var arrayOption = [];
+    arrayOption.push({ value: 0, label: "Medicament" });
+    entities.forEach((e) => {
+      arrayOption.push({ value: e.id, label: e.nom });
+    });
+    setOptionsMedicament(arrayOption);
+  }, [dispatch]);
+  /** end Medicament **/
+
+  /** start Medicament **/
+  const getVoix = useCallback(async () => {
+    var res = await dispatch(getActiveVoix());
+    var entities = res.payload;
+    var arrayOption = [];
+    arrayOption.push({ value: 0, label: "Administré" });
+    entities.forEach((e) => {
+      arrayOption.push({ value: e.id, label: e.description });
+    });
+    setOptionsVoix(arrayOption);
+  }, [dispatch]);
+  /** end Medicament **/
 
   const totalSteps = () => {
     return steps.length;
@@ -54,67 +221,218 @@ function Declaration() {
   };
 
   const handleStep = (step) => () => {
+    /* var list = completed[index]; */
+    var list = { ...completed };
+    list[step] = true;
+    setCompleted(list);
     setActiveStep(step);
   };
 
   const handleComplete = () => {
-    console.log(nom,prenom,tel,email,specialite);
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
+    var test = true;
+    console.log(agePatient,typeof agePatient)
+    console.log(dateNaissance,typeof dateNaissance)
+    if (activeStep == 0) {
+      var id_sp = specialite.value;
+      if (
+        validator.isEmpty(nom) ||
+        validator.isEmpty(prenom) ||
+        validator.isEmpty(email) ||
+        id_sp === 0
+      ) {
+        notify(2, "Vérifier vos donnée");
+        test = false;
+      }
+    } else if (activeStep == 1){
+      var id_indication = indication.value;
+      if (
+        validator.isEmpty(initiales) ||
+        sexe === "" ||
+        age === "" ||
+        (age === 1 && validator.isEmpty(dateNaissance)) ||
+        (age === 2 && validator.isEmpty(agePatient)) ||
+        (age === 3 && ageCategorie.value === 0) ||
+        id_indication === 0
+      ) {
+        notify(2, "Vérifier vos donnée");
+        test = false;
+      }
+    } else if (activeStep == 2) {
+      var id_eff = effet.value;
+      if (
+        validator.isEmpty(dateDebut) ||
+        validator.isEmpty(dateFin) ||
+        validator.isEmpty(information) ||
+        validator.isEmpty(complementaires) ||
+        id_eff === 0
+      ) {
+        notify(2, "Vérifier vos donnée");
+        test = false;
+      }
+    } else if (activeStep == 3) {
+      var id_medicament = medicament.value;
+      var id_voix = voix.value;
+      if (
+        validator.isEmpty(dateDebutAdmin) ||
+        validator.isEmpty(dateFinAdmin) ||
+        validator.isEmpty(numero) ||
+        validator.isEmpty(posologie) ||
+        id_voix === 0 ||
+        id_medicament === 0
+      ) {
+        notify(2, "Vérifier vos donnée");
+        test = false;
+      }
+    }
+    if (test) {
+      const newCompleted = completed;
+      newCompleted[activeStep] = true;
+      setCompleted(newCompleted);
+      handleNext();
+    }
+    /* console.log(
+      nom,
+      prenom,
+      tel,
+      email,
+      specialite,
+      initiales,
+      age,
+      sexe,
+      dateNaissance,
+      agePatient,
+      ageCategorie,
+      indication,
+      effet,
+      dateDebut,
+      dateFin,
+      information,
+      complementaires,
+      medicament,
+      dateDebutAdmin,
+      dateFinAdmin,
+      voix
+    ); */
   };
 
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
   };
+
+  useEffect(() => {
+    getAges();
+    getIndication();
+    getEffet();
+    getMedicament();
+    getVoix();
+  }, [getAges, getIndication, getEffet, getMedicament, getVoix]);
   return (
     <>
-      <Box sx={{ width: "100%" }}>
-        <Stepper nonLinear activeStep={activeStep}>
-          {steps.map((label, index) => (
-            <Step key={label} completed={completed[index]}>
-              <StepButton color="inherit" onClick={handleStep(index)}>
-                {label}
-              </StepButton>
-            </Step>
-          ))}
-        </Stepper>
-        <div>
-          {allStepsCompleted() ? (
-            <React.Fragment>
-              <Typography sx={{ mt: 2, mb: 1 }}>
-                All steps completed - you&apos;re finished
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                <Box sx={{ flex: "1 1 auto" }} />
-                <Button onClick={handleReset}>Reset</Button>
-              </Box>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-                {/* Step {activeStep + 1} */}
-                {activeStep === 0 ? (
-                  <Step1
-                    nom={nom}
-                    setNom={setNom}
-                    prenom={prenom}
-                    setPrenom={setPrenom}
-                    tel={tel}
-                    setTel={setTel}
-                    email={email}
-                    setEmail={setEmail}
-                    specialite={specialite}
-                    setSpecialite={setSpecialite}
-                  ></Step1>
-                ) : (
-                  activeStep + 1
-                )}
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                <Button
+      <ToastContainer />
+      <div className="declaration">
+        <Row>
+          <Col md="6">
+            <img
+              src={require("../../assets/img/logo.png")}
+              alt="medicacom"
+            />
+          </Col>
+          <Col md="6">
+          </Col>
+        </Row>
+        <Box sx={{ width: "100%" }}>
+          <Stepper nonLinear activeStep={activeStep}>
+            {steps.map((label, index) => (
+              <Step key={label} completed={completed[index]}>
+                <StepButton color="inherit" /* onClick={handleStep(index)} */>
+                  {/* {label} */}
+                </StepButton>
+              </Step>
+            ))}
+          </Stepper>
+          <div>
+            {allStepsCompleted() ? (
+              <React.Fragment>
+                <Typography sx={{ mt: 2, mb: 1 }}>
+                  All steps completed - you&apos;re finished
+                </Typography>
+                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                  <Box sx={{ flex: "1 1 auto" }} />
+                  <Button onClick={handleReset}>Reset</Button>
+                </Box>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
+                  {/* Step {activeStep + 1} */}
+                  {activeStep === 0 ? (
+                    <Step1
+                      nom={nom}
+                      setNom={setNom}
+                      prenom={prenom}
+                      setPrenom={setPrenom}
+                      tel={tel}
+                      setTel={setTel}
+                      email={email}
+                      setEmail={setEmail}
+                      specialite={specialite}
+                      setSpecialite={setSpecialite}
+                    ></Step1>
+                  ) : activeStep === 1 ? (
+                    <Step2
+                      initiales={initiales}
+                      setInitiales={setInitiales}
+                      age={age}
+                      setAge={setAge}
+                      sexe={sexe}
+                      setSexe={setSexe}
+                      dateNaissance={dateNaissance}
+                      setDateNaissance={setDateNaissance}
+                      agePatient={agePatient}
+                      setAgePatient={setAgePatient}
+                      optionsAge={optionsAge}
+                      ageCategorie={ageCategorie}
+                      setAgeCategorie={setAgeCategorie}
+                      optionsIndication={optionsIndication}
+                      indication={indication}
+                      setIndication={setIndication}
+                    ></Step2>
+                  ) : activeStep === 2 ? (
+                    <Step3
+                      optionsEffet={optionsEffet}
+                      effet={effet}
+                      setEffet={setEffet}
+                      dateDebut={dateDebut}
+                      setDateDebut={setDateDebut}
+                      dateFin={dateFin}
+                      setDateFin={setDateFin}
+                      information={information}
+                      setInformation={setInformation}
+                      complementaires={complementaires}
+                      setComplementaires={setComplementaires}
+                    ></Step3>
+                  ) : (
+                    <Step4
+                      optionsMedicament={optionsMedicament}
+                      medicament={medicament}
+                      setMedicament={setMedicament}
+                      dateDebutAdmin={dateDebutAdmin}
+                      setDateDebutAdmin={setDateDebutAdmin}
+                      dateFinAdmin={dateFinAdmin}
+                      setDateFinAdmin={setDateFinAdmin}
+                      optionsVoix={optionsVoix}
+                      voix={voix}
+                      setVoix={setVoix}
+                      numero={numero}
+                      setNumero={setNumero}
+                      posologie={posologie}
+                      setPosologie={setPosologie}
+                    ></Step4>
+                  )}
+                </Typography>
+                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                  {/* <Button
                   color="inherit"
                   disabled={activeStep === 0}
                   onClick={handleBack}
@@ -126,30 +444,21 @@ function Declaration() {
                 <Button
                   onClick={handleNext}
                   sx={{ mr: 1 }}
-                  disabled={activeStep === 2}
+                  disabled={activeStep === 3}
                 >
                   Next
-                </Button>
-                {activeStep !== steps.length &&
-                  (completed[activeStep] ? (
-                    <Typography
-                      variant="caption"
-                      sx={{ display: "inline-block" }}
-                    >
-                      Step {activeStep + 1} already completed
-                    </Typography>
-                  ) : (
-                    <Button onClick={handleComplete}>
-                      {completedSteps() === totalSteps() - 1
-                        ? "Finish"
-                        : "Complete Step"}
-                    </Button>
-                  ))}
-              </Box>
-            </React.Fragment>
-          )}
-        </div>
-      </Box>
+                </Button> */}
+                  <Button onClick={handleComplete}>
+                    {completedSteps() === totalSteps() - 1
+                      ? "Finish"
+                      : "Suivant"}
+                  </Button>
+                </Box>
+              </React.Fragment>
+            )}
+          </div>
+        </Box>
+      </div>
     </>
   );
 }

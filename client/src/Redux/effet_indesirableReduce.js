@@ -82,20 +82,23 @@ export const effet_indesirableChangeEtat = createAsyncThunk(
     return effet_indesirable;
   }
 );
-
-/* export const subscribe = createAsyncThunk("effet_indesirable/subscribe", async (action) => {
-  const response = await fetch(Configuration.BACK_BASEURL + "effet_indesirable/subscribe", {
-    method: 'POST',
+export const getActiveEffet = createAsyncThunk("effet_indesirable/getActive", async () => {
+  var effet = await fetch(Configuration.BACK_BASEURL + "effet_indesirable/getActive", {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-access-token':token
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-access-token": token,
     },
-    body: JSON.stringify(action)
-  });
-  const effet_indesirable = await response.status;
-  return effet_indesirable;
-}); */
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      return { status: 403, error: error };
+    });
+  return effet;
+});
 
 const effet_indesirableReduce = createSlice({
   name: "effet_indesirable",

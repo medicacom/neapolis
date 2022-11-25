@@ -1,13 +1,12 @@
 import React, { useEffect, useCallback } from "react";
 import Select from "react-select";
 // react-bootstrap components
-import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
+import { Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { fetchSpecialite } from "../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
 
-function Inscription(props) {
-  console.log(props)
+function Step1(props) {
   const dispatch = useDispatch();
   const location = useParams();
   //input
@@ -141,4 +140,4 @@ function Inscription(props) {
   );
 }
 
-export default Inscription;
+export default Step1;

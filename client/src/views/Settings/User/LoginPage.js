@@ -124,9 +124,6 @@ function LoginPage() {
                     src={require("../../../assets/img/logo.png")}
                     alt="medicacom"
                   />
-                  {/* <Card.Header>
-                  <h3 className="header text-center">Connexion</h3>
-                </Card.Header> */}
                   <Card.Body>
                     <Tab.Container
                       id="icons-tabs-example"

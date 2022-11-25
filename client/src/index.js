@@ -22,7 +22,8 @@ var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
 var testLogin = 0;
-console.log("ListAge. ABD1")
+console.log("activeStep 123")
+
 openDB("medis", 1, {
   upgrade(db) {
 
