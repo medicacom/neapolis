@@ -26,7 +26,6 @@ import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
 
 function Declaration({obj}) {
-  console.log(obj)
   var token = localStorage.getItem("x-access-token");
   var id = 0;
   var nom_prenom = "";
@@ -53,7 +52,7 @@ function Declaration({obj}) {
         </strong>
       );
   };
-  const steps = ["Données notificateur", "Patient", "Médicament suspecté", "Effets indésirables"];
+  const steps = ["Données notificateur", "Patient", "Médicament suspect", "Effets indésirables"];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   //Donnes
@@ -263,23 +262,23 @@ function Declaration({obj}) {
       }
     } else if (activeStep == 2) {
       if (
-        validator.isEmpty(dateDebut) ||
-        validator.isEmpty(dateFin) ||
-        validator.isEmpty(information) ||
-        validator.isEmpty(complementaires) ||
-        id_eff === 0
-      ) {
-        notify(2, "Vérifier vos donnée");
-        test = false;
-      }
-    } else if (activeStep == 3) {
-      if (
         validator.isEmpty(dateDebutAdmin) ||
         validator.isEmpty(dateFinAdmin) ||
         validator.isEmpty(numero) ||
         validator.isEmpty(posologie) ||
         id_voix === 0 ||
         id_medicament === 0
+      ) {
+        notify(2, "Vérifier vos donnée");
+        test = false;
+      }
+    } else if (activeStep == 3) {
+      if (
+        validator.isEmpty(dateDebut) ||
+        validator.isEmpty(dateFin) ||
+        validator.isEmpty(information) ||
+        validator.isEmpty(complementaires) ||
+        id_eff === 0
       ) {
         notify(2, "Vérifier vos donnée");
         test = false;

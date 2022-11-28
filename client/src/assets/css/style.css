@@ -941,3 +941,6 @@ a.dropdown-item {
   color: #1983bc;
   font-weight: bold;
 }
+.pop-up-extra .col-md-4 strong {
+  font-weight: bold;
+}

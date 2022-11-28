@@ -26,12 +26,19 @@ function ListDeclaration() {
         accessorKey: "users.nom",
         Cell: ({ cell, row }) => (
           <div>
-            {cell.row.original.users.nom} {cell.row.original.users.prenom}
+            {cell.row.original.users
+              ? cell.row.original.users.nom +
+                " " +
+                cell.row.original.users.prenom
+              : cell.row.original.patients.passagers.nom +
+                " " +
+                cell.row.original.patients.passagers.prenom}
+            {/* {cell.row.original.users.nom} {cell.row.original.users.prenom} */}
           </div>
         ),
       },
       {
-        header: "Utilisateur",
+        header: "Patients",
         accessorKey: "patients.sexe",
         Cell: ({ cell, row }) => (
           <div>
@@ -105,7 +112,7 @@ function ListDeclaration() {
       <SweetAlert
         customClass="pop-up-extra"
         style={{ display: "block", marginTop: "-100px" }}
-        title={"Détail patient déclarer"}
+        title={"Détail déclaration"}
         onConfirm={() => hideAlert()}
         confirmBtnBsStyle="info"
         cancelBtnBsStyle="danger"
@@ -118,7 +125,10 @@ function ListDeclaration() {
             <ul>
               <li>
                 <strong>Nom personnel: </strong>
-                {data.users.nom + " " + data.users.prenom}
+                {data.users
+                  ? data.users.nom + " " + data.users.prenom
+                  : data.patients.passagers.nom + " " + data.patients.passagers.prenom}
+                {/* {data.users.nom + " " + data.users.prenom} */}
               </li>
               {/* <li>
                 <strong>Adresse email: </strong>
@@ -169,7 +179,7 @@ function ListDeclaration() {
             </ul>
           </Col>
           <Col md="4">
-            <h3>Médicament suspecté</h3>
+            <h3>Médicament suspect</h3>
             <ul>
               <li>
                 <strong>Nom du médicament: </strong>

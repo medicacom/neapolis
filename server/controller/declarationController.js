@@ -4,13 +4,15 @@ var patient = require("../models/patient");
 var rapport = require("../models/rapport");
 const auth = require("../middlewares/passport");
 const user = require("../models/user");
+const passager = require("../models/passager");
 const sendMail = require("./sendMailController");
+
 router.post("/addDeclaration", (req, res) => {
-  /* var nom = req.body.nom;
+  var nom = req.body.nom;
   var prenom = req.body.prenom;
   var tel = req.body.tel;
   var email = req.body.email;
-  var id_sp = req.body.id_sp; */
+  var id_sp = req.body.id_sp;
   var initiales = req.body.initiales;
   var age = req.body.age;
   var sexe = req.body.sexe;
@@ -31,52 +33,132 @@ router.post("/addDeclaration", (req, res) => {
   var posologie = req.body.posologie;
   var numero = req.body.numero;
 
-  patient
-    .create({
-      id_user: id_user,
-      initiales: initiales,
-      age: age,
-      sexe: sexe,
-      dateNaissance: dateNaissance,
-      agePatient: agePatient,
-      ageCategorie: ageCategorie != 0 ? ageCategorie : null,
-      id_indication: id_indication,
-    })
-    .then((p) => {
-      rapport
-        .create({
-          id_user: id_user,
-          id_patient: p.id,
-          id_eff: id_eff,
-          dateDebut: dateDebut,
-          dateFin: dateFin,
-          information: information,
-          complementaires: complementaires,
-          id_medicament: id_medicament,
-          dateDebutAdmin: dateDebutAdmin,
-          dateFinAdmin: dateFinAdmin,
-          id_voix: id_voix,
-          posologie:posologie,
-          numero:numero,
-        })
-        .then((r) => {
-          user.findOne({ where: { id_role: 1 } }).then(function (u) {
-            var msg = "";
-            var txt = "Il y a une nouvelle déclaration";
-            msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
-            sendMail("Déclaration", msg, u.email, u.nom);
-            return res.status(200).send(true);
+  if (id_user != 0) {
+    patient
+      .create({
+        id_user: id_user,
+        initiales: initiales,
+        age: age,
+        sexe: sexe,
+        dateNaissance: dateNaissance,
+        agePatient: agePatient,
+        ageCategorie: ageCategorie != 0 ? ageCategorie : null,
+        id_indication: id_indication,
+      })
+      .then((p) => {
+        rapport
+          .create({
+            id_user: id_user,
+            id_patient: p.id,
+            id_eff: id_eff,
+            dateDebut: dateDebut,
+            dateFin: dateFin,
+            information: information,
+            complementaires: complementaires,
+            id_medicament: id_medicament,
+            dateDebutAdmin: dateDebutAdmin,
+            dateFinAdmin: dateFinAdmin,
+            id_voix: id_voix,
+            posologie: posologie,
+            numero: numero,
+          })
+          .then((r) => {
+            user.findOne({ where: { id_role: 1 } }).then(function (u) {
+              var msg = "";
+              var txt = "Il y a une nouvelle déclaration";
+              msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
+              sendMail("Déclaration", msg, u.email, u.nom);
+              return res.status(200).send(true);
+            });
           });
-        });
-    })
-    .catch((error) => {
-      return res.status(403).send(error);
-    });
+      })
+      .catch((error) => {
+        return res.status(403).send(error);
+      });
+  } else {
+    passager
+      .create({
+        nom: nom,
+        prenom: prenom,
+        tel: tel,
+        email: email,
+        id_sp: id_sp,
+      })
+      .then((pa) => {
+        patient
+          .create({
+            id_passager: pa.id,
+            initiales: initiales,
+            age: age,
+            sexe: sexe,
+            dateNaissance: dateNaissance,
+            agePatient: agePatient,
+            ageCategorie: ageCategorie != 0 ? ageCategorie : null,
+            id_indication: id_indication,
+          })
+          .then((p) => {
+            rapport
+              .create({
+                id_patient: p.id,
+                id_eff: id_eff,
+                dateDebut: dateDebut,
+                dateFin: dateFin,
+                information: information,
+                complementaires: complementaires,
+                id_medicament: id_medicament,
+                dateDebutAdmin: dateDebutAdmin,
+                dateFinAdmin: dateFinAdmin,
+                id_voix: id_voix,
+                posologie: posologie,
+                numero: numero,
+              })
+              .then((r) => {
+                user.findOne({ where: { id_role: 1 } }).then(function (u) {
+                  var msg = "";
+                  var txt = "Il y a une nouvelle déclaration";
+                  msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
+                  sendMail("Déclaration", msg, u.email, u.nom);
+                  return res.status(200).send(true);
+                });
+              });
+          })
+          .catch((error) => {
+            return res.status(403).send(error);
+          });
+      })
+      .catch((error) => {
+        return res.status(403).send(error);
+      });
+  }
 });
 
 router.get("/getDeclarations", auth, (req, res) => {
   rapport
-    .findAll({ include: ["users", "patients", "medicaments"] })
+    .findAll({
+      include: [
+        "medicaments",
+        "effet_indesirables",
+        "voix_administrations",
+        {
+          model: user,
+          as: "users",
+          include: ["specialites"],
+        },
+        {
+          model: patient,
+          as: "patients",
+          include: [
+            "ages",
+            "indications",
+            {
+              model: passager,
+              as: "passagers",
+              include: ["specialites"],
+            },
+          ],
+        },
+      ],
+    })
     .then(function (r) {
       return res.status(200).send(r);
     })
@@ -102,7 +184,15 @@ router.get("/getDeclarationsById/:id", auth, (req, res) => {
         {
           model: patient,
           as: "patients",
-          include: ["ages","indications"],
+          include: [
+            "ages",
+            "indications",
+            {
+              model: passager,
+              as: "passagers",
+              include: ["specialites"],
+            },
+          ],
         },
       ],
     })

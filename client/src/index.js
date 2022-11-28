@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,14 +17,13 @@ import jwt_decode from "jwt-decode";
 import RootBase from "./RootBase";
 import { openDB } from "idb";
 import Declaration from "./views/Global/Declaration";
-import NotFound from "./views/NotFound";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
 var testLogin = 0;
-console.log("pop-up-extra")
+console.log("patientspatients")
 
 openDB("medis", 1, {
   upgrade(db) {

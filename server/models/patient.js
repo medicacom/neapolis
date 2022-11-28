@@ -3,6 +3,7 @@ var configuration = require("../config");
 var ages = require("./age");
 var user = require("./user");
 var indication = require("./indication");
+var passager = require("./passager");
 var config = configuration.connection;
 
 // create a sequelize instance with our local postgres database information.
@@ -82,6 +83,15 @@ var patient = sequelize.define(
         key: "id",
       },
     },
+    id_passager: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+      references: {
+        model: passager,
+        key: "id",
+      },
+    },
   },
 );
 
@@ -90,6 +100,8 @@ patient.belongsTo(user, { as: "users", foreignKey: "id_user" });
 patient.belongsTo(ages, { as: "ages", foreignKey: "ageCategorie" });
 
 patient.belongsTo(indication, { as: "indications", foreignKey: "id_indication" });
+
+patient.belongsTo(passager, { as: "passagers", foreignKey: "id_passager" });
 
 // create all the defined tables in the specified database.
 sequelize
