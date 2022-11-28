@@ -4,7 +4,7 @@
 }
 
 .bglogo img {
-  width: calc(100% - 50px);
+  width: 130px;
   text-align: center;
   margin: 0 auto;
   /* filter: brightness(0) invert(1);
@@ -58,7 +58,7 @@
 }
 
 .card.card-login img {
-  width: calc(100% - 100px);
+  width: 130px;
   text-align: center;
   margin: 40px auto;
   /* filter: brightness(0) invert(1);
@@ -580,7 +580,7 @@ a.dropdown-item {
 .sweet-alert ul {
   list-style: none;
   line-height: 2;
-  font-size: 26px;
+  font-size: 16px;
   text-align: left;
   padding-left: 30px;
 }
@@ -669,10 +669,12 @@ a.dropdown-item {
 }
 
 .footer-login .btn {
-  background: #61b827;
+  /* background: #61b827; */
   border: none;
   color: #fff;
   border-radius: 20px;
+  display: block;
+  margin: 10px auto;
 }
 
 .sidebar:before, body>.navbar-collapse:before {
@@ -850,10 +852,12 @@ a.dropdown-item {
   padding: 0 38px;
   width: 800px;
 }
-.submit-dec{
+
+.submit-dec {
   text-align: right;
   padding-bottom: 15px;
 }
+
 .MuiStepConnector-horizontal.Mui-completed span, .MuiStepConnector-horizontal.Mui-active span {
   border-color: #0885c8;
   border-top-width: 3px;
@@ -862,9 +866,11 @@ a.dropdown-item {
 .main-panel .content {
   background-color: white !important;
 }
+
 .declaration .row .btn {
   margin-top: 35px;
 }
+
 .MuiBox-root.css-8atqhb .card {
   background-color: transparent;
 }
@@ -896,4 +902,42 @@ a.dropdown-item {
 
 .declaration .container {
   padding: 0;
+}
+
+.pop-up-extra {
+  width: calc(100% - 350px) !important;
+  overflow-y: scroll !important;
+  padding: 0 !important;
+}
+
+.pop-up-extra .table-info, .pop-up-extra .table-info>td, .pop-up-extra .table-info>th {
+  background-color: #0885c8 !important;
+  color: white !important;
+}
+
+.pop-up-extra h2 {
+  display: block !important;
+  font-size: 30px !important;
+  font-weight: bold !important;
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+  position: relative !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  background: #1983bc !important;
+  padding: 15px !important;
+  color: #fff !important;
+  margin-bottom: 25px !important;
+}
+
+.pop-up-extra .col-md-4 {
+  border-right: 3px solid #1983bc;
+}
+
+.pop-up-extra h3 {
+  font-size: 22px;
+  text-align: left;
+  padding-left: 30px;
+  color: #1983bc;
+  font-weight: bold;
 }

@@ -284,7 +284,7 @@ function RootBase({id}) {
   useEffect(() => {
     getUser()
     if(location.pathname === "/"){
-      window.location.replace("/profile");
+      window.location.replace("/declaration");
     }
     /* getUser(users); */
   }, []);

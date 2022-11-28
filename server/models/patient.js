@@ -2,11 +2,7 @@ var Sequelize = require("sequelize");
 var configuration = require("../config");
 var ages = require("./age");
 var user = require("./user");
-var medicament = require("./medicament");
-var effet_indesirable = require("./effet_indesirable");
 var indication = require("./indication");
-var voix = require("./voix_administration");
-const rapport = require("./rapport");
 var config = configuration.connection;
 
 // create a sequelize instance with our local postgres database information.
@@ -87,12 +83,17 @@ var patient = sequelize.define(
       },
     },
   },
-  { timestamps: false }
 );
+
+patient.belongsTo(user, { as: "users", foreignKey: "id_user" }); 
+
+patient.belongsTo(ages, { as: "ages", foreignKey: "ageCategorie" });
+
+patient.belongsTo(indication, { as: "indications", foreignKey: "id_indication" });
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync()
+  .sync({alter:true})
   .then(() => {
     console.log(
       "patients table has been successfully created, if one doesn't exist"

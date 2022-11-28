@@ -33,33 +33,6 @@ var rapport = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    id_user: {
-      type: Sequelize.INTEGER,
-      unique: false, 
-      allowNull: true,
-      references: {
-        model: user,
-        key: "id",
-      },
-    },
-    id_patient: {
-      type: Sequelize.INTEGER,
-      unique: false,
-      allowNull: true,
-      references: {
-        model: patient,
-        key: "id",
-      },
-    },
-    id_eff: {
-      type: Sequelize.INTEGER,
-      unique: false,
-      allowNull: true,
-      references: {
-        model: effet_indesirable,
-        key: "id",
-      },
-    },
     dateDebut: {
       type: Sequelize.STRING,
       unique: false,
@@ -80,14 +53,15 @@ var rapport = sequelize.define(
       unique: false,
       allowNull: true,
     },
-    id_medicament: {
-      type: Sequelize.INTEGER,
+    posologie: {
+      type: Sequelize.STRING,
       unique: false,
       allowNull: true,
-      references: {
-        model: medicament,
-        key: "id",
-      },
+    },
+    numero: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
     },
     dateDebutAdmin: {
       type: Sequelize.STRING,
@@ -99,12 +73,48 @@ var rapport = sequelize.define(
       unique: false,
       allowNull: true,
     },
+    id_medicament: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+      references: {
+        model: medicament,
+        key: "id",
+      },
+    },
+    id_user: {
+      type: Sequelize.INTEGER,
+      unique: false, 
+      allowNull: true,
+      references: {
+        model: user,
+        key: "id",
+      },
+    },
+    id_eff: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+      references: {
+        model: effet_indesirable,
+        key: "id",
+      },
+    },
     id_voix: {
       type: Sequelize.INTEGER,
       unique: false,
       allowNull: true,
       references: {
         model: voix,
+        key: "id",
+      },
+    },
+    id_patient: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+      references: {
+        model: patient,
         key: "id",
       },
     },
@@ -118,9 +128,13 @@ rapport.belongsTo(user, { as: "users", foreignKey: "id_user" });
 
 rapport.belongsTo(medicament, { as: "medicaments", foreignKey: "id_medicament" });
 
-// create all the defined tables in the specified database.
+rapport.belongsTo(effet_indesirable, { as: "effet_indesirables", foreignKey: "id_eff" });
+
+rapport.belongsTo(voix, { as: "voix_administrations", foreignKey: "id_voix" });
+
+// create all the defined tables in the specified database. 
 sequelize
-  .sync()
+  .sync({alter:true})
   .then(() => {
     console.log(
       "rapports table has been successfully created, if one doesn't exist"

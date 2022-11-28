@@ -17,13 +17,14 @@ import jwt_decode from "jwt-decode";
 import RootBase from "./RootBase";
 import { openDB } from "idb";
 import Declaration from "./views/Global/Declaration";
+import NotFound from "./views/NotFound";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
 var testLogin = 0;
-console.log("onClick")
+console.log("pop-up-extra")
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -134,7 +135,7 @@ if (token !== null) {
       window.location.replace("/login");
     }
   } catch (err) {
-    console.log("eee", err);
+    console.log("err", err);
   }
 }
 if (hrefURL === "/login") {
@@ -145,10 +146,14 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         {testLogin === 0 ? (
-          <Switch>
-            <Route path="/login" render={() => <LoginPage />} key={"1"} />
-            <Route path="/declaration" render={() => <Declaration />} key={"2"} />
-            <Redirect from="/" to="/declaration" />
+          <Switch>      
+            {/* <Route path="/">
+              <Declaration />
+            </Route>
+            <Redirect from="*" to="/login" /> */}
+            <Route exact  path="/" component={Declaration}/>
+            <Route path="/login"><LoginPage /></Route>
+            <Route path="/*"><Declaration /></Route>
           </Switch>
         ) : (
           <RootBase id={id}/>

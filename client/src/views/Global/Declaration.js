@@ -7,10 +7,10 @@ import StepButton from "@mui/material/StepButton";
 import Typography from "@mui/material/Typography";
 // react component used to create alerts
 // react-bootstrap components
-import Step1 from "./Step1";
-import Step2 from "./Step2";
-import Step3 from "./Step3";
-import Step4 from "./Step4";
+import Donnes from "./Donnes";
+import Patient from "./Patient";
+import Effets from "./Effets";
+import Medicament from "./Medicament";
 import { useEffect, useCallback } from "react";
 import { fetchAge } from "../../Redux/ageReduce";
 import { getActiveMedicament } from "../../Redux/medicamentReduce";
@@ -23,8 +23,18 @@ import validator from "validator";
 import { toast, ToastContainer } from "react-toastify";
 import { Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
+import jwt_decode from "jwt-decode";
 
-function Declaration() {
+function Declaration({obj}) {
+  console.log(obj)
+  var token = localStorage.getItem("x-access-token");
+  var id = 0;
+  var nom_prenom = "";
+  if (token !== null){
+    var decoded = jwt_decode(token);
+    id = decoded.id;
+    nom_prenom = obj.user.nom + " " + obj.user.prenom;
+  }
   const dispatch = useDispatch();
   const navigate = useHistory();
   const notify = (type, msg) => {
@@ -43,10 +53,10 @@ function Declaration() {
         </strong>
       );
   };
-  const steps = ["1", "2", "3", "4"];
+  const steps = ["Données notificateur", "Patient", "Médicament suspecté", "Effets indésirables"];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
-  //step1
+  //Donnes
   const [nom, setNom] = React.useState("");
   const [prenom, setPrenom] = React.useState("");
   const [tel, setTel] = React.useState("");
@@ -56,7 +66,7 @@ function Declaration() {
     value: 0,
     label: "Specialite",
   });
-  //step2
+  //Patient
   const [initiales, setInitiales] = React.useState("");
   const [age, setAge] = React.useState("");
   const [sexe, setSexe] = React.useState("");
@@ -85,7 +95,7 @@ function Declaration() {
     },
   ]);
 
-  //step3
+  //Effets
   const [effet, setEffet] = React.useState({
     value: 0,
     label: "--Choissisez dans cette liste --",
@@ -101,7 +111,7 @@ function Declaration() {
   const [dateFin, setDateFin] = React.useState("");
   const [information, setInformation] = React.useState("");
   const [complementaires, setComplementaires] = React.useState("");
-  //step4
+  //Medicament
   const [medicament, setMedicament] = React.useState({
     value: 0,
     label: "--Choissisez dans cette liste --",
@@ -221,18 +231,6 @@ function Declaration() {
     setActiveStep(newActiveStep);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStep = (step) => () => {
-    /* var list = completed[index]; */
-    var list = { ...completed };
-    list[step] = true;
-    setCompleted(list);
-    setActiveStep(step);
-  };
-
   const handleComplete = () => {
     var test = true;
     var id_sp = specialite.value;
@@ -288,6 +286,7 @@ function Declaration() {
       } else {
         dispatch(
           declarationAdded({
+            id_user: id,
             nom: nom,
             prenom: prenom,
             tel: tel,
@@ -309,7 +308,8 @@ function Declaration() {
             dateDebutAdmin: dateDebutAdmin,
             dateFinAdmin: dateFinAdmin,
             id_voix: id_voix,
-            password: password,
+            numero:numero,
+            posologie:posologie
           })
         ).then((data) => {
           if (data.payload === true) notify(1, "Insertion avec succes");
@@ -324,24 +324,25 @@ function Declaration() {
     }
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
-  };
-
   useEffect(() => {
     getAges();
     getIndication();
     getEffet();
     getMedicament();
     getVoix();
+    if (token !== null){
+      var newCompleted = completed;
+      newCompleted[activeStep] = true;
+      setCompleted(newCompleted);
+      handleNext();
+    }
   }, [getAges, getIndication, getEffet, getMedicament, getVoix]);
 
   const onClick = () => {
     if(token === null) {
       navigate.push("/login");
     } else {      
-      navigate.push("/profile");
+      navigate.push("/listDeclaration");
     }
   };
   
@@ -360,7 +361,7 @@ function Declaration() {
               variant="success"
               onClick={onClick}
             >
-              {token !== null ? "Retour à la liste" : "Se connecter"}
+              {token !== null ? nom_prenom : "Se connecter"}
               {/* {completedSteps() === totalSteps() - 1 ? "Submit" : "Suivant"} */}
             </Button>
           </Col>
@@ -370,7 +371,7 @@ function Declaration() {
             {steps.map((label, index) => (
               <Step key={label} completed={completed[index]}>
                 <StepButton color="inherit" /* onClick={handleStep(index)} */>
-                  {/* {label} */}
+                  {label}
                 </StepButton>
               </Step>
             ))}
@@ -380,7 +381,7 @@ function Declaration() {
               <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
                 {/* Step {activeStep + 1} */}
                 {activeStep === 0 ? (
-                  <Step1
+                  <Donnes
                     nom={nom}
                     setNom={setNom}
                     prenom={prenom}
@@ -393,9 +394,9 @@ function Declaration() {
                     setSpecialite={setSpecialite}
                     password={password}
                     setPassword={setPassword}
-                  ></Step1>
+                  ></Donnes>
                 ) : activeStep === 1 ? (
-                  <Step2
+                  <Patient
                     initiales={initiales}
                     setInitiales={setInitiales}
                     age={age}
@@ -412,23 +413,9 @@ function Declaration() {
                     optionsIndication={optionsIndication}
                     indication={indication}
                     setIndication={setIndication}
-                  ></Step2>
+                  ></Patient>
                 ) : activeStep === 2 ? (
-                  <Step3
-                    optionsEffet={optionsEffet}
-                    effet={effet}
-                    setEffet={setEffet}
-                    dateDebut={dateDebut}
-                    setDateDebut={setDateDebut}
-                    dateFin={dateFin}
-                    setDateFin={setDateFin}
-                    information={information}
-                    setInformation={setInformation}
-                    complementaires={complementaires}
-                    setComplementaires={setComplementaires}
-                  ></Step3>
-                ) : (
-                  <Step4
+                  <Medicament
                     optionsMedicament={optionsMedicament}
                     medicament={medicament}
                     setMedicament={setMedicament}
@@ -443,7 +430,21 @@ function Declaration() {
                     setNumero={setNumero}
                     posologie={posologie}
                     setPosologie={setPosologie}
-                  ></Step4>
+                  ></Medicament>
+                ) : (
+                  <Effets
+                    optionsEffet={optionsEffet}
+                    effet={effet}
+                    setEffet={setEffet}
+                    dateDebut={dateDebut}
+                    setDateDebut={setDateDebut}
+                    dateFin={dateFin}
+                    setDateFin={setDateFin}
+                    information={information}
+                    setInformation={setInformation}
+                    complementaires={complementaires}
+                    setComplementaires={setComplementaires}
+                  ></Effets>
                 )}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>

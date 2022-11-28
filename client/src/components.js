@@ -52,6 +52,7 @@ import ListAge from "./views/Settings/Age/ListAge";
 
 //Global
 import Declaration from "./views/Global/Declaration";
+import ListDeclaration from "./views/Global/ListDeclaration";
 
 const Components = {
   ListUser,
@@ -80,6 +81,7 @@ const Components = {
   ListPersonel,
   Declaration,
   AjouterAge,
-  ListAge
+  ListAge,
+  ListDeclaration
 };
 export default Components;

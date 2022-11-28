@@ -18,7 +18,7 @@ export const declarationAdded = createAsyncThunk("declaration/addDeclaration", a
 
 export const getDeclarations = createAsyncThunk("declaration/getDeclarations", async () => {
   const response = await fetch(Configuration.BACK_BASEURL + "declaration/getDeclarations", {
-    method: 'POST',
+    method: 'get',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -26,9 +26,24 @@ export const getDeclarations = createAsyncThunk("declaration/getDeclarations", a
     },
 
   });
-  const age = await response.json();
-  return age;
+  const declaration = await response.json();
+  return declaration;
 });
+
+export const getDeclarationsById = createAsyncThunk("declaration/getDeclarationsById", async (id) => {
+  const response = await fetch(Configuration.BACK_BASEURL + "declaration/getDeclarationsById/"+id, {
+    method: 'get',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'x-access-token':token
+    },
+
+  });
+  const declaration = await response.json();
+  return declaration;
+});
+
 const declarationReduce = createSlice({
   name: "declaration",
   initialState: {
@@ -36,18 +51,6 @@ const declarationReduce = createSlice({
     loading: false,
   },
   reducers: {
-    /* declarationAdded(state, action) {
-      fetch(Configuration.BACK_BASEURL + "declaration/addDeclaration", {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'x-access-token':token
-        },
-        body: JSON.stringify(action.payload)
-      });
-    }, */
-
   },
   extraReducers: {    
   },

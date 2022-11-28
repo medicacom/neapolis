@@ -168,10 +168,18 @@ function LoginPage() {
                             <Button
                               className="btn-wd"
                               type="button"
-                              variant="success"
+                              variant="info"
                               onClick={submitForm}
                             >
                               Connexion
+                            </Button>
+                            <Button
+                              className="btn-wd"
+                              type="button"
+                              variant="info"
+                              onClick={()=>window.location.replace("/declaration")}
+                            >
+                              Déclaration
                             </Button>
                           </div>
                         </Tab.Pane>
