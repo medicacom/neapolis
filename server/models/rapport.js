@@ -112,6 +112,12 @@ var rapport = sequelize.define(
   { timestamps: false }
 );
 
+rapport.belongsTo(patient, { as: "patients", foreignKey: "id_patient" });
+
+rapport.belongsTo(user, { as: "users", foreignKey: "id_user" });
+
+rapport.belongsTo(medicament, { as: "medicaments", foreignKey: "id_medicament" });
+
 // create all the defined tables in the specified database.
 sequelize
   .sync()

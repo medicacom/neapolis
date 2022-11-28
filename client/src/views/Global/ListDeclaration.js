@@ -1,12 +1,11 @@
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback } from "react";
-import { fetchAge, deleteAge } from "../../../Redux/ageReduce";
+import { getDeclarations } from "../../Redux/declarationReduce";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { verification } from "../../../Redux/usersReduce";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { toast, ToastContainer } from "react-toastify";
-import MaterialReactTable from 'material-react-table';
+import MaterialReactTable from "material-react-table";
 import { useMemo } from "react";
 
 // core components
@@ -35,10 +34,28 @@ function ListDeclaration() {
     () => [
       //column definitions...
       {
-        header: "Age",
-        accessorKey: "age",
+        header: "Utilisateur",
+        accessorKey: "user.nom",
+        Cell: ({ cell, row }) => (
+          <div>
+            {cell.row.original.user.nom} {cell.row.original.user.prenom}
+          </div>
+        ),
       },
       {
+        header: "Utilisateur",
+        accessorKey: "patients.sexe",
+        Cell: ({ cell, row }) => (
+          <div>
+            {cell.row.original.patients.sexe === 1
+              ? "Homme"
+              : cell.row.original.patients.sexe === 2
+              ? "Femme"
+              : "Autre"}
+          </div>
+        ),
+      },
+      /* {
         accessorKey: 'id',
         header: 'actions',        
         Cell: ({ cell, row }) => (
@@ -53,22 +70,12 @@ function ListDeclaration() {
             >
               <i className="fa fa-edit" />
             </Button>
-            <Button
-              onClick={() => {
-                deleteMessage(cell.row.original.id);
-              }}
-              variant="danger"
-              size="sm"
-              className="text-danger btn-link delete"
-            >
-              <i className="fa fa-trash" />
-            </Button>
           </div>
         ),
-      },
+      }, */
       //end
     ],
-    [],
+    []
   );
   const [alert, setAlert] = React.useState(null);
   function ajouter() {
@@ -77,7 +84,7 @@ function ListDeclaration() {
 
   const getAge = useCallback(
     async (titre) => {
-      var age = await dispatch(fetchAge());
+      var age = await dispatch(getDeclarations());
       setEntities(age.payload);
     },
     [dispatch]
@@ -118,19 +125,21 @@ function ListDeclaration() {
       }
     });
   }
-  
-  function ListTable({list}){
-    return (<MaterialReactTable
-      columns={columns}
-      data={list}
-      enableColumnActions={true}
-      enableColumnFilters={true}
-      enablePagination={true}
-      enableSorting={true}
-      enableBottomToolbar={true}
-      enableTopToolbar={true}
-      muiTableBodyRowProps={{ hover: false }}
-    /> )
+
+  function ListTable({ list }) {
+    return (
+      <MaterialReactTable
+        columns={columns}
+        data={list}
+        enableColumnActions={true}
+        enableColumnFilters={true}
+        enablePagination={true}
+        enableSorting={true}
+        enableBottomToolbar={true}
+        enableTopToolbar={true}
+        muiTableBodyRowProps={{ hover: false }}
+      />
+    );
   }
   return (
     <>

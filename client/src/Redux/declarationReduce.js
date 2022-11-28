@@ -15,6 +15,20 @@ export const declarationAdded = createAsyncThunk("declaration/addDeclaration", a
   const declaration = await response.status;
   return declaration;
 });
+
+export const getDeclarations = createAsyncThunk("declaration/getDeclarations", async () => {
+  const response = await fetch(Configuration.BACK_BASEURL + "declaration/getDeclarations", {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'x-access-token':token
+    },
+
+  });
+  const age = await response.json();
+  return age;
+});
 const declarationReduce = createSlice({
   name: "declaration",
   initialState: {

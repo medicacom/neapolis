@@ -68,17 +68,16 @@ router.post("/addDeclaration", auth, (req, res) => {
               id_medicament: id_medicament,
               dateDebutAdmin: dateDebutAdmin,
               dateFinAdmin: dateFinAdmin,
-              id_voix: id_voix, 
+              id_voix: id_voix,
             })
             .then((r) => {
               user.findOne({ where: { etat: 1 } }).then(function (u) {
                 var msg = "";
-                var txt = "Il y a une nouvelle déclaration"
+                var txt = "Il y a une nouvelle déclaration";
                 msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
-                sendMail("Inscription",msg,u.email,u.nom); 
-                return res.status(200).send(true);    
-              })
-
+                sendMail("Inscription", msg, u.email, u.nom);
+                return res.status(200).send(true);
+              });
             });
         })
         .catch((error) => {
@@ -89,6 +88,11 @@ router.post("/addDeclaration", auth, (req, res) => {
       console.log(error);
       return res.status(400).send(error);
     });
+});
+router.post("/getDeclarations", auth, (req, res) => {
+  rapport.findAll({ include: ["users", "patients", "medicaments"] }).then(function (r) {
+    return res.status(200).send(r);
+  });
 });
 
 module.exports = router;

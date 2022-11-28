@@ -6,6 +6,7 @@ var medicament = require("./medicament");
 var effet_indesirable = require("./effet_indesirable");
 var indication = require("./indication");
 var voix = require("./voix_administration");
+const rapport = require("./rapport");
 var config = configuration.connection;
 
 // create a sequelize instance with our local postgres database information.
