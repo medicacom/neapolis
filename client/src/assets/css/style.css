@@ -884,13 +884,6 @@ a.dropdown-item {
   margin: 20px 0;
 }
 
-.MuiButton-root {
-  background-color: #87cb16 !important;
-  border: 1px solid #87cb16 !important;
-  color: #fff;
-  margin-bottom: 24px;
-}
-
 .css-8atqhb {
   width: calc(100% - 100px);
   margin: 20px auto;

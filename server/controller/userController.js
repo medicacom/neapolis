@@ -82,10 +82,10 @@ router.post("/addUser", (req, res) => {
         tel: tel,
         id_role: role,
         password: password,
-        id_gouvernorat:id_gouvernorat,
-        id_sp:id_sp,
+        id_gouvernorat: id_gouvernorat,
+        id_sp: id_sp,
         etat: 1,
-        valider:valide
+        valider: valide,
       })
       .then((u) => {
         return res.status(200).send(true);
@@ -116,8 +116,8 @@ router.post("/addUser", (req, res) => {
               tel: tel,
               id_role: role,
               password: password,
-              id_gouvernorat:id_gouvernorat,
-              id_sp:id_sp,
+              id_gouvernorat: id_gouvernorat,
+              id_sp: id_sp,
               etat: 1,
             },
             { where: { id: id } }
@@ -126,7 +126,7 @@ router.post("/addUser", (req, res) => {
             return res.status(200).send(true);
           })
           .catch((error) => {
-            console.log(error)
+            console.log(error);
             return res.status(400).send(error);
           });
       }
@@ -163,7 +163,6 @@ router.put("/changeEtat/:id", auth, (req, res) => {
 });
 
 router.put("/validation/:id", auth, (req, res) => {
-  console.log(req.body)
   var id = req.params.id;
   var valider = req.body.valider;
   var email = req.body.email;
@@ -181,9 +180,12 @@ router.put("/validation/:id", auth, (req, res) => {
         )
         .then((r2) => {
           var msg = "";
-          var txt = valider == 1?"Sujet :Valider d'inscription":"Sujet : Refuser d'inscription"
+          var txt =
+            valider == 1
+              ? "Sujet :Valider d'inscription"
+              : "Sujet : Refuser d'inscription";
           msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
-          sendMail("Inscription",msg,email,nom); 
+          sendMail("Inscription", msg, email, nom);
           return res.status(200).send(true);
         })
         .catch((error) => {
@@ -198,23 +200,25 @@ router.post("/allUser", auth, (req, res) => {
     .findAll({
       include: ["roles"],
       order: [["id", "desc"]],
-      where:{id_role:{ [Op.ne]: 2 }}
+      where: { id_role: { [Op.ne]: 2 } },
     })
     .then(function (r) {
       return res.status(200).send(r);
     });
 });
 
-router.get("/getPersonnel", auth, (req, res) => {
-  user
-    .findAll({
-      include: ["roles"],
-      order: [["id", "desc"]],
-      where:{ id_role: 2 }
-    })
-    .then(function (r) {
-      return res.status(200).send(r);
-    });
+router.get("/getPersonnel", auth, async (req, res) => {
+  var findValider = await user.findAll({
+    include: ["roles"],
+    order: [["id", "desc"]],
+    where: { id_role: 2, valider: 1 },
+  });
+  var findNonValider = await user.findAll({
+    include: ["roles"],
+    order: [["id", "desc"]],
+    where: { id_role: 2, valider: 0 },
+  });
+  return res.status(200).send({ findValider, findNonValider });
 });
 
 router.post("/getActive", auth, (req, res) => {
@@ -248,14 +252,19 @@ router.delete("/deleteUser/:id", auth, (req, res) => {
 
 router.post("/getUser", auth, (req, res) => {
   var id = req.headers["id"];
-  user.findOne({ where: { id: id },include:["roles","gouvernorats","specialites"] }).then(function (u1) {
-    if (!u1) {
-      return res.status(403).send(false);
-    } else {
-      return res.status(200).json({user:u1.dataValues})
-      /* return res.status(200).json(u1.dataValues); */
-    }
-  });
+  user
+    .findOne({
+      where: { id: id },
+      include: ["roles", "gouvernorats", "specialites"],
+    })
+    .then(function (u1) {
+      if (!u1) {
+        return res.status(403).send(false);
+      } else {
+        return res.status(200).json({ user: u1.dataValues });
+        /* return res.status(200).json(u1.dataValues); */
+      }
+    });
 });
 
 router.post("/login", (req, res) => {

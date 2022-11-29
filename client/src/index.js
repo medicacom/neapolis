@@ -23,7 +23,7 @@ var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
 var testLogin = 0;
-console.log("patientspatients")
+console.log("valider")
 
 openDB("medis", 1, {
   upgrade(db) {

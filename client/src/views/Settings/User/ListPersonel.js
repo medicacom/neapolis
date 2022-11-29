@@ -33,6 +33,7 @@ function ListPersonel({ onlineStatus }) {
   const navigate = useHistory();
   const dispatch = useDispatch();
   const [entities, setEntities] = React.useState([]);
+  const [entitiesNo, setEntitiesNo] = React.useState([]);
   const [columns] = React.useState([
     //column definitions...
     {
@@ -104,29 +105,32 @@ function ListPersonel({ onlineStatus }) {
     {
       accessorKey: "valider",
       header: "Validation",
-      Cell: ({ cell, row }) => (
-        <div className="actions-right block_action">
-          <Button
-            onClick={(event) => {
-              valideEtat(cell.row.original, 1);
-            }}
-            variant="success"
-            size="sm"
-          >
-            Valider <i className={"fa fa-check"} />
-          </Button>
-          <Button
-            onClick={(event) => {
-              valideEtat(cell.row.original, 2);
-            }}
-            variant="danger"
-            size="sm"
-            className={"btn-danger"}
-          >
-            Refuser <i className={"fa fa-times"} />
-          </Button>
-        </div>
-      ),
+      Cell: ({ cell, row }) =>
+        cell.row.original.valider === 0 ? (
+          <div className="actions-right block_action">
+            <Button
+              onClick={(event) => {
+                valideEtat(cell.row.original, 1);
+              }}
+              variant="success"
+              size="sm"
+            >
+              Valider <i className={"fa fa-check"} />
+            </Button>
+            <Button
+              onClick={(event) => {
+                valideEtat(cell.row.original, 2);
+              }}
+              variant="danger"
+              size="sm"
+              className={"btn-danger"}
+            >
+              Refuser <i className={"fa fa-times"} />
+            </Button>
+          </div>
+        ) : (
+          ""
+        ),
     },
     //end
   ]);
@@ -180,8 +184,15 @@ function ListPersonel({ onlineStatus }) {
     }
   }
 
-  function valideEtat(ligne,etat) {
-    dispatch(validationUser({ id: ligne.id, valider: etat, email: ligne.email, nom:ligne.nom + " " + ligne.prenom }))
+  function valideEtat(ligne, etat) {
+    dispatch(
+      validationUser({
+        id: ligne.id,
+        valider: etat,
+        email: ligne.email,
+        nom: ligne.nom + " " + ligne.prenom,
+      })
+    );
   }
 
   //storeUsers
@@ -219,8 +230,10 @@ function ListPersonel({ onlineStatus }) {
 
   const getUser = useCallback(async () => {
     var response = await dispatch(getPersonnel());
-    var resUsers = response.payload;
+    var resUsers = await response.payload.findValider;
+    var findNonValider = await response.payload.findNonValider;
     setEntities(resUsers);
+    setEntitiesNo(findNonValider);
     clearUsers(resUsers);
   }, [dispatch]);
 
@@ -279,21 +292,18 @@ function ListPersonel({ onlineStatus }) {
             </Button>
           </Col>
           <Col md="12">
-            <h4 className="title">Liste des personnel de santés</h4>
+            <h4 className="title">Liste des personnel de santés non valider</h4>
+            <Card className="card-header">
+              <Card.Body>
+                <ListTable list={entitiesNo}></ListTable>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md="12">
+            <h4 className="title">Liste des personnel de santés valider</h4>
             <Card className="card-header">
               <Card.Body>
                 <ListTable list={entities}></ListTable>
-                {/* <MaterialReactTable
-                  columns={columns}
-                  data={entities}
-                  enableColumnActions={true}
-                  enableColumnFilters={true}
-                  enablePagination={true}
-                  enableSorting={true}
-                  enableBottomToolbar={true}
-                  enableTopToolbar={true}
-                  muiTableBodyRowProps={{ hover: false }}
-                />  */}
               </Card.Body>
             </Card>
           </Col>
