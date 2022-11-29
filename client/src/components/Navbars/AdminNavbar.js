@@ -1,22 +1,29 @@
 import React from "react";
-import { Navbar, Container, Nav, Dropdown, Button, Col } from "react-bootstrap";
+import {
+  Navbar,
+  Container,
+  Nav,
+  Dropdown,
+  Button,
+  Col,
+  Row,
+} from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { anneeAdded, fetchAnnee } from "../../Redux/anneeReduce";
-import Select from "react-select";
+import {
+  setDefaultLanguage,
+  setLanguage,
+  useTranslation,
+} from "react-multi-lang";
 
-function Header({ users,onlineStatus }) {
+function Header({ users, onlineStatus }) {
+  setDefaultLanguage("en");
+  const t = useTranslation();
   var navigate = useHistory();
-  const dispatch = useDispatch();
-  const [annee, setAnnee] = React.useState();
-  const [optionsAnnee, setOptionsAnnee] = React.useState([
-    {
-      value: "",
-      label: "Annee",
-      isDisabled: true,
-    },
-  ]);
-  let nom = onlineStatus === 1 ?users.user.prenom + " " + users.user.nom:users.prenom + " " + users.nom;
+  let nom =
+    onlineStatus === 1
+      ? users.user.prenom + " " + users.user.nom
+      : users.prenom + " " + users.nom;
   /* let role = users.user.id_role;
   let id = users.user.id; */
   function LogOut(e) {
@@ -44,7 +51,7 @@ function Header({ users,onlineStatus }) {
     } */
     return "";
   };
- /*  const getAnnes = React.useCallback(async () => {
+  /*  const getAnnes = React.useCallback(async () => {
     var year = await dispatch(fetchAnnee());
     var arrayOption = [];
     var selected = null;
@@ -130,22 +137,41 @@ function Header({ users,onlineStatus }) {
             onClick={(e) => e.preventDefault()}
           ></Navbar.Brand> */}
         </div>
-        <Col md="3">
-          {/* <Select
-            className="react-select primary"
-            classNamePrefix="react-select"
-            name="singleSelect"
-            value={annee}
-            onChange={(value) => {
-              setAnnee(value);
-              updateAnnee(value);
-            }}
-            options={optionsAnnee}
-            placeholder="Annee"
-          /> */}
-        </Col>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto" navbar>
+            <Dropdown as={Nav.Item}>
+              <Dropdown.Toggle
+                aria-expanded={false}
+                aria-haspopup={true}
+                as={Nav.Link}
+                data-toggle="dropdown"
+                id="navbarDropdownMenuLink"
+                variant="default"
+                className="m-0"
+              >
+                <span className="no-icon">Langue</span>
+              </Dropdown.Toggle>
+              <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
+                <Dropdown.Item
+                  href="#"
+                  /* onClick={(e) => navigate.push("/profile")} */
+                >
+                  <img src={require("../../assets/img/en.png")} alt="medicacom" /> English
+                </Dropdown.Item>
+                <Dropdown.Item
+                  href="#"
+                  /* onClick={(e) => navigate.push("/profile")} */
+                >
+                  <img src={require("../../assets/img/fr.png")} alt="medicacom" /> Francais
+                </Dropdown.Item>
+                <Dropdown.Item
+                  href="#"
+                  /* onClick={(e) => navigate.push("/profile")} */
+                >
+                  <img src={require("../../assets/img/ar.png")} alt="medicacom" /> Arabe
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
                 aria-expanded={false}
@@ -159,13 +185,6 @@ function Header({ users,onlineStatus }) {
                 <span className="no-icon">{nom}</span>
               </Dropdown.Toggle>
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
-                <Dropdown.Item
-                  href="#"
-                  onClick={(e) => navigate.push("/Settings")}
-                >
-                  <i className="fas fa-users-cog"></i>
-                  Settings
-                </Dropdown.Item>
                 <Dropdown.Item
                   href="#"
                   onClick={(e) => navigate.push("/profile")}

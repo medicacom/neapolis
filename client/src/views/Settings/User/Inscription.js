@@ -378,7 +378,7 @@ function Inscription({ onlineStatus }) {
                           </Form.Group>
                         </Col>
                       </Row>
-                      <Row></Row>
+                      <br></br>
                       <Button
                         className="btn-fill pull-right"
                         type="button"

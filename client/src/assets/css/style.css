@@ -937,3 +937,7 @@ a.dropdown-item {
 .pop-up-extra .col-md-4 strong {
   font-weight: bold;
 }
+
+.dropdown-menu .dropdown-item img {
+  width: 20px;
+}

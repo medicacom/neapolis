@@ -25,11 +25,11 @@ import { Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
 
-function Declaration({obj}) {
+function Declaration({ obj }) {
   var token = localStorage.getItem("x-access-token");
   var id = 0;
   var nom_prenom = "";
-  if (token !== null){
+  if (token !== null) {
     var decoded = jwt_decode(token);
     id = decoded.id;
     nom_prenom = obj.user.nom + " " + obj.user.prenom;
@@ -52,7 +52,12 @@ function Declaration({obj}) {
         </strong>
       );
   };
-  const steps = ["Données notificateur", "Patient", "Médicament suspect", "Effets indésirables"];
+  const steps = [
+    "Données notificateur",
+    "Patient",
+    "Médicament suspect",
+    "Effets indésirables",
+  ];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   //Donnes
@@ -307,8 +312,8 @@ function Declaration({obj}) {
             dateDebutAdmin: dateDebutAdmin,
             dateFinAdmin: dateFinAdmin,
             id_voix: id_voix,
-            numero:numero,
-            posologie:posologie
+            numero: numero,
+            posologie: posologie,
           })
         ).then((data) => {
           if (data.payload === true) notify(1, "Insertion avec succes");
@@ -329,7 +334,7 @@ function Declaration({obj}) {
     getEffet();
     getMedicament();
     getVoix();
-    if (token !== null){
+    if (token !== null) {
       var newCompleted = completed;
       newCompleted[activeStep] = true;
       setCompleted(newCompleted);
@@ -338,13 +343,20 @@ function Declaration({obj}) {
   }, [getAges, getIndication, getEffet, getMedicament, getVoix]);
 
   const onClick = () => {
-    if(token === null) {
+    if (token === null) {
       navigate.push("/login");
-    } else {      
+    } else {
       navigate.push("/listDeclaration");
     }
   };
-  
+
+  const handleBack = () => {
+    var newCompleted = completed;
+    delete newCompleted[activeStep - 1]
+    setCompleted(newCompleted);    
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -353,7 +365,7 @@ function Declaration({obj}) {
           <Col md="6">
             <img src={require("../../assets/img/logo.png")} alt="medicacom" />
           </Col>
-          <Col md="6">            
+          <Col md="6">
             <Button
               className="btn-fill float-right"
               type="button"
@@ -361,7 +373,6 @@ function Declaration({obj}) {
               onClick={onClick}
             >
               {token !== null ? nom_prenom : "Se connecter"}
-              {/* {completedSteps() === totalSteps() - 1 ? "Submit" : "Suivant"} */}
             </Button>
           </Col>
         </Row>
@@ -369,7 +380,7 @@ function Declaration({obj}) {
           <Stepper nonLinear activeStep={activeStep}>
             {steps.map((label, index) => (
               <Step key={label} completed={completed[index]}>
-                <StepButton color="inherit" /* onClick={handleStep(index)} */>
+                <StepButton color="inherit">
                   {label}
                 </StepButton>
               </Step>
@@ -378,7 +389,6 @@ function Declaration({obj}) {
           <div>
             <React.Fragment>
               <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-                {/* Step {activeStep + 1} */}
                 {activeStep === 0 ? (
                   <Donnes
                     nom={nom}
@@ -446,50 +456,37 @@ function Declaration({obj}) {
                   ></Effets>
                 )}
               </Typography>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                {/* <Button
-                  color="inherit"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}
-                >
-                  Back
-                </Button>
-                <Box sx={{ flex: "1 1 auto" }} />
-                <Button
-                  onClick={handleNext}
-                  sx={{ mr: 1 }}
-                  disabled={activeStep === 3}
-                >
-                  Next
-                </Button> */}
-              </Box>
             </React.Fragment>
-            {/* {allStepsCompleted() ? (
-              <React.Fragment>
-                <Typography sx={{ mt: 2, mb: 1 }}>
-                  All steps completed - you&apos;re finished
-                </Typography>
-                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                  <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleReset}>Reset</Button>
-                </Box>
-              </React.Fragment>
-            ) : (""
-            )} */}
           </div>
         </Box>
-        <div className="submit-dec">
-          <Button
-            className="btn-fill"
-            type="button"
-            variant="success"
-            onClick={handleComplete}
-          >
-            {activeStep === 3 ? "Enregistrer" : "Suivant"}
-            {/* {completedSteps() === totalSteps() - 1 ? "Submit" : "Suivant"} */}
-          </Button>
-        </div>
+        <Row>
+          <Col md="6">
+            <div className="handleBack">
+              <Button
+                className="btn-fill"
+                type="button"
+                variant="success"
+                onClick={handleBack}
+              >
+                <i class="fas fa-angle-double-left"></i>
+                {"Précedent"}
+              </Button>
+            </div>
+          </Col>
+          <Col md="6">
+            <div className="submit-dec">
+              <Button
+                className="btn-fill"
+                type="button"
+                variant="success"
+                onClick={handleComplete}
+              >
+                {activeStep === 3 ? "Enregistrer" : "Suivant"}
+                <i class={activeStep < 3 ?"fas fa-angle-double-right" : "fas fa-save"}></i>
+              </Button>
+            </div>
+          </Col>
+        </Row>
       </div>
     </>
   );

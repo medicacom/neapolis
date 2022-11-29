@@ -117,7 +117,7 @@ function LoginPage() {
       <div className="full-gray section-image" data-color="black">
         <div className="content d-flex align-items-center p-0">
           <Container>
-            <Col className="mx-auto" lg="4" md="8">
+            <Col className="mx-auto" lg="5" md="8">
               <Form action="" className="form" method="" onSubmit={submitForm}>
                 <Card className={"card-login " + cardClasses}>
                   <img
