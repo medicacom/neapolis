@@ -24,8 +24,10 @@ import { toast, ToastContainer } from "react-toastify";
 import { Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
+import { useTranslation } from 'react-multi-lang'
 
 function Declaration({ obj }) {
+  const t = useTranslation()
   var token = localStorage.getItem("x-access-token");
   var id = 0;
   var nom_prenom = "";
@@ -53,10 +55,10 @@ function Declaration({ obj }) {
       );
   };
   const steps = [
-    "Données notificateur",
-    "Patient",
-    "Médicament suspect",
-    "Effets indésirables",
+    t('Declaration.data'),
+    t('Declaration.suspect'),
+    t('Declaration.drugs'),
+    t('Declaration.effects'),
   ];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
@@ -89,12 +91,12 @@ function Declaration({ obj }) {
   ]);
   const [indication, setIndication] = React.useState({
     value: 0,
-    label: "--Choissisez dans cette liste --",
+    label: t("select"),
   });
   const [optionsIndication, setOptionsIndication] = React.useState([
     {
       value: 0,
-      label: "--Choissisez dans cette liste --",
+      label: t("select"),
       isDisabled: true,
     },
   ]);
@@ -102,12 +104,12 @@ function Declaration({ obj }) {
   //Effets
   const [effet, setEffet] = React.useState({
     value: 0,
-    label: "--Choissisez dans cette liste --",
+    label: t("select"),
   });
   const [optionsEffet, setOptionsEffet] = React.useState([
     {
       value: 0,
-      label: "--Choissisez dans cette liste --",
+      label: t("select"),
       isDisabled: true,
     },
   ]);
@@ -118,12 +120,12 @@ function Declaration({ obj }) {
   //Medicament
   const [medicament, setMedicament] = React.useState({
     value: 0,
-    label: "--Choissisez dans cette liste --",
+    label: t("select"),
   });
   const [optionsMedicament, setOptionsMedicament] = React.useState([
     {
       value: 0,
-      label: "--Choissisez dans cette liste --",
+      label: t("select"),
       isDisabled: true,
     },
   ]);
@@ -133,12 +135,12 @@ function Declaration({ obj }) {
   const [posologie, setPosologie] = React.useState("");
   const [voix, setVoix] = React.useState({
     value: 0,
-    label: "--Choissisez dans cette liste --",
+    label: t("select"),
   });
   const [optionsVoix, setOptionsVoix] = React.useState([
     {
       value: 0,
-      label: "--Choissisez dans cette liste --",
+      label: t("select"),
       isDisabled: true,
     },
   ]);
@@ -372,7 +374,7 @@ function Declaration({ obj }) {
               variant="success"
               onClick={onClick}
             >
-              {token !== null ? nom_prenom : "Se connecter"}
+              {token !== null ? nom_prenom : t('sign-in')}
             </Button>
           </Col>
         </Row>
@@ -469,7 +471,7 @@ function Declaration({ obj }) {
                 onClick={handleBack}
               >
                 <i class="fas fa-angle-double-left"></i>
-                {"Précedent"}
+                  {t('back')}
               </Button>
             </div>
           </Col>
@@ -481,7 +483,7 @@ function Declaration({ obj }) {
                 variant="success"
                 onClick={handleComplete}
               >
-                {activeStep === 3 ? "Enregistrer" : "Suivant"}
+                {activeStep === 3 ? t('save') : t('next')}
                 <i class={activeStep < 3 ?"fas fa-angle-double-right" : "fas fa-save"}></i>
               </Button>
             </div>

@@ -17,13 +17,22 @@ import jwt_decode from "jwt-decode";
 import RootBase from "./RootBase";
 import { openDB } from "idb";
 import Declaration from "./views/Global/Declaration";
-
+import { setLanguage, setDefaultTranslations, setDefaultLanguage } from 'react-multi-lang'
+import en from './views/utils/en.json'
+import fr from './views/utils/fr.json'
 const root = ReactDOM.createRoot(document.getElementById("root"));
+setDefaultTranslations({fr, en})
+setDefaultLanguage('fr')
 var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
+let lang = window.localStorage.getItem('lang')
+if( lang )
+  setLanguage(lang)
+else
+  window.localStorage.setItem('lang', 'fr')
 var testLogin = 0;
-console.log("Langue")
+console.log("select1")
 
 openDB("medis", 1, {
   upgrade(db) {

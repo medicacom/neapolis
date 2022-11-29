@@ -74,7 +74,7 @@ medicaments.belongsTo(voix_administration, { as: "voix_administrations", foreign
 medicaments.belongsTo(indication, { as: "indications", foreignKey: "id_indication" });
 
 // create all the defined tables in the specified database.
-sequelize.sync({alter:true})
+sequelize.sync()
     .then(() => {
         console.log('medicaments table has been successfully created, if one doesn\'t exist'); 
     })

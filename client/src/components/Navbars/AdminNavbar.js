@@ -5,20 +5,11 @@ import {
   Nav,
   Dropdown,
   Button,
-  Col,
-  Row,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import {
-  setDefaultLanguage,
-  setLanguage,
-  useTranslation,
-} from "react-multi-lang";
 
 function Header({ users, onlineStatus }) {
-  setDefaultLanguage("en");
-  const t = useTranslation();
+  var lang = window.localStorage.getItem("lang");
   var navigate = useHistory();
   let nom =
     onlineStatus === 1
@@ -153,22 +144,46 @@ function Header({ users, onlineStatus }) {
               </Dropdown.Toggle>
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
                 <Dropdown.Item
+                  className={lang === "en"?"active_lang":""}
                   href="#"
-                  /* onClick={(e) => navigate.push("/profile")} */
+                  onClick={(e) => {
+                    window.localStorage.setItem("lang", "en");
+                    window.location.reload();
+                  }}
                 >
-                  <img src={require("../../assets/img/en.png")} alt="medicacom" /> English
+                  <img
+                    src={require("../../assets/img/en.png")}
+                    alt="medicacom"
+                  />
+                  English
                 </Dropdown.Item>
                 <Dropdown.Item
+                  className={lang === "fr"?"active_lang":""}
                   href="#"
-                  /* onClick={(e) => navigate.push("/profile")} */
+                  onClick={(e) => {
+                    window.localStorage.setItem("lang", "fr");
+                    window.location.reload();
+                  }}
                 >
-                  <img src={require("../../assets/img/fr.png")} alt="medicacom" /> Francais
+                  <img
+                    src={require("../../assets/img/fr.png")}
+                    alt="medicacom"
+                  />
+                  Francais
                 </Dropdown.Item>
                 <Dropdown.Item
+                  className={lang === "ar"?"active_lang":""}
                   href="#"
-                  /* onClick={(e) => navigate.push("/profile")} */
+                  onClick={(e) => {
+                    window.localStorage.setItem("lang", "ar");
+                    window.location.reload();
+                  }}
                 >
-                  <img src={require("../../assets/img/ar.png")} alt="medicacom" /> Arabe
+                  <img
+                    src={require("../../assets/img/ar.png")}
+                    alt="medicacom"
+                  />
+                  Arabe
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

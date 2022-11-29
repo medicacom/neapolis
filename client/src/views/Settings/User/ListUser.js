@@ -6,9 +6,10 @@ import { useHistory } from "react-router-dom";
 import MaterialReactTable from 'material-react-table';
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb";
-
+import { useTranslation } from 'react-multi-lang'
 // core components
 function ListUser({onlineStatus}) {
+  const t = useTranslation()
   let db;
   const notify = (type,msg) => {
     if(type === 1)
@@ -22,34 +23,34 @@ function ListUser({onlineStatus}) {
   const [columns] =  React.useState([
     //column definitions...
     {
-      header: "Nom",
+      header: t('User.name'),
       accessorKey: "nom",
     },
     {
-      header: "Prenom",
+      header: t('User.last_name'),
       accessorKey: "prenom",
     },
     {
-      header: "Login",
+      header: t('User.login'),
       accessorKey: "login",
     },
     {
-      header: "Role",
+      header: t('User.role'),
       accessorKey: "role",
       Cell: ({ cell }) => (onlineStatus === 1?cell.row.original.roles.nom:cell.row.original.nom_role),
     },
     {
-      header: "E-mail",
+      header: t('User.email'),
       accessorKey: "email",
     },
     {
-      header: "Etat",
+      header: t('User.state'),
       accessorKey: "etat",
       Cell: ({ cell }) => (cell.row.original.etat === 1?"Activé":"Désactivé"),
     },
     {
+      header: t('User.actions'),
       accessorKey: 'id',
-      header: 'actions',        
       Cell: ({ cell, row }) => (
         <div className="actions-right block_action">
           <Button
@@ -202,11 +203,11 @@ function ListUser({onlineStatus}) {
               <span className="btn-label">
                 <i className="fas fa-plus"></i>
               </span>
-              Ajouter un utilisateur
+                {t('User.add')}
             </Button>
           </Col>
           <Col md="12">
-            <h4 className="title">Liste des utilisateurs</h4>
+            <h4 className="title">{t('User.listU')}</h4>
             <Card className="card-header">
               <Card.Body>                
                 <ListTable list={entities}></ListTable>

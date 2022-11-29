@@ -14,8 +14,10 @@ import { fetchSpecialite } from "../../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import { useTranslation } from "react-multi-lang";
 
 function AjouterUser({ onlineStatus }) {
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -391,8 +393,8 @@ function AjouterUser({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter utilisateur"
-                            : "Modifier utilisateur"}
+                            ? t('User.add')
+                            : t('User.update')}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -400,10 +402,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Nom * </label>
+                            <label>{t('User.name')} * </label>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder="Nom"
+                              placeholder={t('User.name')}
                               name="Nom"
                               className="required"
                               type="text"
@@ -416,10 +418,10 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Prenom* </label>
+                            <label>{t('User.last_name')} </label>
                             <Form.Control
                               defaultValue={prenom}
-                              placeholder="Prenom"
+                              placeholder={t('User.last_name')}
                               name="Prenom"
                               className="required"
                               type="text"
@@ -434,10 +436,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Login* </label>
+                            <label>{t('User.login')}* </label>
                             <Form.Control
                               defaultValue={login}
-                              placeholder="Login"
+                              placeholder={t('User.login')}
                               className="required"
                               name="Login"
                               type="text"
@@ -455,7 +457,7 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Password* </label>
+                            <label>{t('User.password')}* </label>
                             <Form.Control
                               defaultValue={password}
                               placeholder="Password"
@@ -478,10 +480,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>E-mail* </label>
+                            <label>{t('User.email')}* </label>
                             <Form.Control
                               defaultValue={email}
-                              placeholder="E-mail"
+                              placeholder={t('User.email')}
                               name="Email"
                               className="required"
                               type="text"
@@ -499,9 +501,9 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group id="roleClass">
-                            <label>Role* </label>
+                            <label>{t('User.role')}* </label>
                             <Select
-                              placeholder="Role"
+                              placeholder={t('User.role')}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={roleSelect}
@@ -520,9 +522,9 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group id="roleClass">
-                            <label>Gouvernorat* </label>
+                            <label>{t('User.gouvernorat')}* </label>
                             <Select
-                              placeholder="Gouvernorat"
+                              placeholder={t('User.gouvernorat')}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={gouvernoratSelect}
@@ -535,9 +537,9 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group id="roleClass">
-                            <label>Specialite </label>
+                            <label>{t('User.specialite')} </label>
                             <Select
-                              placeholder="Specialite"
+                              placeholder={t('User.specialite')}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={specialiteSelect}
@@ -552,10 +554,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Téléphone </label>
+                            <label>{t('User.tel')} </label>
                             <Form.Control
                               defaultValue={tel}
-                              placeholder="Téléphone"
+                              placeholder= {t('User.tel')}
                               type="number"
                               onChange={(value) => {
                                 setTel(value.target.value);
@@ -570,7 +572,7 @@ function AjouterUser({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t('save')}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

@@ -2,8 +2,10 @@ import React from "react";
 // react-bootstrap components
 import { Card, Form, Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
+import { useTranslation } from "react-multi-lang";
 
 function Step4(props) {
+  const t = useTranslation();
   return (
     <>
       <Container fluid>
@@ -17,11 +19,9 @@ function Step4(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>
-                              Nom du médicament suspecté *
-                            </label>
+                            <label>{t("Declaration.name_drug")} *</label>
                             <Select
-                              placeholder="--Choissisez dans cette liste --"
+                              placeholder={t("select")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               defaultValue={props.medicament}
@@ -37,7 +37,7 @@ function Step4(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>Numéro du lot* </label>
+                            <label>{t("Declaration.numero")}* </label>
                             <Form.Control
                               defaultValue={props.numero}
                               placeholder="Numéro du lot"
@@ -55,7 +55,7 @@ function Step4(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>Posologie* </label>
+                            <label>{t('Declaration.initials')}* </label>
                             <Form.Control
                               defaultValue={props.posologie}
                               placeholder="Posologie"
@@ -74,7 +74,7 @@ function Step4(props) {
                         <Col md="12">
                           <Form.Group>
                             <label>
-                              Comment le médicament a-t-il été administré ? *
+                              {t('Declaration.voice_txt')} ? *
                             </label>
                             <Select
                               placeholder="--Choissisez dans cette liste --"
@@ -92,15 +92,13 @@ function Step4(props) {
                       </Row>
                       <Row>
                         <Col md="12">
-                          <label>Début et fin des effets indésirables </label>
+                          <label>{t('Declaration.txt_date')} </label>
                         </Col>
                         <Col md="6">
                           <Form.Group>
-                            <label>Date de début </label>
+                            <label>{t('Declaration.start')} </label>
                             <Form.Control
                               defaultValue={props.dateDebutAdmin}
-                              placeholder="Date de début"
-                              name="Email"
                               className="required"
                               type="date"
                               onChange={(value) => {
@@ -111,10 +109,9 @@ function Step4(props) {
                         </Col>
                         <Col md="6">
                           <Form.Group>
-                            <label>Date de fin </label>
+                            <label>{t('Declaration.end')} </label>
                             <Form.Control
                               defaultValue={props.dateFinAdmin}
-                              placeholder="Date de fin"
                               type="date"
                               onChange={(value) => {
                                 props.setDateFinAdmin(value.target.value);

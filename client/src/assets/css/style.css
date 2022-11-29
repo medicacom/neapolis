@@ -940,4 +940,11 @@ a.dropdown-item {
 
 .dropdown-menu .dropdown-item img {
   width: 20px;
+  margin-top: 0;
+  margin-right: 10px;
+}
+
+.active_lang {
+  background-color: #0885c870 !important;
+  color: white !important;
 }

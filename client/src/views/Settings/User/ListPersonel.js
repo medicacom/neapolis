@@ -10,9 +10,11 @@ import { useHistory } from "react-router-dom";
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb";
+import { useTranslation } from 'react-multi-lang'
 
 // core components
 function ListPersonel({ onlineStatus }) {
+  const t = useTranslation()
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -37,19 +39,19 @@ function ListPersonel({ onlineStatus }) {
   const [columns] = React.useState([
     //column definitions...
     {
-      header: "Nom",
+      header: t('User.name'),
       accessorKey: "nom",
     },
     {
-      header: "Prenom",
+      header: t('User.last_name'),
       accessorKey: "prenom",
     },
     {
-      header: "Login",
+      header: t('User.login'),
       accessorKey: "login",
     },
     {
-      header: "Role",
+      header: t('User.role'),
       accessorKey: "role",
       Cell: ({ cell }) =>
         onlineStatus === 1
@@ -57,11 +59,11 @@ function ListPersonel({ onlineStatus }) {
           : cell.row.original.nom_role,
     },
     {
-      header: "E-mail",
+      header: t('User.state'),
       accessorKey: "email",
     },
     {
-      header: "Etat",
+      header: t('User.actions'),
       accessorKey: "etat",
       Cell: ({ cell }) =>
         cell.row.original.etat === 1 ? "Activé" : "Désactivé",
@@ -103,8 +105,8 @@ function ListPersonel({ onlineStatus }) {
       ),
     },
     {
+      header: t('User.validation'),
       accessorKey: "valider",
-      header: "Validation",
       Cell: ({ cell, row }) =>
         cell.row.original.valider === 0 ? (
           <div className="actions-right block_action">
@@ -288,11 +290,11 @@ function ListPersonel({ onlineStatus }) {
               <span className="btn-label">
                 <i className="fas fa-plus"></i>
               </span>
-              Ajouter un personnel de santé
+              {t('User.add')}
             </Button>
           </Col>
           <Col md="12">
-            <h4 className="title">Liste des personnel de santés non valider</h4>
+            <h4 className="title">{t('User.listP')}</h4>
             <Card className="card-header">
               <Card.Body>
                 <ListTable list={entitiesNo}></ListTable>
@@ -300,7 +302,7 @@ function ListPersonel({ onlineStatus }) {
             </Card>
           </Col>
           <Col md="12">
-            <h4 className="title">Liste des personnel de santés valider</h4>
+            <h4 className="title">{t('User.listV')}</h4>
             <Card className="card-header">
               <Card.Body>
                 <ListTable list={entities}></ListTable>

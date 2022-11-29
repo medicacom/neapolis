@@ -2,8 +2,10 @@ import React from "react";
 // react-bootstrap components
 import { Card, Form, Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
+import { useTranslation } from "react-multi-lang";
 
 function Step3(props) {
+  const t = useTranslation();
   return (
     <>
       <Container fluid>
@@ -17,11 +19,9 @@ function Step3(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>
-                              Description des effets indésirables *
-                            </label>
+                            <label>{t("Declaration.effects")} *</label>
                             <Select
-                              placeholder="--Choissisez dans cette liste --"
+                              placeholder={t("select")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               defaultValue={props.effet}
@@ -36,14 +36,13 @@ function Step3(props) {
                       </Row>
                       <Row>
                         <Col md="12">
-                          <label>Début et fin des effets indésirables </label>
+                          <label>{t("Declaration.txt_date")} </label>
                         </Col>
                         <Col md="6">
                           <Form.Group>
-                            <label>Date de début </label>
+                            <label>{t("Declaration.start")} </label>
                             <Form.Control
                               defaultValue={props.dateDebut}
-                              placeholder="Date de début"
                               name="Email"
                               className="required"
                               type="date"
@@ -55,10 +54,9 @@ function Step3(props) {
                         </Col>
                         <Col md="6">
                           <Form.Group>
-                            <label>Date de fin </label>
+                            <label>{t("Declaration.end")} </label>
                             <Form.Control
                               defaultValue={props.dateFin}
-                              placeholder="Date de fin"
                               type="date"
                               onChange={(value) => {
                                 props.setDateFin(value.target.value);
@@ -71,11 +69,7 @@ function Step3(props) {
                         <Col md="12">
                           <Form.Group>
                             <label>
-                              Si vous ne connaissez pas la date exacte de début
-                              et/ou de fin des effets indésirables, vous pouvez
-                              donner plus d’information sur la relation
-                              temporelle ici. Veuillez le préciser pour chaque
-                              effet indésirable.
+                              {t("Declaration.text1")}
                             </label>
                             <Form.Control
                               defaultValue={props.information}
@@ -93,10 +87,7 @@ function Step3(props) {
                         <Col md="12">
                           <Form.Group>
                             <label>
-                              Examens complémentaires Si des tests ont été
-                              effectués,mentionnez également les résultats. Il
-                              peut s’agir d’analyses sanguines, d’une imagerie
-                              médicale, d’une biopsie ...
+                              {t("Declaration.text2")}
                             </label>
                             <Form.Control
                               defaultValue={props.complementaires}

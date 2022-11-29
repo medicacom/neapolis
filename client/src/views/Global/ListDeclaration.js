@@ -10,9 +10,11 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import { toast, ToastContainer } from "react-toastify";
 import MaterialReactTable from "material-react-table";
 import { useMemo } from "react";
+import { useTranslation } from 'react-multi-lang'
 
 // core components
 function ListDeclaration() {
+  const t = useTranslation()
   document.title = "Liste des ages";
   const dispatch = useDispatch();
   const navigate = useHistory();
@@ -22,7 +24,7 @@ function ListDeclaration() {
     () => [
       //column definitions...
       {
-        header: "Utilisateur",
+        header: t('Declaration.user'),
         accessorKey: "users.nom",
         Cell: ({ cell, row }) => (
           <div>
@@ -38,7 +40,7 @@ function ListDeclaration() {
         ),
       },
       {
-        header: "Patients",
+        header: t('Declaration.patients'),
         accessorKey: "patients.sexe",
         Cell: ({ cell, row }) => (
           <div>
@@ -51,11 +53,11 @@ function ListDeclaration() {
         ),
       },
       {
-        header: "Medicaments",
+        header: t('Declaration.drugs'),
         accessorKey: "medicaments.nom",
       },
       {
-        header: "Date",
+        header: t('Declaration.date'),
         accessorKey: "createdAt",
         Cell: ({ cell, row }) => (
           <div>
@@ -73,7 +75,7 @@ function ListDeclaration() {
         ),
       },
       {
-        header: "Détail",
+        header: t('Declaration.detail'),
         accessorKey: "id",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
@@ -121,7 +123,7 @@ function ListDeclaration() {
       >
         <Row>
           <Col md="4">
-            <h3>Patient</h3>
+            <h3>{t('Declaration.list')}</h3>
             <ul>
               <li>
                 <strong>Nom personnel: </strong>
@@ -143,7 +145,7 @@ function ListDeclaration() {
                 {data.users.specialites.nom}
               </li> */}
               <li>
-                <strong>Date: </strong>
+                <strong>{t('Declaration.date')}: </strong>
                 {new Date(
                   new Date(data.patients.createdAt).getTime() -
                     new Date(data.patients.createdAt).getTimezoneOffset() *
@@ -153,19 +155,19 @@ function ListDeclaration() {
                   .slice(0, 10)}
               </li>
               <li>
-                <strong>Initiales: </strong>
+                <strong>{t('Declaration.list')}: </strong>
                 {data.patients.initiales}
               </li>
               <li>
-                <strong>Sexe: </strong>
+                <strong>{t('Declaration.gendre')}: </strong>
                 {data.patients.sexe === 1
-                  ? "Homme"
+                  ? t('Declaration.man')
                   : data.patients.sexe === 2
-                  ? "Femme"
-                  : "Autre"}
+                  ? t('Declaration.woman')
+                  : t('Declaration.other')}
               </li>
               <li>
-                <strong>Âge du patient: </strong>
+                <strong>{t('Declaration.age')}: </strong>
                 {data.patients.age === 1
                   ? data.patients.dateNaissance
                   : data.patients.age === 2
@@ -173,153 +175,66 @@ function ListDeclaration() {
                   : data.patients.ages.description}
               </li>
               <li>
-                <strong>Indiquation: </strong>
+                <strong>{t('Declaration.indication')}: </strong>
                 {data.patients.indications.description}
               </li>
             </ul>
           </Col>
           <Col md="4">
-            <h3>Médicament suspect</h3>
+            <h3>{t('Declaration.suspect')}</h3>
             <ul>
               <li>
-                <strong>Nom du médicament: </strong>
+                <strong>{t('Declaration.name_drug')}: </strong>
                 {data.medicaments.nom}
               </li>
               <li>
-                <strong>Numéro du lot: </strong>
+                <strong>{t('Declaration.numero')}: </strong>
                 {data.numero}
               </li>
               <li>
-                <strong>Posologie: </strong>
+                <strong>{t('Declaration.dosage')}: </strong>
                 {data.posologie}
               </li>
               <li>
-                <strong>Voix administrations: </strong>
+                <strong>{t('Declaration.voice')}: </strong>
                 {data.voix_administrations.description}
               </li>
               <li>
-                <strong>Date de début: </strong>
+                <strong>{t('Declaration.start')}: </strong>
                 {data.dateDebutAdmin}
               </li>
               <li>
-                <strong>Date de fin: </strong>
+                <strong>{t('Declaration.end')}: </strong>
                 {data.dateFinAdmin}
               </li>
             </ul>
           </Col>
           <Col md="4">
-            <h3>Effets indésirables</h3>
+            <h3>{t('Declaration.effects')}</h3>
             <ul>
               <li>
-                <strong>Effets indésirables: </strong>
+                <strong>{t('Declaration.effects')}: </strong>
                 {data.effet_indesirables.description}
               </li>
               <li>
-                <strong>Date de début: </strong>
+                <strong>{t('Declaration.start')}: </strong>
                 {data.dateDebut}
               </li>
               <li>
-                <strong>Date de fin: </strong>
+                <strong>{t('Declaration.end')}: </strong>
                 {data.dateFin}
               </li>
               <li>
-                <strong>Information: </strong>
+                <strong>{t('Declaration.information')}: </strong>
                 {data.information}
               </li>
               <li>
-                <strong>Complémentaires: </strong>
+                <strong>{t('Declaration.complementary')}: </strong>
                 {data.complementaires}
               </li>
             </ul>
           </Col>
         </Row>
-        {/* <table className="table table-bordered">
-          <thead>
-            <tr className="table-info">
-              <th>Nom personnel</th>
-              <th>Date</th>
-              <th>Initiales</th>
-              <th>Sexe</th>
-              <th>Âge du patient</th>
-              <th>Indiquation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{data.users.nom + " " + data.users.prenom}</td>
-              <td>
-                {new Date(
-                  new Date(data.patients.createdAt).getTime() -
-                    new Date(data.patients.createdAt).getTimezoneOffset() *
-                      60000
-                )
-                  .toISOString()
-                  .slice(0, 10)}
-              </td>
-              <td>{data.patients.initiales}</td>
-              <td>
-                {data.patients.sexe === 1
-                  ? "Homme"
-                  : data.patients.sexe === 2
-                  ? "Femme"
-                  : "Autre"}
-              </td>
-              <td>
-                {data.patients.age === 1
-                  ? data.patients.dateNaissance
-                  : data.patients.age === 2
-                  ? data.patients.agePatient
-                  : data.patients.ages.description}
-              </td>
-              <td>{data.patients.indications.description}</td>
-            </tr>
-          </tbody>
-        </table>
-        <h2>Détail médicament</h2>
-        
-        <table className="table table-bordered">
-          <thead>
-            <tr className="table-info">
-              <th>Effets indésirables</th>
-              <th>Date de début</th>
-              <th>Date de fin</th>
-              <th>Information </th>
-              <th>Complémentaires </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{data.effet_indesirables.description}</td>
-              <td>{data.dateDebut}</td>
-              <td>{data.dateFin}</td>
-              <td>{data.information}</td>
-              <td>{data.complementaires}</td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <table className="table table-bordered">
-          <thead>
-            <tr className="table-info">
-              <th>Nom du médicament</th>
-              <th>Numéro du lot</th>
-              <th>Posologie</th>
-              <th>Voix administrations</th>
-              <th>Date de début</th>
-              <th>Date de fin</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{data.medicaments.nom}</td>
-              <td>{data.numero}</td>
-              <td>{data.posologie}</td>
-              <td>{data.voix_administrations.description}</td>
-              <td>{data.dateDebutAdmin}</td>
-              <td>{data.dateFinAdmin}</td>
-            </tr>
-          </tbody>
-        </table> */}
       </SweetAlert>
     );
   };
@@ -367,7 +282,7 @@ function ListDeclaration() {
             </Button>
           </Col>
           <Col md="12">
-            <h4 className="title">Liste des declarations</h4>
+            <h4 className="title">{t('Declaration.list')}</h4>
             <Card>
               <Card.Body>
                 <ListTable list={entities}></ListTable>

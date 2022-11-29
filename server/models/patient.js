@@ -105,7 +105,7 @@ patient.belongsTo(passager, { as: "passagers", foreignKey: "id_passager" });
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync({alter:true})
+  .sync()
   .then(() => {
     console.log(
       "patients table has been successfully created, if one doesn't exist"

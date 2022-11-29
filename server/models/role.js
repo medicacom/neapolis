@@ -48,7 +48,7 @@ var Role = sequelize.define(
 
 // create all the defined tables in the specified database. alter:true
 sequelize
-  .sync({alter:true}) 
+  .sync() 
   .then(() => {
     console.log(
       "Roles table has been successfully created, if one doesn't exist"

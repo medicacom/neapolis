@@ -2,8 +2,10 @@ import React, {  } from "react";
 // react-bootstrap components
 import { Card, Form, Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
+import { useTranslation } from 'react-multi-lang'
 
 function Step2(props) {
+  const t = useTranslation()
   return (
     <>
       <Container fluid>
@@ -17,10 +19,10 @@ function Step2(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>Initiales* </label>
+                            <label>{t('Declaration.initials')}* </label>
                             <Form.Control
                               defaultValue={props.initiales}
-                              placeholder="Nom"
+                              placeholder={t('Declaration.data')}
                               name="Nom"
                               className="required"
                               type="text"
@@ -32,7 +34,7 @@ function Step2(props) {
                           <div className="error"></div>
                         </Col>
                         <Col md="12">
-                          <label>Sexe* </label>
+                          <label>{t('Declaration.gendre')}* </label>
                           <Form.Check className="form-check-radio">
                             <Form.Check.Label>
                               <Form.Check.Input
@@ -43,7 +45,7 @@ function Step2(props) {
                                 onClick={()=>props.setSexe(1)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              Homme
+                              {t('Declaration.man')}
                             </Form.Check.Label>
                           </Form.Check>
                           <Form.Check className="form-check-radio">
@@ -56,7 +58,7 @@ function Step2(props) {
                                 onClick={()=>props.setSexe(2)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              Femme
+                              {t('Declaration.woman')}
                             </Form.Check.Label>
                           </Form.Check>
                           <Form.Check className="form-check-radio">
@@ -69,14 +71,14 @@ function Step2(props) {
                                 onClick={()=>props.setSexe(3)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              X
+                              {t('Declaration.other')}
                             </Form.Check.Label>
                           </Form.Check>
                         </Col>
                       </Row>
                       <Row>
                         <Col md="12">
-                          <label>Age du patient* </label>
+                          <label>{t('Declaration.age')}* </label>
                         </Col>
                         <Col md="12">
                           <Form.Check className="form-check-radio">
@@ -89,7 +91,7 @@ function Step2(props) {
                                 onClick={()=>props.setAge(1)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              Date de naissance
+                                {t('Declaration.date')}
                             </Form.Check.Label>
                           </Form.Check>
                         </Col>
@@ -130,7 +132,6 @@ function Step2(props) {
                             <Form.Group>
                               <Form.Control
                                 defaultValue={props.agePatient}
-                                placeholder="Age Patient"
                                 name="agePatient"
                                 className="required"
                                 type="text"
@@ -153,14 +154,14 @@ function Step2(props) {
                                 onClick={()=>props.setAge(3)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              Catégorie d'age
+                              {t('Declaration.category')}
                             </Form.Check.Label>
                           </Form.Check>
                         </Col>
                         {props.age ===3?
                           <Col md="12">
                             <Select
-                              placeholder="Catégorie d'age"
+                              placeholder={t('Declaration.category')}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               defaultValue={props.ageCategorie}
@@ -175,9 +176,9 @@ function Step2(props) {
                       </Row>
                       <Row>
                         <Col md="12">
-                          <label>Dans le cas d’un nouveau -né ou d’un nourrisson, indiquez si le médicament a été administré à/au* </label>
+                          <label>{t('Declaration.txt_indication')} </label>
                           <Select
-                            placeholder="--Choissisez dans cette liste --"
+                            placeholder={t("select")}
                             className="react-select primary"
                             classNamePrefix="react-select"
                             defaultValue={props.indication}
