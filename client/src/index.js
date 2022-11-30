@@ -26,13 +26,13 @@ setDefaultLanguage('fr')
 var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
-let lang = window.localStorage.getItem('lang')
+let lang = window.localStorage.getItem('lang');
 if( lang )
   setLanguage(lang)
 else
   window.localStorage.setItem('lang', 'fr')
 var testLogin = 0;
-console.log("select1")
+console.log("lang1")
 
 openDB("medis", 1, {
   upgrade(db) {

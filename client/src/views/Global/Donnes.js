@@ -5,8 +5,10 @@ import { Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { fetchSpecialite } from "../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
+import { useTranslation } from 'react-multi-lang'
 
 function Step1(props) {
+  const t = useTranslation()
   const dispatch = useDispatch();
   const location = useParams();
   //input
@@ -49,10 +51,10 @@ function Step1(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>Nom * </label>
+                            <label>{t('User.name')} * </label>
                             <Form.Control
                               defaultValue={props.nom}
-                              placeholder="Nom"
+                              placeholder={t('User.name')}
                               name="Nom"
                               className="required"
                               type="text"
@@ -65,10 +67,10 @@ function Step1(props) {
                         </Col>
                         <Col md="12">
                           <Form.Group>
-                            <label>Prenom* </label>
+                            <label>{t('User.last_name')}* </label>
                             <Form.Control
                               defaultValue={props.prenom}
-                              placeholder="Prenom"
+                              placeholder={t('User.last_name')}
                               name="Prenom"
                               className="required"
                               type="text"
@@ -79,29 +81,14 @@ function Step1(props) {
                           </Form.Group>
                           <div className="error"></div>
                         </Col>
-                        <Col md="12">
-                          <Form.Group>
-                            <label>Password* </label>
-                            <Form.Control
-                              defaultValue={props.password}
-                              placeholder="Password"
-                              className="required"
-                              name="Password"
-                              type="password"
-                              onChange={(value) => {
-                                props.setPassword(value.target.value);
-                              }}
-                            ></Form.Control>
-                          </Form.Group>
-                        </Col>
                       </Row>
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>E-mail* </label>
+                            <label>{t('User.email')}* </label>
                             <Form.Control
                               defaultValue={props.email}
-                              placeholder="E-mail"
+                              placeholder={t('User.email')}
                               name="Email"
                               className="required"
                               type="text"
@@ -113,10 +100,10 @@ function Step1(props) {
                         </Col>
                         <Col md="12">
                           <Form.Group>
-                            <label>Téléphone </label>
+                            <label>{t('User.tel')} </label>
                             <Form.Control
                               defaultValue={props.tel}
-                              placeholder="Téléphone"
+                              placeholder={t('User.tel')}
                               type="number"
                               onChange={(value) => {
                                 props.setTel(value.target.value);
@@ -128,9 +115,9 @@ function Step1(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group id="roleClass">
-                            <label>Specialite </label>
+                            <label>{t('User.specialite')} </label>
                             <Select
-                              placeholder="Specialite"
+                              placeholder={t('User.specialite')}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               defaultValue={props.specialite}

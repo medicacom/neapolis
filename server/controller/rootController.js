@@ -117,10 +117,12 @@ router.get("/getRootByRole/:role", auth, async (req, res) => {
     })
     if (getRootFils.length == 0) {
       //
-      var p =getRootPere[key].dataValues.name != "404 not found"? "/"+getRootPere[key].dataValues.path : "*";
+      var p =getRootPere[key].dataValues.name != "404 not found"? "/"+ getRootPere[key].dataValues.path : "*";
       arrayRoots.push({
         path: p,
         name: getRootPere[key].dataValues.name,
+        name_en: getRootPere[key].dataValues.name_en,
+        name_ar: getRootPere[key].dataValues.name_ar,
         icon: getRootPere[key].dataValues.icon,
         role: arrayRole,
         componentStr: getRootPere[key].dataValues.component,
@@ -139,6 +141,8 @@ router.get("/getRootByRole/:role", auth, async (req, res) => {
         arrayView.push({
           path: "/"+e.dataValues.path,
           name: e.dataValues.name,
+          name_en: e.dataValues.name_en,
+          name_ar: e.dataValues.name_ar,
           icon: e.dataValues.icon,
           role: arrayRoleFils,
           componentStr: e.dataValues.component,
@@ -149,6 +153,8 @@ router.get("/getRootByRole/:role", auth, async (req, res) => {
         collapse: true,
         path: "/"+getRootPere[key].dataValues.path,
         name: getRootPere[key].dataValues.name,
+        name_en: getRootPere[key].dataValues.name_en,
+        name_ar: getRootPere[key].dataValues.name_ar,
         state: "pere"+key,
         icon: getRootPere[key].dataValues.icon,
         type: getRootPere[key].dataValues.type,

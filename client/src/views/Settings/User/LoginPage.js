@@ -17,6 +17,7 @@ import {
 } from "react-bootstrap";
 import { openDB } from "idb/with-async-ittr";
 import Inscription from "./Inscription";
+import { useTranslation } from 'react-multi-lang'
 
 function LoginPage() {
   document.title = "NEAPOLIS";
@@ -115,11 +116,37 @@ function LoginPage() {
     <>
       <ToastContainer />
       <div className="full-gray section-image" data-color="black">
-        <div className="content d-flex align-items-center p-0">
+        <div className="content d-grid align-items-center p-0">
           <Container>
             <Col className="mx-auto" lg="5" md="8">
               <Form action="" className="form" method="" onSubmit={submitForm}>
                 <Card className={"card-login " + cardClasses}>
+                  <div className="flag">
+                    <img
+                      src={require("../../../assets/img/en.png")}
+                      alt="en"
+                      onClick={(e) => {
+                        window.localStorage.setItem("lang", "en");
+                        window.location.reload();
+                      }}
+                    />
+                    <img
+                      src={require("../../../assets/img/fr.png")}
+                      alt="fr"
+                      onClick={(e) => {
+                        window.localStorage.setItem("lang", "fr");
+                        window.location.reload();
+                      }}
+                    />
+                    <img
+                      src={require("../../../assets/img/ar.png")}
+                      alt="ar"
+                      onClick={(e) => {
+                        window.localStorage.setItem("lang", "ar");
+                        window.location.reload();
+                      }}
+                    />
+                  </div>
                   <img
                     src={require("../../../assets/img/logo.png")}
                     alt="medicacom"
@@ -136,9 +163,7 @@ function LoginPage() {
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                          <Nav.Link eventKey="info-icons">
-                            S'inscrire
-                          </Nav.Link>
+                          <Nav.Link eventKey="info-icons">S'inscrire</Nav.Link>
                         </Nav.Item>
                       </Nav>
                       <Tab.Content>
@@ -147,7 +172,6 @@ function LoginPage() {
                         </Tab.Pane>
                         <Tab.Pane eventKey="settings-icons">
                           <Form.Group>
-                            <label>Login</label>
                             <Form.Control
                               onKeyPress={enterKeyPressed}
                               placeholder="Login"
@@ -156,7 +180,6 @@ function LoginPage() {
                             ></Form.Control>
                           </Form.Group>
                           <Form.Group>
-                            <label>Mot de passe</label>
                             <Form.Control
                               placeholder="Password"
                               onKeyPress={enterKeyPressed}
@@ -177,7 +200,9 @@ function LoginPage() {
                               className="btn-wd"
                               type="button"
                               variant="info"
-                              onClick={()=>window.location.replace("/declaration")}
+                              onClick={() =>
+                                window.location.replace("/declaration")
+                              }
                             >
                               Déclaration
                             </Button>

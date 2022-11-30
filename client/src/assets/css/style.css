@@ -60,7 +60,7 @@
 .card.card-login img {
   width: 130px;
   text-align: center;
-  margin: 40px auto;
+  margin: 15px auto 30px;
   /* filter: brightness(0) invert(1);
   -webkit-filter: brightness(0) invert(1);
   -webkit-transition: all 0.3s; */
@@ -934,6 +934,7 @@ a.dropdown-item {
   color: #1983bc;
   font-weight: bold;
 }
+
 .pop-up-extra .col-md-4 strong {
   font-weight: bold;
 }
@@ -947,4 +948,22 @@ a.dropdown-item {
 .active_lang {
   background-color: #0885c870 !important;
   color: white !important;
+}
+.btn-success {
+  background-color: #87cb16 !important;
+}
+.d-grid {
+  display: grid;
+}
+
+.flag {
+  text-align: right;
+  margin-right: 16px;
+  margin-top: 14px;
+}
+
+.flag img {
+  width: 18px !important;
+  margin: 0 8px !important;
+  cursor: pointer;
 }

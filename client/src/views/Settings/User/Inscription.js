@@ -11,8 +11,10 @@ import { fetchSpecialite } from "../../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import { useTranslation } from 'react-multi-lang'
 
 function Inscription({ onlineStatus }) {
+  const t = useTranslation()
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -235,10 +237,9 @@ function Inscription({ onlineStatus }) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>Nom * </label>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder="Nom"
+                              placeholder={t('User.name')}
                               name="Nom"
                               className="required"
                               type="text"
@@ -251,10 +252,9 @@ function Inscription({ onlineStatus }) {
                         </Col>
                         <Col md="12">
                           <Form.Group>
-                            <label>Prenom* </label>
                             <Form.Control
                               defaultValue={prenom}
-                              placeholder="Prenom"
+                              placeholder={t('User.last_name')}
                               name="Prenom"
                               className="required"
                               type="text"
@@ -269,10 +269,9 @@ function Inscription({ onlineStatus }) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>Login* </label>
                             <Form.Control
                               defaultValue={login}
-                              placeholder="Login"
+                              placeholder={t('User.login')}
                               className="required"
                               name="Login"
                               type="text"
@@ -290,10 +289,9 @@ function Inscription({ onlineStatus }) {
                         </Col>
                         <Col md="12">
                           <Form.Group>
-                            <label>Password* </label>
                             <Form.Control
                               defaultValue={password}
-                              placeholder="Password"
+                              placeholder={t('User.password')}
                               className="required"
                               name="Password"
                               type="password"
@@ -313,10 +311,9 @@ function Inscription({ onlineStatus }) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>E-mail* </label>
                             <Form.Control
                               defaultValue={email}
-                              placeholder="E-mail"
+                              placeholder={t('User.email')}
                               name="Email"
                               className="required"
                               type="text"
@@ -334,10 +331,9 @@ function Inscription({ onlineStatus }) {
                         </Col>
                         <Col md="12">
                           <Form.Group>
-                            <label>Téléphone </label>
                             <Form.Control
                               defaultValue={tel}
-                              placeholder="Téléphone"
+                              placeholder={t('User.tel')}
                               type="number"
                               onChange={(value) => {
                                 setTel(value.target.value);
@@ -349,9 +345,8 @@ function Inscription({ onlineStatus }) {
                       <Row>
                         <Col md="12">
                           <Form.Group id="roleClass">
-                            <label>Gouvernorat* </label>
                             <Select
-                              placeholder="Gouvernorat"
+                              placeholder={t('User.gouvernorat')}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={gouvernoratSelect}
@@ -364,9 +359,8 @@ function Inscription({ onlineStatus }) {
                         </Col>
                         <Col md="12">
                           <Form.Group id="roleClass">
-                            <label>Specialite </label>
                             <Select
-                              placeholder="Specialite"
+                              placeholder={t('User.specialite')}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={specialiteSelect}
@@ -385,7 +379,7 @@ function Inscription({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t('save')}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

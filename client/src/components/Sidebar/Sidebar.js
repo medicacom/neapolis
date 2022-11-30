@@ -1,72 +1,39 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 // react-bootstrap components
 import { Collapse, Nav } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { openDB } from 'idb/with-async-ittr'; 
-import { updateDB } from "../../Redux/offlineReduce";
-function Sidebar({ background,users,onlineStatus }) {
+import { useSelector } from "react-redux";
+import { openDB } from "idb/with-async-ittr";
+function Sidebar({ background, users, onlineStatus }) {
   let db;
-  var ifConnected = window.navigator.onLine;
-  const dispatch = useDispatch();
+  let lang = window.localStorage.getItem("lang");
   let location = useLocation();
   const [state, setState] = React.useState({});
   /* const { entities } = useSelector((state) => state.settings); */
   const { rootBase } = useSelector((state) => state.rootBase);
-  var routes = rootBase?rootBase[0]:[];
+  var routes = rootBase ? rootBase[0] : [];
   const [routesIndex, setRoutesIndex] = React.useState([]);
   var token = localStorage.getItem("x-access-token");
-  var decoded = jwt_decode(token);
-  var id_role = onlineStatus === 1 ? users.user.id_role:users.id_role;
-  async function initRole() {
-    db = await openDB("medis", 1, {});
-    const tx = db.transaction('roles', 'readwrite');
-    let rolesStore = tx.objectStore('roles');
-    let roles = await rolesStore.getAll();
-    var insertRole = [];
-    var updateRole = [];
-    for (const key in roles) {
-      const element = roles[key];
-      const index = tx.store.index('id');
-      for await (const cursor of index.iterate(parseInt(element.id))) {
-        var objRole = { ...cursor.value };
-        if(element.saved === 0){        
-          insertRole.push({
-            nom: element.nom,
-            role: element.role,
-            order: element.order,          
-          });
-          objRole.saved =1;
-        } else if(element.updated === 1){
-          updateRole.push(element);
-          objRole.updated = 0;
-        }
-        cursor.update(objRole);
-      }
-    }
-    await tx.done;
-    dispatch(updateDB({ insertRole:insertRole, updateRole:updateRole,id:users.user.id }));
-  }
+  var id_role = onlineStatus === 1 ? users.user.id_role : users.id_role;
 
   async function initRoot() {
     db = await openDB("medis", 1, {});
-    const tx = db.transaction('rootBase', 'readwrite');
-    const index = tx.store.index('parent');
-    let store = tx.objectStore('rootBase');
+    const tx = db.transaction("rootBase", "readwrite");
+    const index = tx.store.index("parent");
+    let store = tx.objectStore("rootBase");
     let rootArray = await store.getAll();
     var arrayView = [];
     for (const key in rootArray) {
       var e = rootArray[key];
-      if(e.parent !==0) {
-        var rolesFils=e.role;
+      if (e.parent !== 0) {
+        var rolesFils = e.role;
         var splitRoleFils = rolesFils.split(",");
-        var arrayRoleFils=[];
-        splitRoleFils.forEach(element=>{
+        var arrayRoleFils = [];
+        splitRoleFils.forEach((element) => {
           arrayRoleFils.push(parseInt(element));
-        })
+        });
         arrayView.push({
-          path: "/"+e.path,
+          path: "/" + e.path,
           name: e.name,
           icon: e.icon,
           role: arrayRoleFils,
@@ -80,17 +47,17 @@ function Sidebar({ background,users,onlineStatus }) {
     var arrayParent = [];
     for await (const cursor of index.iterate(0)) {
       var objRole = { ...cursor.value };
-      const pos = arrayView.map(e => e.parent).indexOf(objRole.id);
-      
-      var rolesFils=objRole.role;
+      const pos = arrayView.map((e) => e.parent).indexOf(objRole.id);
+
+      var rolesFils = objRole.role;
       var splitRoleFils = rolesFils.split(",");
-      var arrayRole=[];
-      splitRoleFils.forEach(element=>{
+      var arrayRole = [];
+      splitRoleFils.forEach((element) => {
         arrayRole.push(parseInt(element));
-      })
-      if(pos === -1){
+      });
+      if (pos === -1) {
         var obj = {
-          path: "/"+objRole.path,
+          path: "/" + objRole.path,
           name: objRole.name,
           icon: objRole.icon,
           role: arrayRole,
@@ -102,13 +69,13 @@ function Sidebar({ background,users,onlineStatus }) {
       } else {
         var obj = {
           collapse: true,
-          path: "/"+objRole.path,
+          path: "/" + objRole.path,
           name: objRole.name,
-          state: "pere"+objRole.id,
+          state: "pere" + objRole.id,
           icon: objRole.icon,
           role: arrayRole,
           className: objRole.className,
-          views:arrayView
+          views: arrayView,
         };
         arrayParent.push(obj);
       }
@@ -116,7 +83,7 @@ function Sidebar({ background,users,onlineStatus }) {
     setRoutesIndex(arrayParent);
   }
   React.useEffect(() => {
-    if(onlineStatus === 0) {
+    if (onlineStatus === 0) {
       initRoot();
     }
     /* if(onlineStatus === 1){
@@ -141,7 +108,7 @@ function Sidebar({ background,users,onlineStatus }) {
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       var st = {};
-      if ((prop.role.includes(id_role)) || prop.role.includes(20)) {
+      if (prop.role.includes(id_role) || prop.role.includes(20)) {
         if (prop.redirect) {
           return null;
         }
@@ -164,7 +131,12 @@ function Sidebar({ background,users,onlineStatus }) {
               >
                 <i className={prop.icon}></i>
                 <p>
-                  {prop.name} <b className="caret"></b>
+                  {lang === "fr"
+                    ? prop.name
+                    : lang === "en"
+                    ? prop.name_en
+                    : prop.name_ar}
+                  <b className="caret"></b>
                 </p>
               </Nav.Link>
               <Collapse in={state[prop.state]}>
@@ -182,18 +154,30 @@ function Sidebar({ background,users,onlineStatus }) {
               {prop.icon ? (
                 <>
                   <i className={prop.icon} />
-                  <p>{prop.name}</p>
+                  <p>
+                    {lang === "fr"
+                      ? prop.name
+                      : lang === "en"
+                      ? prop.name_en
+                      : prop.name_ar}
+                  </p>
                 </>
               ) : (
                 <>
                   <span className="sidebar-mini">{prop.mini}</span>
-                  <span className="sidebar-normal">{prop.name}</span>
+                  <span className="sidebar-normal">
+                    {lang === "fr"
+                      ? prop.name
+                      : lang === "en"
+                      ? prop.name_en
+                      : prop.name_ar}
+                  </span>
                 </>
               )}
             </Nav.Link>
           </Nav.Item>
         );
-      } else {      
+      } else {
         return null;
       }
     });
@@ -222,21 +206,21 @@ function Sidebar({ background,users,onlineStatus }) {
         <div className="sidebar-wrapper">
           <div className="logo">
             <div className="bglogo">
-              <img src={require("../../assets/img/logo.png")} alt="medicacom"/>
+              <img src={require("../../assets/img/logo.png")} alt="medicacom" />
             </div>
           </div>
-          
-          {onlineStatus === 1 && routes.length !== 0?
-            <Nav as="ul">
-              {createLinks(routes)}
-            </Nav>
-          :""}
 
-          {onlineStatus === 0 && routesIndex.length !== 0?
-            <Nav as="ul">
-              {createLinks(routesIndex)}
-            </Nav>
-          :""}
+          {onlineStatus === 1 && routes.length !== 0 ? (
+            <Nav as="ul">{createLinks(routes)}</Nav>
+          ) : (
+            ""
+          )}
+
+          {onlineStatus === 0 && routesIndex.length !== 0 ? (
+            <Nav as="ul">{createLinks(routesIndex)}</Nav>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>

@@ -30,6 +30,16 @@ var Root = sequelize.define('roots', {
         unique: false,
         allowNull: true
     },
+	name_en: {
+        type: Sequelize.STRING,
+        unique: false,
+        allowNull: true
+    },
+	name_ar: {
+        type: Sequelize.STRING,
+        unique: false,
+        allowNull: true
+    },
     className: {
         type: Sequelize.STRING,
         unique: false,

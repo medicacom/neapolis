@@ -465,6 +465,7 @@ function Declaration({ obj }) {
           <Col md="6">
             <div className="handleBack">
               <Button
+                disabled={activeStep === 0?true:false}
                 className="btn-fill"
                 type="button"
                 variant="success"

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Navbar,
-  Container,
-  Nav,
-  Dropdown,
-  Button,
-} from "react-bootstrap";
+import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 
 function Header({ users, onlineStatus }) {
@@ -15,8 +9,7 @@ function Header({ users, onlineStatus }) {
     onlineStatus === 1
       ? users.user.prenom + " " + users.user.nom
       : users.prenom + " " + users.nom;
-  /* let role = users.user.id_role;
-  let id = users.user.id; */
+
   function LogOut(e) {
     e.preventDefault();
     localStorage.clear();
@@ -35,53 +28,8 @@ function Header({ users, onlineStatus }) {
   };
 
   const getBrandText = () => {
-    /* for (let i = 0; i < routes.length; i++) {
-      if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
-        return routes[i].name;
-      }
-    } */
     return "";
   };
-  /*  const getAnnes = React.useCallback(async () => {
-    var year = await dispatch(fetchAnnee());
-    var arrayOption = [];
-    var selected = null;
-    year.payload.forEach((element) => {
-      arrayOption.push({
-        value: element.annee,
-        label: element.annee,
-        selected: element.selected,
-        id: element.id,
-      });
-      if (!selected)
-        selected = {
-          value: element.annee,
-          label: element.annee,
-          selected: element.selected,
-          id: element.id,
-        };
-    });
-    var annee = localStorage.getItem("annee");
-    if (annee === null) {
-      setAnnee({ value: selected.value, label: selected.value });
-      localStorage.setItem("annee", selected.value);
-    } else {
-      setAnnee({ value: annee, label: annee });
-      localStorage.setItem("annee", annee);
-    }
-
-    setOptionsAnnee(arrayOption);
-  }, [dispatch]); */
-
-  /* React.useEffect(() => {
-    getAnnes();
-  }, [getAnnes]); */
-
-  function updateAnnee(value) {
-    /* dispatch(anneeAdded({ annee: value.annee, id: value.id, selected: 1 })); */
-    localStorage.setItem("annee", value.value);
-    window.location.reload();
-  }
 
   return (
     <Navbar bg="light" expand="lg">
@@ -144,7 +92,7 @@ function Header({ users, onlineStatus }) {
               </Dropdown.Toggle>
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
                 <Dropdown.Item
-                  className={lang === "en"?"active_lang":""}
+                  className={lang === "en" ? "active_lang" : ""}
                   href="#"
                   onClick={(e) => {
                     window.localStorage.setItem("lang", "en");
@@ -158,7 +106,7 @@ function Header({ users, onlineStatus }) {
                   English
                 </Dropdown.Item>
                 <Dropdown.Item
-                  className={lang === "fr"?"active_lang":""}
+                  className={lang === "fr" ? "active_lang" : ""}
                   href="#"
                   onClick={(e) => {
                     window.localStorage.setItem("lang", "fr");
@@ -172,7 +120,7 @@ function Header({ users, onlineStatus }) {
                   Francais
                 </Dropdown.Item>
                 <Dropdown.Item
-                  className={lang === "ar"?"active_lang":""}
+                  className={lang === "ar" ? "active_lang" : ""}
                   href="#"
                   onClick={(e) => {
                     window.localStorage.setItem("lang", "ar");

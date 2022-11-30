@@ -11,7 +11,6 @@ import { openDB } from 'idb/with-async-ittr';
 import { updateDB } from "./Redux/offlineReduce";
 
 function RootBase({id}) {
-  var ifConnected = window.navigator.onLine;
   let db;
   const location = useLocation();
   const dispatch = useDispatch();
