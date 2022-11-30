@@ -318,7 +318,10 @@ function Declaration({ obj }) {
             posologie: posologie,
           })
         ).then((data) => {
-          if (data.payload === true) notify(1, "Insertion avec succes");
+          notify(1, "Insertion avec succes");
+          setTimeout(async () => {
+            window.location.reload();
+          }, 1500);
         });
       }
     }
