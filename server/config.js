@@ -4,7 +4,7 @@ var config = {
   host: "localhost",
   password: "",
   port: "3306",
-  path:"http://localhost:4000/news/"
+  path:"http://localhost:4000/new/"
   /* base: "neapolis",
   root: "user",
   host: "km813502-001.eu.clouddb.ovh.net",

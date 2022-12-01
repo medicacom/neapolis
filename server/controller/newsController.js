@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 var news = require("../models/news");
+var news_user = require("../models/news_user");
 const auth = require("../middlewares/passport");
 const multer = require("multer");
 const webpush = require("web-push");
@@ -9,17 +10,36 @@ const publicVapidKey =
 const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
 resolve = require("path").resolve;
 var configuration = require("../config");
+const user = require("../models/user");
 var config = configuration.connection;
+var Sequelize = require("sequelize");
+const sequelize = new Sequelize(
+  config.base,
+  config.root,
+  config.password,
+  {
+    host: config.host,
+    port: config.port,
+    dialect: "mysql",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+    operatorsAliases: false,
+  }
+);
 
-webpush.setVapidDetails(
+/* webpush.setVapidDetails(
   "mailto:feriani.khalil2@gmail.com;dragonxi12341@gmail.com",
   publicVapidKey,
   privateVapidKey
-);
+); */
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./news");
+    cb(null, "./new");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -28,7 +48,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 // Desplay all lignes of client ...
-router.post("/saveFile", auth, upload.single("file"),(req, res) => {
+router.post("/saveFile", auth, upload.single("file"), (req, res) => {
   var filename = "";
   if (typeof req.file != "undefined") filename = req.file.filename;
   res.send({ filename: filename });
@@ -44,7 +64,16 @@ router.post("/addNews", auth, (req, res) => {
         file: req.body.filename,
       })
       .then((r) => {
-        return res.status(200).send({ data: r, msg: true });
+        var arrayInsert = [];
+        req.body.userSelect.forEach((element) => {
+          arrayInsert.push({
+            id_news: r.dataValues.id,
+            id_user: element.value,
+          });
+        });
+        news_user.bulkCreate(arrayInsert).then(() => {
+          return res.status(200).send({ data: r, msg: true });
+        });
       })
       .catch((error) => {
         return res.status(403).send({ error: error, msg: false });
@@ -141,20 +170,42 @@ router.post("/subscribe/:id", async (req, res) => {
   var findNews = await news.findOne({ where: { id: id } });
   // Send 201 - resource created
   res.status(201).json({});
-  console.log(config.path + findNews.dataValues.file)
-  // Create payload
-  const payload = JSON.stringify({
-    title: findNews.dataValues.titre,
-    body: {
-      body: findNews.dataValues.description,
-      icon: config.path + findNews.dataValues.file,
-      /* icon: "http://image.ibb.co/frYOFd/tmlogo.png", */
-    },
-  });
-  console.log(webpush);
-  // Pass object into sendNotification
-  webpush
-    .sendNotification(subscription, payload)
-    .catch((err) => console.error(err));
+  news_user
+    .findOne({
+      where: { id_news: id },
+      include: [
+        {
+          model: user,
+          as: "users",
+          attributes: [
+            [
+              sequelize.fn("GROUP_CONCAT", sequelize.col("users.email")),
+              "emailU",
+            ],
+          ],
+        },
+      ],
+    })
+    .then((val) => {
+      var email = (val.dataValues.users.dataValues.emailU).replaceAll(",",";");
+      // Create payload
+      const payload = JSON.stringify({
+        title: findNews.dataValues.titre,
+        body: {
+          body: findNews.dataValues.description,
+          icon: config.path + findNews.dataValues.file,
+          /* icon: "http://image.ibb.co/frYOFd/tmlogo.png", */
+        },
+      });
+      // Pass object into sendNotification
+      webpush.setVapidDetails(
+        "mailto:"+email,
+        publicVapidKey,
+        privateVapidKey
+      );
+      webpush
+        .sendNotification(subscription, payload)
+        .catch((err) => console.error(err));
+    });
 });
 module.exports = router;

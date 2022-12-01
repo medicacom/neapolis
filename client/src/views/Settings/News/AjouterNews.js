@@ -9,6 +9,8 @@ import { send } from "../../utils/utils";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import Select from "react-select";
+import { getPersonnel } from "../../../Redux/usersReduce";
 function AjouterNews({ onlineStatus }) {
   /* var ifConnected = window.navigator.onLine; */
   let db;
@@ -36,6 +38,15 @@ function AjouterNews({ onlineStatus }) {
   const [description, setDescription] = React.useState("");
   const [file, setFile] = React.useState("");
   const [id, setId] = React.useState(0);
+
+  const [options, setOptions] = React.useState([
+    {
+      value: "",
+      label: "Gouvernorat",
+      isDisabled: true,
+    },
+  ]);
+  const [userSelect, setUserSelect] = React.useState([]);
 
   async function saveNewsIndex() {
     db = await openDB("medis", 1, {});
@@ -76,13 +87,13 @@ function AjouterNews({ onlineStatus }) {
     const dataArray = new FormData();
     dataArray.append("file", file);
     if (onlineStatus === 1) {
-      if (date !== "" && description !== "" && titre !== "") {
+      if (date !== "" && description !== "" && titre !== "" && userSelect.length !== 0) {
         dispatch(saveFile({ dataArray })).then((value) => {
           console.log(value);
           var filename = value.payload.filename;
           if (filename !== "") {
             dispatch(
-              newsAdded({ date, titre, description, filename, id })
+              newsAdded({ date, titre, description, filename, id, userSelect })
             ).then((val) => {
               if (val.payload.msg === true) {
                 if (isNaN(location.id) === true) {
@@ -131,6 +142,18 @@ function AjouterNews({ onlineStatus }) {
     await tx.done;
   }
 
+  /** start Personnel **/
+  const getUser = useCallback(async () => {
+    var user = await dispatch(getPersonnel());
+    var entities = user.payload.findValider;
+    var arrayOption = [];
+    arrayOption.push({ value: 0, label: "Personnel" });
+    entities.forEach((e) => {
+      arrayOption.push({ value: e.id, label: e.nom });
+    });
+    setOptions(arrayOption);
+  }, [dispatch]);
+
   useEffect(() => {
     async function getNews() {
       if (isNaN(location.id) === false) {
@@ -142,6 +165,7 @@ function AjouterNews({ onlineStatus }) {
         setId(location.id);
       }
     }
+    getUser();
     if (onlineStatus === 1) getNews();
     else {
       if (isNaN(location.id) === false) initNews();
@@ -240,6 +264,24 @@ function AjouterNews({ onlineStatus }) {
                                 setFile(value.target.files[0]);
                               }}
                             ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className="pr-1" md="6">
+                          <Form.Group id="roleClass">
+                            <label>User* </label>
+                            <Select
+                              isMulti
+                              placeholder="User"
+                              className="react-select primary"
+                              classNamePrefix="react-select"
+                              value={userSelect}
+                              onChange={(value) => {
+                                setUserSelect(value);
+                              }}
+                              options={options}
+                            />
                           </Form.Group>
                         </Col>
                       </Row>

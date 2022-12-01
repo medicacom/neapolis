@@ -39,6 +39,7 @@ var news_user = sequelize.define('news_user', {
     id_news: {
       type: Sequelize.INTEGER,
       unique: false,
+      onDelete:"cascade",
       allowNull: false,
       references: {
         model: news,

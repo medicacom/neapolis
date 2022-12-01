@@ -32,7 +32,7 @@ if( lang )
 else
   window.localStorage.setItem('lang', 'fr')
 var testLogin = 0;
-console.log("value")
+console.log("findValider")
 
 openDB("medis", 1, {
   upgrade(db) {
