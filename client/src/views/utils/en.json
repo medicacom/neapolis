@@ -3,8 +3,45 @@
   "list": "Back to the list",
   "back": "back",
   "next": "next",
-  "sign-in": "Sign in",
-  "select": "--Choose from this list --",
+  "sign_in": "Sign in",
+  "register": "register",
+  "login": "Log in",
+  "statement": "Statement",
+  "select": "-- Choose from this list --",
+  "enable": "Successfully activate",
+  "disable": "Successfully deactivate",
+  "name": "Name",
+  "age": {
+    "list": "List of ages",
+    "add": "Add a age",
+    "update": "Edit age"
+  },
+  "role": {
+    "list": "List of role",
+    "add": "Add a role",
+    "update": "Edit role",
+    "order": "order"
+  },
+  "speciality": {
+    "list": "List of specialties",
+    "add": "Add a specialty",
+    "update": "Edit spécialité"
+  },
+  "indication": {
+    "list": "List of indications",
+    "add": "Add a indication",
+    "update": "Edit indication"
+  },
+  "voice": {
+    "list": "List of voices",
+    "add_voice": "Add a voice",
+    "update_voice": "Edit voice"
+  },
+  "effect": {
+    "list": "List of side effects",
+    "add_effect": "Add side effect",
+    "update_effect": "Edit side effect"
+  },
   "User": {
     "name": "Name",
     "last_name": "Last name",
@@ -18,8 +55,8 @@
     "gouvernorat": "Gouvernorate",
     "specialite": "Speciality",
     "tel": "Phone",
-    "add": "Add user",
-    "update": "Update user",
+    "add": "Add a user",
+    "update": "Edit user",
     "listU": "Users list",
     "listP": "List of invalid health personnel",
     "listV": "List of valid health personnel"
@@ -56,5 +93,14 @@
     "txt_date": "Side effects",
     "text1": "If you don't know the exact start date and/or end of side effects, you can give more information about the relationship temporal here. Please specify this for each adverse effect.",
     "text2": "Additional examinations If tests have been carried out done, also mention the results. He can be blood tests, imaging medical, a biopsy ..."
+  },
+  "Drugs": {
+    "add": "Add a drugs",
+    "update": "Edit drugs",
+    "list": "List of drugs",
+    "voice": "voice",
+    "form": "form",
+    "dosage": "dosage",
+    "indication": "Indication"
   }
 }

@@ -32,7 +32,7 @@ if( lang )
 else
   window.localStorage.setItem('lang', 'fr')
 var testLogin = 0;
-console.log("fff")
+console.log("value")
 
 openDB("medis", 1, {
   upgrade(db) {

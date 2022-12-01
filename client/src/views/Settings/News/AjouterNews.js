@@ -3,7 +3,7 @@ import React, { useEffect, useCallback } from "react";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
-import { newsAdded, newsGetById } from "../../../Redux/newsReduce";
+import { newsAdded, newsGetById, saveFile } from "../../../Redux/newsReduce";
 import { send } from "../../utils/utils";
 
 import { useDispatch } from "react-redux";
@@ -34,6 +34,7 @@ function AjouterNews({ onlineStatus }) {
   const [date, setDate] = React.useState("");
   const [titre, setTitre] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [file, setFile] = React.useState("");
   const [id, setId] = React.useState(0);
 
   async function saveNewsIndex() {
@@ -61,36 +62,47 @@ function AjouterNews({ onlineStatus }) {
         titre: titre,
         type_table: 4,
         saved: 0,
-        etat:1,
-        id:news.length !==0? news[news.length - 1].id + 1 : 1,
+        etat: 1,
+        id: news.length !== 0 ? news[news.length - 1].id + 1 : 1,
       });
       notify(1, "Insertion avec succes");
     }
-          
+
     setTimeout(async () => {
       listeNews();
     }, 1500);
   }
   function submitForm() {
+    const dataArray = new FormData();
+    dataArray.append("file", file);
     if (onlineStatus === 1) {
       if (date !== "" && description !== "" && titre !== "") {
-        dispatch(newsAdded({ date, titre, description, id })).then((val)=>{
-          if (val.payload.msg === true) {
-            if (isNaN(location.id) === true) {
-              notify(1, "Insertion avec succes");
-            } else {
-              notify(1, "Modifier avec succes");
-            }
-            send(val.payload.data.id);
+        dispatch(saveFile({ dataArray })).then((value) => {
+          console.log(value);
+          var filename = value.payload.filename;
+          if (filename !== "") {
+            dispatch(
+              newsAdded({ date, titre, description, filename, id })
+            ).then((val) => {
+              if (val.payload.msg === true) {
+                if (isNaN(location.id) === true) {
+                  notify(1, "Insertion avec succes");
+                } else {
+                  notify(1, "Modifier avec succes");
+                }
+                send(val.payload.data.id);
+              } else {
+                notify(2, "Problème de connexion");
+              }
+            });
           } else {
-            notify(2, "Problème de connexion");
+            notify(2, "Vérifier vos donnée");
           }
-
         });
       } else {
         notify(2, "Vérifier vos donnée");
       }
-          
+
       setTimeout(async () => {
         listeNews();
       }, 1500);
@@ -213,6 +225,19 @@ function AjouterNews({ onlineStatus }) {
                               type="date"
                               onChange={(value) => {
                                 setDate(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col className="pl-1" md="6">
+                          <Form.Group>
+                            <label>File * </label>
+                            <Form.Control
+                              defaultValue={file}
+                              placeholder="file"
+                              type="file"
+                              onChange={(value) => {
+                                setFile(value.target.files[0]);
                               }}
                             ></Form.Control>
                           </Form.Group>

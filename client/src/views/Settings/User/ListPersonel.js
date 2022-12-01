@@ -10,11 +10,11 @@ import { useHistory } from "react-router-dom";
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb";
-import { useTranslation } from 'react-multi-lang'
+import { useTranslation } from "react-multi-lang";
 
 // core components
 function ListPersonel({ onlineStatus }) {
-  const t = useTranslation()
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -39,19 +39,19 @@ function ListPersonel({ onlineStatus }) {
   const [columns] = React.useState([
     //column definitions...
     {
-      header: t('User.name'),
+      header: t("User.name"),
       accessorKey: "nom",
     },
     {
-      header: t('User.last_name'),
+      header: t("User.last_name"),
       accessorKey: "prenom",
     },
     {
-      header: t('User.login'),
+      header: t("User.login"),
       accessorKey: "login",
     },
     {
-      header: t('User.role'),
+      header: t("User.role"),
       accessorKey: "role",
       Cell: ({ cell }) =>
         onlineStatus === 1
@@ -59,11 +59,11 @@ function ListPersonel({ onlineStatus }) {
           : cell.row.original.nom_role,
     },
     {
-      header: t('User.state'),
+      header: t("User.state"),
       accessorKey: "email",
     },
     {
-      header: t('User.actions'),
+      header: t("User.actions"),
       accessorKey: "etat",
       Cell: ({ cell }) =>
         cell.row.original.etat === 1 ? "Activé" : "Désactivé",
@@ -105,7 +105,7 @@ function ListPersonel({ onlineStatus }) {
       ),
     },
     {
-      header: t('User.validation'),
+      header: t("User.validation"),
       accessorKey: "valider",
       Cell: ({ cell, row }) =>
         cell.row.original.valider === 0 ? (
@@ -144,22 +144,22 @@ function ListPersonel({ onlineStatus }) {
     const tx = db.transaction("users", "readwrite");
     const index = tx.store.index("id");
     for await (const cursor of index.iterate(parseInt(id))) {
-      var objRole = { ...cursor.value };
+      var obj = { ...cursor.value };
       switch (etat) {
         case 0:
-          objRole.etat = 1;
-          notify(1, "Activer avec succes");
+          obj.etat = 1;
+          notify(1, t("enable"));
           break;
         case 1:
-          objRole.etat = 0;
-          notify(1, "Désactiver avec succes");
+          obj.etat = 0;
+          notify(1, t("disable"));
           break;
         default:
           break;
       }
 
-      objRole.updated = 1;
-      cursor.update(objRole);
+      obj.updated = 1;
+      cursor.update(obj);
     }
     await tx.done;
     initUser();
@@ -172,10 +172,10 @@ function ListPersonel({ onlineStatus }) {
         getUser();
         switch (e) {
           case 0:
-            notify(1, "Activer avec succes");
+            notify(1, t("enable"));
             break;
           case 1:
-            notify(1, "Désactiver avec succes");
+            notify(1, t("disable"));
             break;
           default:
             break;
@@ -290,11 +290,11 @@ function ListPersonel({ onlineStatus }) {
               <span className="btn-label">
                 <i className="fas fa-plus"></i>
               </span>
-              {t('User.add')}
+              {t("User.add")}
             </Button>
           </Col>
           <Col md="12">
-            <h4 className="title">{t('User.listP')}</h4>
+            <h4 className="title">{t("User.listP")}</h4>
             <Card className="card-header">
               <Card.Body>
                 <ListTable list={entitiesNo}></ListTable>
@@ -302,7 +302,7 @@ function ListPersonel({ onlineStatus }) {
             </Card>
           </Col>
           <Col md="12">
-            <h4 className="title">{t('User.listV')}</h4>
+            <h4 className="title">{t("User.listV")}</h4>
             <Card className="card-header">
               <Card.Body>
                 <ListTable list={entities}></ListTable>

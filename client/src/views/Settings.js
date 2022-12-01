@@ -20,14 +20,14 @@ function Settings() {
   const [name, setName] = React.useState("");
 
   function submitForm() {
-    /* const dataArray = new FormData();
+    const dataArray = new FormData();
     dataArray.append("image", logo);
     dataArray.append("name", logo.name);
     const iconArray = new FormData();
     iconArray.append("icon", icon);
     iconArray.append("iconname", "favicon.ico");
     var settingsObj = {icon:"favicon.ico",logo:logo.name,name:name}
-    dispatch(settingsUpdated({ dataArray, iconArray,settingsObj })); */
+    dispatch(settingsUpdated({ dataArray, iconArray,settingsObj }));
   }
 
   useEffect(() => {

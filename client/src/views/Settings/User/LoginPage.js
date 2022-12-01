@@ -20,8 +20,8 @@ import Inscription from "./Inscription";
 import { useTranslation } from 'react-multi-lang'
 
 function LoginPage() {
+  const t = useTranslation()
   document.title = "NEAPOLIS";
-  var ifConnected = window.navigator.onLine;
   let db;
   const notifyErr = (msg) =>
     toast.error(
@@ -159,11 +159,11 @@ function LoginPage() {
                       <Nav role="tablist" variant="tabs">
                         <Nav.Item>
                           <Nav.Link eventKey="settings-icons">
-                            Connexion
+                            {t('sign_in')}
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                          <Nav.Link eventKey="info-icons">S'inscrire</Nav.Link>
+                          <Nav.Link eventKey="info-icons">{t('register')}</Nav.Link>
                         </Nav.Item>
                       </Nav>
                       <Tab.Content>
@@ -181,7 +181,7 @@ function LoginPage() {
                           </Form.Group>
                           <Form.Group>
                             <Form.Control
-                              placeholder="Password"
+                              placeholder={t('User.password')}
                               onKeyPress={enterKeyPressed}
                               onChange={passwordChange}
                               type="password"
@@ -194,7 +194,7 @@ function LoginPage() {
                               variant="info"
                               onClick={submitForm}
                             >
-                              Connexion
+                              {t('login')}
                             </Button>
                             <Button
                               className="btn-wd"
@@ -204,7 +204,7 @@ function LoginPage() {
                                 window.location.replace("/declaration")
                               }
                             >
-                              Déclaration
+                              {t('statement')}
                             </Button>
                           </div>
                         </Tab.Pane>

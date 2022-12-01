@@ -2,17 +2,37 @@ const express = require("express");
 const router = express.Router();
 var news = require("../models/news");
 const auth = require("../middlewares/passport");
+const multer = require("multer");
 const webpush = require("web-push");
 const publicVapidKey =
   "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo";
 const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
+resolve = require("path").resolve;
+var configuration = require("../config");
+var config = configuration.connection;
 
 webpush.setVapidDetails(
-  "mailto:feriani.khalil2@gmail.com",
+  "mailto:feriani.khalil2@gmail.com;dragonxi12341@gmail.com",
   publicVapidKey,
   privateVapidKey
 );
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./news");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 // Desplay all lignes of client ...
+router.post("/saveFile", auth, upload.single("file"),(req, res) => {
+  var filename = "";
+  if (typeof req.file != "undefined") filename = req.file.filename;
+  res.send({ filename: filename });
+});
 router.post("/addNews", auth, (req, res) => {
   var id = req.body.id;
   if (id == 0) {
@@ -21,36 +41,40 @@ router.post("/addNews", auth, (req, res) => {
         titre: req.body.titre,
         description: req.body.description,
         date: req.body.date,
+        file: req.body.filename,
       })
       .then((r) => {
-        return res.status(200).send({data:r,msg:true});
+        return res.status(200).send({ data: r, msg: true });
       })
       .catch((error) => {
-        return res.status(403).send({error:error,msg:false});
+        return res.status(403).send({ error: error, msg: false });
       });
   } else {
-    news.findOne({ where: { id: id } }).then(function (r1) { 
+    news.findOne({ where: { id: id } }).then(function (r1) {
       if (!r1) {
         return res.status(403).send(false);
       } else {
         news
-          .update({
-            titre: req.body.titre,
-            description: req.body.description,
-            date: req.body.date,
-          },{ where: { id: id } })
+          .update(
+            {
+              titre: req.body.titre,
+              description: req.body.description,
+              date: req.body.date,
+            },
+            { where: { id: id } }
+          )
           .then((r) => {
-            return res.status(200).send({data:r,msg:true});
+            return res.status(200).send({ data: r, msg: true });
           })
           .catch((error) => {
-            return res.status(403).send({error:error,msg:false});
+            return res.status(403).send({ error: error, msg: false });
           });
       }
     });
   }
 });
-router.post("/allNews",auth, (req, res) => {
-  news.findAll({order:["id"]}).then(function (r) {
+router.post("/allNews", auth, (req, res) => {
+  news.findAll({ order: ["id"] }).then(function (r) {
     return res.status(200).send(r);
   });
 });
@@ -62,7 +86,8 @@ router.delete("/deleteNews/:id", auth, (req, res) => {
     if (!r1) {
       return res.status(403).send(false);
     } else {
-      news.destroy({ where: { id: id } })
+      news
+        .destroy({ where: { id: id } })
         .then((r2) => {
           return res.status(200).send(true);
         })
@@ -72,7 +97,7 @@ router.delete("/deleteNews/:id", auth, (req, res) => {
     }
   });
 });
-router.post("/getNews",auth, (req, res) => {
+router.post("/getNews", auth, (req, res) => {
   var id = req.headers["id"];
   news.findOne({ where: { id: id } }).then(function (r1) {
     if (!r1) {
@@ -109,25 +134,24 @@ router.put("/changeEtat/:id", auth, (req, res) => {
 });
 
 // Subscribe Route
-router.post("/subscribe/:id", async(req, res) => {
+router.post("/subscribe/:id", async (req, res) => {
   // Get pushSubscription object
   var id = req.params.id;
   const subscription = req.body;
   var findNews = await news.findOne({ where: { id: id } });
   // Send 201 - resource created
   res.status(201).json({});
-  /* const data = fs.readFileSync('../client/src/assets/img/logo.png');
-  console.log("first",data) */
+  console.log(config.path + findNews.dataValues.file)
   // Create payload
   const payload = JSON.stringify({
     title: findNews.dataValues.titre,
     body: {
-      body: findNews.dataValues.description,      
-      icon: "/logo.png",
+      body: findNews.dataValues.description,
+      icon: config.path + findNews.dataValues.file,
       /* icon: "http://image.ibb.co/frYOFd/tmlogo.png", */
     },
   });
-
+  console.log(webpush);
   // Pass object into sendNotification
   webpush
     .sendNotification(subscription, payload)

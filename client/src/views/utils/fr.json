@@ -2,9 +2,46 @@
   "save": "Enregistrer",
   "back": "précédent",
   "next": "Suivant",
-  "sign-in": "Se connecter",
+  "sign_in": "Se connecter",
   "list": "Retour à la liste",
-  "select": "--Choissisez dans cette liste --",
+  "register": "S'inscrire",
+  "login": "Connexion",
+  "statement": "Déclaration",
+  "select": "-- Choissisez dans cette liste --",
+  "enable": "Activer avec succès",
+  "disable": "Désactiver avec succès",
+  "name": "Nom",
+  "age": {
+    "list": "Liste des âges",
+    "add": "Ajouter un âge",
+    "update": "Modifier âge"
+  },
+  "role": {
+    "list": "Liste des rôle",
+    "add": "Ajouter un rôle",
+    "update": "Modifier rôle",
+    "order": "ordre"
+  },
+  "speciality": {
+    "list": "Liste des spécialité",
+    "add": "Ajouter un spécialité",
+    "update": "Modifier spécialité"
+  },
+  "indication": {
+    "list": "Liste des indication",
+    "add": "Ajouter un indication",
+    "update": "Modifier indication"
+  },
+  "voice": {
+    "list": "Liste des voix",
+    "add_voice": "Ajouter un voix",
+    "update_voice": "Modifier voix"
+  },
+  "effect": {
+    "list": "Liste des effet indésirable",
+    "add_effect": "Ajouter un effet indésirable",
+    "update_effect": "Modifier effet indésirable"
+  },
   "User": {
     "name": "Nom",
     "last_name": "Prenom",
@@ -56,5 +93,14 @@
     "txt_date": "Début et fin des effets indésirables",
     "text1": "Si vous ne connaissez pas la date exacte de début et/ou de fin des effets indésirables, vous pouvez donner plus d’information sur la relation temporelle ici. Veuillez le préciser pour chaque effet indésirable.",
     "text2": "Examens complémentaires Si des tests ont été effectués,mentionnez également les résultats. Il peut s’agir d’analyses sanguines, d’une imagerie médicale, d’une biopsie ..."
+  },
+  "Drugs": {
+    "add": "Ajouter un médicaments",
+    "update": "Modifier médicaments",
+    "list": "Liste des médicaments",
+    "voice": "voice",
+    "form": "form",
+    "dosage": "dosage",
+    "indication": "Indication"
   }
 }

@@ -3,14 +3,17 @@ import React, { useEffect, useCallback } from "react";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
-import { effet_indesirableAdded, effet_indesirableGetById } from "../../../Redux/effet_indesirableReduce";
-import { send } from "../../utils/utils";
+import {
+  effet_indesirableAdded,
+  effet_indesirableGetById,
+} from "../../../Redux/effet_indesirableReduce";
 
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import { useTranslation } from "react-multi-lang";
 function AjouterEffet_indesirable({ onlineStatus }) {
-  /* var ifConnected = window.navigator.onLine; */
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -53,13 +56,16 @@ function AjouterEffet_indesirable({ onlineStatus }) {
       let effet_indesirable = await effet_indesirableStore.getAll();
       await tx.objectStore("effet_indesirables").add({
         description: description,
-        type_table:6,
+        type_table: 6,
         saved: 0,
-        etat:1,
-        id: effet_indesirable.length !==0 ? effet_indesirable[effet_indesirable.length - 1].id + 1 : 1,
+        etat: 1,
+        id:
+          effet_indesirable.length !== 0
+            ? effet_indesirable[effet_indesirable.length - 1].id + 1
+            : 1,
       });
       notify(1, "Insertion avec succes");
-    }          
+    }
     setTimeout(async () => {
       listeEffet_indesirable();
     }, 1500);
@@ -67,18 +73,17 @@ function AjouterEffet_indesirable({ onlineStatus }) {
   function submitForm() {
     if (onlineStatus === 1) {
       if (description !== "") {
-        dispatch(effet_indesirableAdded({ description, id })).then((data)=>{
+        dispatch(effet_indesirableAdded({ description, id })).then((data) => {
           if (data.payload.msg === true) {
             if (isNaN(location.id) === true) {
               notify(1, "Insertion avec succes");
             } else {
               notify(1, "Modifier avec succes");
             }
-
           } else {
             notify(2, "Problème de connexion");
           }
-          
+
           setTimeout(async () => {
             listeEffet_indesirable();
           }, 1500);
@@ -110,7 +115,9 @@ function AjouterEffet_indesirable({ onlineStatus }) {
   useEffect(() => {
     async function getEffet_indesirable() {
       if (isNaN(location.id) === false) {
-        var effet_indesirable = await dispatch(effet_indesirableGetById(location.id));
+        var effet_indesirable = await dispatch(
+          effet_indesirableGetById(location.id)
+        );
         var entities = effet_indesirable.payload;
         setDescription(entities.titre);
         setId(location.id);
@@ -143,7 +150,7 @@ function AjouterEffet_indesirable({ onlineStatus }) {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -155,8 +162,8 @@ function AjouterEffet_indesirable({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter effet indesirable"
-                            : "Modifier effet indesirable"}
+                            ? t("effect.add_effect")
+                            : t("effect.update_effect")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -183,7 +190,7 @@ function AjouterEffet_indesirable({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

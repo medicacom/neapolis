@@ -6,8 +6,10 @@ import { useParams } from "react-router-dom";
 import { specialiteAdded, specialiteGetById } from "../../../Redux/specialiteReduce";
 import { verification } from "../../../Redux/usersReduce";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-multi-lang";
 
 function AjouterSpecialite() {
+  const t = useTranslation();
   const dispatch = useDispatch();
   const location = useParams();
   if (isNaN(location.id) === true) document.title = "Ajouter un specialite";
@@ -85,7 +87,7 @@ function AjouterSpecialite() {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -96,7 +98,7 @@ function AjouterSpecialite() {
                     <Card.Header>
                       <Card.Header>
                         <Card.Title as="h4">
-                          { typeof location.id == "undefined" ? "Ajouter specialite" : "Modifier specialite" }
+                          { typeof location.id == "undefined" ? t("speciality.add") : t("speciality.update") }
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -104,10 +106,10 @@ function AjouterSpecialite() {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Nom * </label>
+                            <label>{t("name")}* </label>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder="Nom"
+                              placeholder={t("name")}
                               type="text"
                               onChange={(value) => {
                                 setNom(value.target.value);
@@ -123,7 +125,7 @@ function AjouterSpecialite() {
                         variant="info"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

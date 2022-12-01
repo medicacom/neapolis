@@ -4,17 +4,16 @@ import validator from "validator";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
-import { userAdded, userGetById } from "../../../Redux/usersReduce";
-import { fetchRole } from "../../../Redux/roleReduce";
+import { userAdded } from "../../../Redux/usersReduce";
 import { fetchGouvernorat } from "../../../Redux/gouvernoratReduce";
 import { fetchSpecialite } from "../../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
-import { useTranslation } from 'react-multi-lang'
+import { useTranslation } from "react-multi-lang";
 
 function Inscription({ onlineStatus }) {
-  const t = useTranslation()
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -145,7 +144,7 @@ function Inscription({ onlineStatus }) {
           role,
           id_sp,
           id_gouvernorat,
-          valide
+          valide,
         })
       ).then((data) => {
         if (data.payload === true) {
@@ -239,7 +238,7 @@ function Inscription({ onlineStatus }) {
                           <Form.Group>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder={t('User.name')}
+                              placeholder={t("User.name")}
                               name="Nom"
                               className="required"
                               type="text"
@@ -254,7 +253,7 @@ function Inscription({ onlineStatus }) {
                           <Form.Group>
                             <Form.Control
                               defaultValue={prenom}
-                              placeholder={t('User.last_name')}
+                              placeholder={t("User.last_name")}
                               name="Prenom"
                               className="required"
                               type="text"
@@ -271,7 +270,7 @@ function Inscription({ onlineStatus }) {
                           <Form.Group>
                             <Form.Control
                               defaultValue={login}
-                              placeholder={t('User.login')}
+                              placeholder={t("User.login")}
                               className="required"
                               name="Login"
                               type="text"
@@ -291,7 +290,7 @@ function Inscription({ onlineStatus }) {
                           <Form.Group>
                             <Form.Control
                               defaultValue={password}
-                              placeholder={t('User.password')}
+                              placeholder={t("User.password")}
                               className="required"
                               name="Password"
                               type="password"
@@ -313,7 +312,7 @@ function Inscription({ onlineStatus }) {
                           <Form.Group>
                             <Form.Control
                               defaultValue={email}
-                              placeholder={t('User.email')}
+                              placeholder={t("User.email")}
                               name="Email"
                               className="required"
                               type="text"
@@ -333,7 +332,7 @@ function Inscription({ onlineStatus }) {
                           <Form.Group>
                             <Form.Control
                               defaultValue={tel}
-                              placeholder={t('User.tel')}
+                              placeholder={t("User.tel")}
                               type="number"
                               onChange={(value) => {
                                 setTel(value.target.value);
@@ -346,7 +345,7 @@ function Inscription({ onlineStatus }) {
                         <Col md="12">
                           <Form.Group id="roleClass">
                             <Select
-                              placeholder={t('User.gouvernorat')}
+                              placeholder={t("User.gouvernorat")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={gouvernoratSelect}
@@ -360,7 +359,7 @@ function Inscription({ onlineStatus }) {
                         <Col md="12">
                           <Form.Group id="roleClass">
                             <Select
-                              placeholder={t('User.specialite')}
+                              placeholder={t("User.specialite")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={specialiteSelect}
@@ -379,7 +378,7 @@ function Inscription({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        {t('save')}
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

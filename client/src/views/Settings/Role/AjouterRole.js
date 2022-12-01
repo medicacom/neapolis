@@ -4,13 +4,12 @@ import React, { useEffect, useCallback } from "react";
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
 import { roleAdded, roleGetById } from "../../../Redux/roleReduce";
-import { send } from "../../utils/utils";
-
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import { useTranslation } from "react-multi-lang";
 function AjouterRole({ onlineStatus }) {
-  /* var ifConnected = window.navigator.onLine; */
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -64,7 +63,7 @@ function AjouterRole({ onlineStatus }) {
       });
       notify(1, "Insertion avec succes");
     }
-          
+
     setTimeout(async () => {
       listeRole();
     }, 1500);
@@ -88,7 +87,7 @@ function AjouterRole({ onlineStatus }) {
         notify(2, "Vérifier vos donnée");
       }
     }
-          
+
     setTimeout(async () => {
       listeRole();
     }, 1500);
@@ -146,7 +145,7 @@ function AjouterRole({ onlineStatus }) {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -158,8 +157,8 @@ function AjouterRole({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter role"
-                            : "Modifier role"}
+                            ? t("role.add")
+                            : t("role.update")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -167,10 +166,10 @@ function AjouterRole({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Nom * </label>
+                            <label>{t("name")}* </label>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder="Nom"
+                              placeholder={t("name")}
                               type="text"
                               onChange={(value) => {
                                 setNom(value.target.value);
@@ -180,10 +179,10 @@ function AjouterRole({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Order * </label>
+                            <label>{t("role.order")} * </label>
                             <Form.Control
                               defaultValue={order}
-                              placeholder="Order"
+                              placeholder={t("role.order")}
                               type="text"
                               onChange={(value) => {
                                 setOrder(value.target.value);
@@ -199,7 +198,7 @@ function AjouterRole({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

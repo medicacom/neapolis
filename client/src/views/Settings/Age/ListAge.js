@@ -3,14 +3,15 @@ import React, { useEffect, useCallback } from "react";
 import { fetchAge, deleteAge } from "../../../Redux/ageReduce";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { verification } from "../../../Redux/usersReduce";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { toast, ToastContainer } from "react-toastify";
-import MaterialReactTable from 'material-react-table';
+import MaterialReactTable from "material-react-table";
 import { useMemo } from "react";
+import { useTranslation } from "react-multi-lang";
 
 // core components
 function ListAge() {
+  const t = useTranslation();
   document.title = "Liste des ages";
   const dispatch = useDispatch();
   const navigate = useHistory();
@@ -36,11 +37,11 @@ function ListAge() {
       //column definitions...
       {
         header: "Age",
-        accessorKey: "age",
+        accessorKey: "description",
       },
       {
-        accessorKey: 'id',
-        header: 'actions',        
+        accessorKey: "id",
+        header: "actions",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
             <Button
@@ -68,7 +69,7 @@ function ListAge() {
       },
       //end
     ],
-    [],
+    []
   );
   const [alert, setAlert] = React.useState(null);
   function ajouter() {
@@ -118,19 +119,21 @@ function ListAge() {
       }
     });
   }
-  
-  function ListTable({list}){
-    return (<MaterialReactTable
-      columns={columns}
-      data={list}
-      enableColumnActions={true}
-      enableColumnFilters={true}
-      enablePagination={true}
-      enableSorting={true}
-      enableBottomToolbar={true}
-      enableTopToolbar={true}
-      muiTableBodyRowProps={{ hover: false }}
-    /> )
+
+  function ListTable({ list }) {
+    return (
+      <MaterialReactTable
+        columns={columns}
+        data={list}
+        enableColumnActions={true}
+        enableColumnFilters={true}
+        enablePagination={true}
+        enableSorting={true}
+        enableBottomToolbar={true}
+        enableTopToolbar={true}
+        muiTableBodyRowProps={{ hover: false }}
+      />
+    );
   }
   return (
     <>
@@ -149,11 +152,11 @@ function ListAge() {
               <span className="btn-label">
                 <i className="fas fa-plus"></i>
               </span>
-              Ajouter un age
+              {t("age.add")}
             </Button>
           </Col>
           <Col md="12">
-            <h4 className="title">Liste des ages</h4>
+            <h4 className="title">{t("age.list")}</h4>
             <Card>
               <Card.Body>
                 <ListTable list={entities}></ListTable>

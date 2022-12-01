@@ -1,16 +1,18 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
-import { indicationAdded, indicationGetById } from "../../../Redux/indicationReduce";
-import { send } from "../../utils/utils";
-
+import {
+  indicationAdded,
+  indicationGetById,
+} from "../../../Redux/indicationReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import { useTranslation } from "react-multi-lang";
 function AjouterIndication({ onlineStatus }) {
-  /* var ifConnected = window.navigator.onLine; */
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -53,14 +55,17 @@ function AjouterIndication({ onlineStatus }) {
       let indication = await indicationStore.getAll();
       await tx.objectStore("indications").add({
         description: description,
-        type_table:6,
+        type_table: 6,
         saved: 0,
-        etat:1,
-        id: indication.length !==0 ? indication[indication.length - 1].id + 1 : 1,
+        etat: 1,
+        id:
+          indication.length !== 0
+            ? indication[indication.length - 1].id + 1
+            : 1,
       });
       notify(1, "Insertion avec succes");
     }
-          
+
     setTimeout(async () => {
       listeIndication();
     }, 1500);
@@ -68,8 +73,8 @@ function AjouterIndication({ onlineStatus }) {
   function submitForm() {
     if (onlineStatus === 1) {
       if (description !== "") {
-        dispatch(indicationAdded({ description, id })).then((val)=>{
-          if (val.payload.msg === true){
+        dispatch(indicationAdded({ description, id })).then((val) => {
+          if (val.payload.msg === true) {
             if (isNaN(location.id) === true) {
               notify(1, "Insertion avec succes");
             } else {
@@ -82,7 +87,7 @@ function AjouterIndication({ onlineStatus }) {
       } else {
         notify(2, "Vérifier vos donnée");
       }
-          
+
       setTimeout(async () => {
         listeIndication();
       }, 1500);
@@ -145,7 +150,7 @@ function AjouterIndication({ onlineStatus }) {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -157,8 +162,8 @@ function AjouterIndication({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter indication"
-                            : "Modifier indication"}
+                            ? t("indication.add")
+                            : t("indication.update")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -185,7 +190,7 @@ function AjouterIndication({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

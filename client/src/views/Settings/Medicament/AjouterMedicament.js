@@ -14,8 +14,9 @@ import Select from "react-select";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import { useTranslation } from "react-multi-lang";
 function AjouterMedicament({ onlineStatus }) {
-  /* var ifConnected = window.navigator.onLine; */
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -145,7 +146,6 @@ function AjouterMedicament({ onlineStatus }) {
     }
   }
 
-
   /** start getIndication **/
   const getIndication = useCallback(async () => {
     var role = await dispatch(getActiveIndication());
@@ -157,17 +157,16 @@ function AjouterMedicament({ onlineStatus }) {
     });
     setOptionsIndication(arrayOption);
   }, [dispatch]);
-  
+
   const initIndication = useCallback(async () => {
     db = await openDB("medis", 1, {});
-    const tx = db.transaction('indications', 'readwrite');
-    let voixStore = tx.objectStore('indications');
+    const tx = db.transaction("indications", "readwrite");
+    let voixStore = tx.objectStore("indications");
     let medicament = await voixStore.getAll();
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Indications" });
     medicament.forEach((e) => {
-      if(e.etat === 1)
-        arrayOption.push({ value: e.id, label: e.description });
+      if (e.etat === 1) arrayOption.push({ value: e.id, label: e.description });
     });
     setOptionsIndication(arrayOption);
   }, []);
@@ -189,14 +188,13 @@ function AjouterMedicament({ onlineStatus }) {
 
   const initVoix = useCallback(async () => {
     db = await openDB("medis", 1, {});
-    const tx = db.transaction('voix_administrations', 'readwrite');
-    let voixStore = tx.objectStore('voix_administrations');
+    const tx = db.transaction("voix_administrations", "readwrite");
+    let voixStore = tx.objectStore("voix_administrations");
     let medicament = await voixStore.getAll();
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Voix" });
     medicament.forEach((e) => {
-      if(e.etat === 1)
-        arrayOption.push({ value: e.id, label: e.description });
+      if (e.etat === 1) arrayOption.push({ value: e.id, label: e.description });
     });
     setOptionsVoix(arrayOption);
   }, []);
@@ -278,7 +276,7 @@ function AjouterMedicament({ onlineStatus }) {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -290,8 +288,8 @@ function AjouterMedicament({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter medicament"
-                            : "Modifier medicament"}
+                            ? t("Drugs.add")
+                            : t("Drugs.update")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -299,10 +297,10 @@ function AjouterMedicament({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Nom* </label>
+                            <label>{t("name")}* </label>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder="Nom"
+                              placeholder={t("name")}
                               type="text"
                               onChange={(value) => {
                                 setNom(value.target.value);
@@ -312,10 +310,10 @@ function AjouterMedicament({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Dosage* </label>
+                            <label>{t("Drugs.dosage")}* </label>
                             <Form.Control
                               defaultValue={dosage}
-                              placeholder="Dosage"
+                              placeholder={t("Drugs.dosage")}
                               type="text"
                               onChange={(value) => {
                                 setDosage(value.target.value);
@@ -326,7 +324,7 @@ function AjouterMedicament({ onlineStatus }) {
                       </Row>
                       <Row>
                         <Col className="pr-1" md="6">
-                          <Form.Group id="roleClass">
+                          <Form.Group >
                             <label>Indication* </label>
                             <Select
                               placeholder="Indication"
@@ -341,10 +339,10 @@ function AjouterMedicament({ onlineStatus }) {
                           </Form.Group>
                         </Col>
                         <Col className="pl-1" md="6">
-                          <Form.Group id="roleClass">
-                            <label>Voix* </label>
+                          <Form.Group >
+                            <label>{t("Drugs.dosage")}* </label>
                             <Select
-                              placeholder="Role"
+                              placeholder={t("Drugs.voice")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={voixSelect}
@@ -359,10 +357,10 @@ function AjouterMedicament({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Form* </label>
+                            <label>{t("Drugs.dosage")}* </label>
                             <Form.Control
                               defaultValue={form}
-                              placeholder="Form"
+                              placeholder={t("Drugs.form")}
                               type="text"
                               onChange={(value) => {
                                 setForm(value.target.value);
@@ -378,7 +376,7 @@ function AjouterMedicament({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

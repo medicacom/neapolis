@@ -1,20 +1,16 @@
-import React, { useEffect, useCallback } from "react";
-import Select from "react-select";
+import React, { useEffect } from "react";
 
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
-import {
-  ageAdded,
-  ageGetById,
-} from "../../../Redux/ageReduce";
+import { ageAdded, ageGetById } from "../../../Redux/ageReduce";
 
 import { useDispatch } from "react-redux";
-import { verification } from "../../../Redux/usersReduce";
 import { toast, ToastContainer } from "react-toastify";
-import MaterialReactTable from 'material-react-table';
+import { useTranslation } from "react-multi-lang";
 
 function AjouterAge() {
+  const t = useTranslation();
   const dispatch = useDispatch();
   const location = useParams();
   const navigate = useHistory();
@@ -40,9 +36,9 @@ function AjouterAge() {
       );
   };
   function submitForm(event) {
-    dispatch(ageAdded({ description:description, id:id}));
+    dispatch(ageAdded({ description: description, id: id }));
     if (isNaN(location.id) === true) {
-      notify(1, "Insertion avec succes")
+      notify(1, "Insertion avec succes");
     } else {
       notify(1, "Modifier avec succes");
     }
@@ -85,7 +81,7 @@ function AjouterAge() {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -97,8 +93,8 @@ function AjouterAge() {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter age"
-                            : "Modifier age"}
+                            ? t("age.add")
+                            : t("age.update")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -106,7 +102,7 @@ function AjouterAge() {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Age * </label>
+                            <label>Age* </label>
                             <Form.Control
                               defaultValue={description}
                               placeholder="Age"
@@ -125,7 +121,7 @@ function AjouterAge() {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

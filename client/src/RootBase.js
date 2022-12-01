@@ -3,10 +3,10 @@ import Components from "./components";
 import Sidebar from "./components/Sidebar/Sidebar";
 import AdminNavbar from "./components/Navbars/AdminNavbar";
 import Footer from "./components/Footer/Footer";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import { getRootByRole } from "./Redux/rootBaseReduce";
 import { verification,getDetailUser } from "./Redux/usersReduce";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { openDB } from 'idb/with-async-ittr'; 
 import { updateDB } from "./Redux/offlineReduce";
 
@@ -300,15 +300,15 @@ function RootBase({id}) {
       :""}
       {users && entities.length>0 && onlineStatus === 1 && !loaderTable? (
         <div className="wrapper">
-          <Sidebar users={users} onlineStatus={onlineStatus} />
-          <div className="main-panel">
-            <AdminNavbar users={users} onlineStatus={onlineStatus} />
+          {location.pathname !=="/declaration"?<Sidebar users={users} onlineStatus={onlineStatus} />:""}
+          <div className={location.pathname !=="/declaration"?"main-panel":""}>
+            {location.pathname !=="/declaration"?<AdminNavbar users={users} onlineStatus={onlineStatus} />:""}
             <div className="content">
               <Switch>
                 {entities.length>0?getRoutes(entities):""}
               </Switch>
             </div>
-            <Footer />
+            {location.pathname !=="/declaration"?<Footer />:""}
             <div
               className="close-layer"
               onClick={() =>

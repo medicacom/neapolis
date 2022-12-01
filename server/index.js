@@ -3,6 +3,7 @@
 const express = require("express");
 var app = express();
 const path = require("path");
+app.use('/new',express.static("./new"));
 
 var cors = require("cors");
 /* const sqlite3 = require('sqlite3').verbose();
@@ -49,7 +50,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 }); 
 
-const PORT = 4005 || 5000 || 6000;
-app.listen(PORT, (err) =>
+const PORT = 4000 || 5000 || 6000;
+app.listen(PORT, (err) => 
   err ? console.log(err) : console.log(`app listening on port ${PORT}!`)
 );

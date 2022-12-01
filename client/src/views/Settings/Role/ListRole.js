@@ -3,14 +3,14 @@ import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback, useMemo } from "react";
 import { fetchRole, roleDeleted } from "../../../Redux/roleReduce";
 import { useDispatch } from "react-redux";
-import { verification } from "../../../Redux/usersReduce";
 import { toast, ToastContainer } from "react-toastify";
-import MaterialReactTable from 'material-react-table';
+import MaterialReactTable from "material-react-table";
 import { useHistory } from "react-router";
 import { openDB } from "idb";
-/* import { openDB } from 'idb/with-async-ittr'; */
+import { useTranslation } from "react-multi-lang";
 // core components
-function ListRole({onlineStatus}) {
+function ListRole({ onlineStatus }) {
+  const t = useTranslation();
   let db;
   const dispatch = useDispatch();
   const navigate = useHistory();
@@ -20,12 +20,12 @@ function ListRole({onlineStatus}) {
     () => [
       //column definitions...
       {
-        header: "Nom",
+        header: t("name"),
         accessorKey: "nom",
       },
       {
-        accessorKey: 'id',
-        header: 'actions',        
+        accessorKey: "id",
+        header: "actions",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
             <Button
@@ -41,20 +41,23 @@ function ListRole({onlineStatus}) {
             <Button
               id={"idLigne_" + cell.row.original.id}
               onClick={(e) => {
-                confirmMessage(cell.row.original.id,e);
+                confirmMessage(cell.row.original.id, e);
               }}
               variant="danger"
               size="sm"
               className="text-danger btn-link delete"
             >
-              <i className="fa fa-trash" id={"idLigne_" + cell.row.original.id}/>
+              <i
+                className="fa fa-trash"
+                id={"idLigne_" + cell.row.original.id}
+              />
             </Button>
           </div>
         ),
       },
       //end
     ],
-    [],
+    []
   );
   const notify = (type, msg) => {
     if (type === 1)
@@ -97,7 +100,7 @@ function ListRole({onlineStatus}) {
   }
   function deleteRole(id, e) {
     dispatch(roleDeleted({ id })).then((val) => {
-      notify(1 , "Role supprimer avec succes");    
+      notify(1, "Role supprimer avec succes");
       getRole();
       hideAlert();
     });
@@ -112,10 +115,10 @@ function ListRole({onlineStatus}) {
         order: resRole[index].order,
         role: resRole[index].role,
         id: resRole[index].id,
-        saved:1,
-        updated:0,
-        deleted:0,
-        type_table:2
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 2,
       });
     }
   }, []);
@@ -126,48 +129,45 @@ function ListRole({onlineStatus}) {
     storeRoles(resRole);
   }
 
-  const getRole = useCallback(
-    async () => {
-      var role = await dispatch(fetchRole());
-      var resRole = await role.payload;
-      setEntities(resRole);
-      if(resRole.length!=0)
-      clearRole(resRole)
-    },
-    [dispatch]
-  );
+  const getRole = useCallback(async () => {
+    var role = await dispatch(fetchRole());
+    var resRole = await role.payload;
+    setEntities(resRole);
+    if (resRole.length != 0) clearRole(resRole);
+  }, [dispatch]);
 
   async function initRole() {
-    const tx = db.transaction('roles', 'readwrite');
-    let rolesStore = tx.objectStore('roles');
+    const tx = db.transaction("roles", "readwrite");
+    let rolesStore = tx.objectStore("roles");
     let roles = await rolesStore.getAll();
     setEntities(roles);
   }
   async function init() {
     db = await openDB("medis", 1, {});
-    if(onlineStatus === 1)
-      getRole();
-    else {      
+    if (onlineStatus === 1) getRole();
+    else {
       initRole();
     }
   }
-  
+
   useEffect(() => {
     init();
   }, []); //now shut up eslint
-  
-  function ListTable({list}){
-    return (<MaterialReactTable
-      columns={columns}
-      data={list}
-      enableColumnActions={true}
-      enableColumnFilters={true}
-      enablePagination={true}
-      enableSorting={true}
-      enableBottomToolbar={true}
-      enableTopToolbar={true}
-      muiTableBodyRowProps={{ hover: false }}
-    /> )
+
+  function ListTable({ list }) {
+    return (
+      <MaterialReactTable
+        columns={columns}
+        data={list}
+        enableColumnActions={true}
+        enableColumnFilters={true}
+        enablePagination={true}
+        enableSorting={true}
+        enableBottomToolbar={true}
+        enableTopToolbar={true}
+        muiTableBodyRowProps={{ hover: false }}
+      />
+    );
   }
 
   return (
@@ -178,7 +178,6 @@ function ListRole({onlineStatus}) {
         <Row>
           <Col md="12">
             <Button
-              id="saveBL"
               className="btn-wd  mr-1 float-left"
               type="button"
               variant="success"
@@ -187,26 +186,15 @@ function ListRole({onlineStatus}) {
               <span className="btn-label">
                 <i className="fas fa-plus"></i>
               </span>
-              Ajouter un role
+              {t("role.add")}
             </Button>
           </Col>
 
           <Col md="12">
-            <h4 className="title">Liste des roles</h4>
+            <h4 className="title">{t("role.list")}</h4>
             <Card className="card-header">
-              <Card.Body>                
+              <Card.Body>
                 <ListTable list={entities}></ListTable>
-                {/* <MaterialReactTable
-                  columns={columns}
-                  data={entities}
-                  enableColumnActions={true}
-                  enableColumnFilters={true}
-                  enablePagination={true}
-                  enableSorting={true}
-                  enableBottomToolbar={true}
-                  enableTopToolbar={true}
-                  muiTableBodyRowProps={{ hover: false }}
-                /> */} 
               </Card.Body>
             </Card>
           </Col>

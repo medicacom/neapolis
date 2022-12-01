@@ -3,14 +3,17 @@ import React, { useEffect, useCallback } from "react";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
-import { voix_administrationAdded, voix_administrationGetById } from "../../../Redux/voix_administrationReduce";
-import { send } from "../../utils/utils";
+import {
+  voix_administrationAdded,
+  voix_administrationGetById,
+} from "../../../Redux/voix_administrationReduce";
 
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
+import { useTranslation } from "react-multi-lang";
 function AjouterVoix_administration({ onlineStatus }) {
-  /* var ifConnected = window.navigator.onLine; */
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -55,8 +58,11 @@ function AjouterVoix_administration({ onlineStatus }) {
         description: description,
         type_table: 5,
         saved: 0,
-        etat:1,
-        id: voix_administration.length !==0 ? voix_administration[voix_administration.length - 1].id + 1 : 1,
+        etat: 1,
+        id:
+          voix_administration.length !== 0
+            ? voix_administration[voix_administration.length - 1].id + 1
+            : 1,
       });
       notify(1, "Insertion avec succes");
     }
@@ -67,7 +73,7 @@ function AjouterVoix_administration({ onlineStatus }) {
   function submitForm() {
     if (onlineStatus === 1) {
       if (description !== "") {
-        dispatch(voix_administrationAdded({ description, id })).then((val)=>{
+        dispatch(voix_administrationAdded({ description, id })).then((val) => {
           if (val.payload.msg === true) {
             if (isNaN(location.id) === true) {
               notify(1, "Insertion avec succes");
@@ -108,7 +114,9 @@ function AjouterVoix_administration({ onlineStatus }) {
   useEffect(() => {
     async function getVoix_administration() {
       if (isNaN(location.id) === false) {
-        var voix_administration = await dispatch(voix_administrationGetById(location.id));
+        var voix_administration = await dispatch(
+          voix_administrationGetById(location.id)
+        );
         var entities = voix_administration.payload;
         setDescription(entities.titre);
         setId(location.id);
@@ -141,7 +149,7 @@ function AjouterVoix_administration({ onlineStatus }) {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -153,8 +161,8 @@ function AjouterVoix_administration({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter voix administration"
-                            : "Modifier voix administration"}
+                            ? t("voice.add_voice")
+                            : t("voice.update_voice")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -181,7 +189,7 @@ function AjouterVoix_administration({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

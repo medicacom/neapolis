@@ -41,10 +41,22 @@ export const newsDeleted = createAsyncThunk("news/deleteNews", async (action) =>
       'x-access-token':token
     },
   });
-  const rootBase = await response.json();
-  return rootBase;
+  const news = await response.json();
+  return news;
 });
 
+export const saveFile = createAsyncThunk("news/saveFile", async (action) => {
+  const response = await fetch(Configuration.BACK_BASEURL + "news/saveFile", {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/*',
+      'x-access-token':token,
+    },
+    body:action.dataArray
+  });
+  const news = await response.json();
+  return news;
+});
 export const newsAdded = createAsyncThunk("news/addNews", async (action) => {
   const response = await fetch(Configuration.BACK_BASEURL + "news/addNews", {
     method: 'POST',
@@ -83,20 +95,6 @@ export const newsChangeEtat = createAsyncThunk(
   }
 );
 
-/* export const subscribe = createAsyncThunk("news/subscribe", async (action) => {
-  const response = await fetch(Configuration.BACK_BASEURL + "news/subscribe", {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-access-token':token
-    },
-    body: JSON.stringify(action)
-  });
-  const news = await response.status;
-  return news;
-}); */
-
 const newsReduce = createSlice({
   name: "news",
   initialState: {
@@ -104,15 +102,14 @@ const newsReduce = createSlice({
     loading: false,
   },
   reducers: {
-    /* newsDeleted(state, action) {
-      const { id } = action.payload;
-      fetch(Configuration.BACK_BASEURL + "news/deleteNews/"+id, {
-        method: 'DELETE',
+   /*  newsAdded(state, action) {
+      fetch(Configuration.BACK_BASEURL + "news/addNews", {
+        method: 'POST',
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Accept': 'application/*',
           'x-access-token':token
         },
+        body:action.payload.dataArray
       });
     }, */
 
@@ -132,6 +129,6 @@ const newsReduce = createSlice({
   },
 });
 
-/* export const { newsAdded, newsUpdated } = newsReduce.actions; */
+/* export const { newsAdded } = newsReduce.actions; */
 
 export default newsReduce.reducer;
