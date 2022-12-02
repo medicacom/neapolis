@@ -61,7 +61,7 @@ var passager = sequelize.define(
       },
     },
   },
-  { timestamps: false }
+  { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
 
 passager.belongsTo(specialite, { as: "specialites", foreignKey: "id_sp" });

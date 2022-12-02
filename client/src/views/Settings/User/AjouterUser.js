@@ -4,10 +4,7 @@ import validator from "validator";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
-import {
-  userAdded,
-  userGetById,
-} from "../../../Redux/usersReduce";
+import { userAdded, userGetById } from "../../../Redux/usersReduce";
 import { fetchRole } from "../../../Redux/roleReduce";
 import { fetchGouvernorat } from "../../../Redux/gouvernoratReduce";
 import { fetchSpecialite } from "../../../Redux/specialiteReduce";
@@ -113,7 +110,7 @@ function AjouterUser({ onlineStatus }) {
         cursor.update(objRole);
       }
       await tx.done;
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     } else {
       let rolesStore = tx.objectStore("users");
       let users = await rolesStore.getAll();
@@ -127,11 +124,11 @@ function AjouterUser({ onlineStatus }) {
         nom_role: roleSelect.label,
         password: password,
         saved: 0,
-        type_table:3,
-        etat:1,
+        type_table: 3,
+        etat: 1,
         id: users[users.length - 1].id + 1,
       });
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     }
     setTimeout(async () => {
       listeUser();
@@ -187,8 +184,8 @@ function AjouterUser({ onlineStatus }) {
       roleClass.style.borderColor = "red";
       notify(2, "Choisire un role");
     }
-    var id_gouvernorat= gouvernoratSelect.value;
-    var id_sp= specialiteSelect.value;
+    var id_gouvernorat = gouvernoratSelect.value;
+    var id_sp = specialiteSelect.value;
     if (
       !validator.isEmpty(nom) &&
       !validator.isEmpty(prenom) &&
@@ -212,22 +209,21 @@ function AjouterUser({ onlineStatus }) {
             role,
             id_sp,
             id_gouvernorat,
-            valide
+            valide,
           })
         ).then((data) => {
           if (data.payload === true) {
-            if (isNaN(location.id) === true) notify(1, "Insertion avec succes");
-            else notify(1, "Modifier avec succes");
+            if (isNaN(location.id) === true) notify(1, t("add_txt"));
+            else notify(1, t("update_txt"));
             setTimeout(async () => {
               listeUser();
             }, 1500);
           } else {
-            notify(2, "Problème de connexion");
+            notify(2, t("problem"));
           }
         });
-      }
-      else {        
-        saveIndex()
+      } else {
+        saveIndex();
       }
     }
   }
@@ -242,8 +238,14 @@ function AjouterUser({ onlineStatus }) {
     setTel(entities.tel);
     setRole(entities.id_role);
     setRoleSelect({ value: entities.roles.id, label: entities.roles.nom });
-    setGouvernoratSelect({ value: entities.gouvernorats.id, label: entities.gouvernorats.libelle })
-    setSpecialiteSelect({ value: entities.gouvernorats.id, label: entities.specialites.nom })
+    setGouvernoratSelect({
+      value: entities.gouvernorats.id,
+      label: entities.gouvernorats.libelle,
+    });
+    setSpecialiteSelect({
+      value: entities.gouvernorats.id,
+      label: entities.specialites.nom,
+    });
     setId(location.id);
   }, [dispatch]);
 
@@ -358,7 +360,7 @@ function AjouterUser({ onlineStatus }) {
       initSpecialite();
       if (isNaN(location.id) === false) initUser();
     }
-  }, [location.id, getUserById, getRole,getSpecialite, dispatch]);
+  }, [location.id, getUserById, getRole, getSpecialite, dispatch]);
 
   function listeUser() {
     navigate.push("/utilisateurListe");
@@ -393,8 +395,8 @@ function AjouterUser({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? t('User.add')
-                            : t('User.update')}
+                            ? t("User.add")
+                            : t("User.update")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -402,10 +404,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>{t('User.name')} * </label>
+                            <label>{t("User.name")} * </label>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder={t('User.name')}
+                              placeholder={t("User.name")}
                               name="Nom"
                               className="required"
                               type="text"
@@ -418,10 +420,10 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>{t('User.last_name')} </label>
+                            <label>{t("User.last_name")} </label>
                             <Form.Control
                               defaultValue={prenom}
-                              placeholder={t('User.last_name')}
+                              placeholder={t("User.last_name")}
                               name="Prenom"
                               className="required"
                               type="text"
@@ -436,10 +438,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>{t('User.login')}* </label>
+                            <label>{t("User.login")}* </label>
                             <Form.Control
                               defaultValue={login}
-                              placeholder={t('User.login')}
+                              placeholder={t("User.login")}
                               className="required"
                               name="Login"
                               type="text"
@@ -457,7 +459,7 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>{t('User.password')}* </label>
+                            <label>{t("User.password")}* </label>
                             <Form.Control
                               defaultValue={password}
                               placeholder="Password"
@@ -480,10 +482,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>{t('User.email')}* </label>
+                            <label>{t("User.email")}* </label>
                             <Form.Control
                               defaultValue={email}
-                              placeholder={t('User.email')}
+                              placeholder={t("User.email")}
                               name="Email"
                               className="required"
                               type="text"
@@ -501,9 +503,9 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group id="roleClass">
-                            <label>{t('User.role')}* </label>
+                            <label>{t("User.role")}* </label>
                             <Select
-                              placeholder={t('User.role')}
+                              placeholder={t("User.role")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={roleSelect}
@@ -522,9 +524,9 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group id="roleClass">
-                            <label>{t('User.gouvernorat')}* </label>
+                            <label>{t("User.gouvernorat")}* </label>
                             <Select
-                              placeholder={t('User.gouvernorat')}
+                              placeholder={t("User.gouvernorat")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={gouvernoratSelect}
@@ -537,9 +539,9 @@ function AjouterUser({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group id="roleClass">
-                            <label>{t('User.specialite')} </label>
+                            <label>{t("User.specialite")} </label>
                             <Select
-                              placeholder={t('User.specialite')}
+                              placeholder={t("User.specialite")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={specialiteSelect}
@@ -554,10 +556,10 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>{t('User.tel')} </label>
+                            <label>{t("User.tel")} </label>
                             <Form.Control
                               defaultValue={tel}
-                              placeholder= {t('User.tel')}
+                              placeholder={t("User.tel")}
                               type="number"
                               onChange={(value) => {
                                 setTel(value.target.value);
@@ -572,7 +574,7 @@ function AjouterUser({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        {t('save')}
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

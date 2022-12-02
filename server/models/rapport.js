@@ -119,7 +119,7 @@ var rapport = sequelize.define(
       },
     },
   },
-  { timestamps: false }
+  { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
 
 rapport.belongsTo(patient, { as: "patients", foreignKey: "id_patient" });

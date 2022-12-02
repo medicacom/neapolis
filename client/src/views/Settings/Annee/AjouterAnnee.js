@@ -4,15 +4,12 @@ import Select from "react-select";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
-import {
-  anneeAdded,
-  anneeGetById,
-} from "../../../Redux/anneeReduce";
+import { anneeAdded, anneeGetById } from "../../../Redux/anneeReduce";
 
 import { useDispatch } from "react-redux";
 import { verification } from "../../../Redux/usersReduce";
 import { toast, ToastContainer } from "react-toastify";
-import MaterialReactTable from 'material-react-table';
+import MaterialReactTable from "material-react-table";
 
 function AjouterAnnee() {
   const dispatch = useDispatch();
@@ -36,11 +33,10 @@ function AjouterAnnee() {
       label: "Oui",
     },
   ]); */
-  const [selected, setSelected] = React.useState(
-    {
-      value: 0,
-      label: "Non",
-    });
+  const [selected, setSelected] = React.useState({
+    value: 0,
+    label: "Non",
+  });
   const [annee, setAnnee] = React.useState("");
   const [id, setId] = React.useState(0);
 
@@ -61,12 +57,9 @@ function AjouterAnnee() {
       );
   };
   function submitForm(event) {
-    dispatch(anneeAdded({ annee:annee, id:id,selected:selected.value }));
-    if (isNaN(location.id) === true) {
-      notify(1, "Insertion avec succes")
-    } else {
-      notify(1, "Modifier avec succes");
-    }
+    dispatch(anneeAdded({ annee: annee, id: id, selected: selected.value }));
+    if (isNaN(location.id) === true) notify(1, "Insertion avec succes");
+    else notify(1, "Modifier avec succes");
   }
 
   useEffect(() => {
@@ -78,16 +71,16 @@ function AjouterAnnee() {
           listeAnnee();
         } else {
           setAnnee(entities.annee);
-          if(entities.selected === 0) 
+          if (entities.selected === 0)
             setSelected({
               value: 0,
               label: "Non",
-            })
+            });
           else
             setSelected({
               value: 1,
               label: "Oui",
-            })
+            });
           setId(location.id);
         }
       }

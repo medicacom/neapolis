@@ -32,6 +32,16 @@ var Role = sequelize.define(
       unique: false,
       allowNull: true,
     },
+    nom_en: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    nom_ar: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
     role: {
       type: Sequelize.STRING,
       unique: false,
@@ -43,7 +53,7 @@ var Role = sequelize.define(
       allowNull: true,
     },
   },
-  { timestamps: false }
+  { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
 
 // create all the defined tables in the specified database. alter:true

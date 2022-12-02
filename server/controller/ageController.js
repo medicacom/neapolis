@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 var age = require("../models/age");
+var tests = require("../models/test");
 const auth = require("../middlewares/passport");
 const { Op } = require("sequelize"); 
 // Desplay all lignes of client ...

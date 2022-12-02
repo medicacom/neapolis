@@ -54,7 +54,7 @@ var news = sequelize.define(
       defaultValue: 1,
     },
   },
-  { timestamps: false }
+  { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
 
 // create all the defined tables in the specified database.

@@ -1,4 +1,4 @@
-import React, { useEffect,useCallback  } from "react";
+import React, { useEffect, useCallback } from "react";
 import Select from "react-select";
 import validator from "validator";
 import { verification } from "../../../Redux/usersReduce";
@@ -47,12 +47,22 @@ function AjouterRootBase(props) {
     value: 0,
     label: "Parent",
   });
-  const notify = (type,msg) => {
-    if(type === 1)
-      toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
-    else 
-      toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
-  }
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(
+        <strong>
+          <i className="fas fa-check-circle"></i>
+          {msg}
+        </strong>
+      );
+    else
+      toast.error(
+        <strong>
+          <i className="fas fa-exclamation-circle"></i>
+          {msg}
+        </strong>
+      );
+  };
   function submitForm() {
     if (validator.isEmpty(name)) {
       notify(2, "Name est obligatoire");
@@ -103,12 +113,20 @@ function AjouterRootBase(props) {
       parseInt(ordre) !== 0
     ) {
       dispatch(
-        rootBaseAdded({ name, className, component, icon, path, parent, id,role,ordre })
+        rootBaseAdded({
+          name,
+          className,
+          component,
+          icon,
+          path,
+          parent,
+          id,
+          role,
+          ordre,
+        })
       );
-      if(isNaN(location.id) === true) 
-        notify(1, "Insertion avec succes")
-      else
-        notify(1, "Modifier avec succes");
+      if (isNaN(location.id) === true) notify(1, "Insertion avec succes");
+      else notify(1, "Modifier avec succes");
       setTimeout(async () => {
         listeRoute();
       }, 1500);
@@ -154,10 +172,10 @@ function AjouterRootBase(props) {
     promise.then((value) => {
       getRoot(value);
     });
-  }, [location.id,dispatch]);
+  }, [location.id, dispatch]);
 
   function listeRoute() {
-    navigate.push('/listRootBase');
+    navigate.push("/listRootBase");
   }
   return (
     <>

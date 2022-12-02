@@ -4,6 +4,10 @@ var config = configuration.connection;
 	
 // create a sequelize instance with our local postgres database information.
 const sequelize = new Sequelize(config.base, config.root, config.password, {
+    define: {
+        charset: 'utf8',
+        collate: 'utf8_general_ci' 
+    },
 	host:config.host,
 	port: config.port,
 	dialect:'mysql',
@@ -12,12 +16,12 @@ const sequelize = new Sequelize(config.base, config.root, config.password, {
 		min: 0,
 		acquire: 30000,
 		idle: 10000
-	},
+	}, 
 	operatorsAliases: false
 });
 
-// setup gouvernorat model and its fields.
-var gouvernorat = sequelize.define('gouvernorat', {
+// setup test model and its fields.
+var test = sequelize.define('tests', {
     id: {
         type: Sequelize.INTEGER,
         unique: true,
@@ -25,34 +29,30 @@ var gouvernorat = sequelize.define('gouvernorat', {
         primaryKey: true,
         autoIncrement: true
     },
-	libelle: {
+	description: {
         type: Sequelize.STRING,
         unique: false,
-        allowNull: false
-    },
-	libelle_en: {
-        type: Sequelize.STRING,
-        unique: false,
-        allowNull: false
-    },
-	libelle_ar: {
-        type: Sequelize.STRING,
-        unique: false,
-        allowNull: false
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
+        allowNull: true,         
     },
     etat: {
-        type: Sequelize.INTEGER,
-        unique: false,
-        allowNull: true, 
-        defaultValue: 1
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+      defaultValue: 1,
     },
-}, { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }); 
-
+}, { timestamps: false , 
+    charset: 'utf8',
+    collate: 'utf8_general_ci' 
+  });
 
 // create all the defined tables in the specified database.
-sequelize.sync()
-    .then(() => console.log('Gouvernorat table has been successfully created, if one doesn\'t exist'))
+sequelize.sync({alter:true})
+    .then(() => {
+        console.log('test table has been successfully created, if one doesn\'t exist'); 
+    })
     .catch(error => console.log('This error occured', error));
 
-// export gouvernorat model for use in other files.
-module.exports = gouvernorat;
+// export test model for use in other files.
+module.exports = test;

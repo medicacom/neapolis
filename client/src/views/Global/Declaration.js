@@ -251,7 +251,7 @@ function Declaration({ obj }) {
         validator.isEmpty(email) ||
         id_sp === 0
       ) {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
         test = false;
       }
     } else if (activeStep == 1) {
@@ -264,7 +264,7 @@ function Declaration({ obj }) {
         (age === 3 && ageCategorie.value === 0) ||
         id_indication === 0
       ) {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
         test = false;
       }
     } else if (activeStep == 2) {
@@ -276,7 +276,7 @@ function Declaration({ obj }) {
         id_voix === 0 ||
         id_medicament === 0
       ) {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
         test = false;
       }
     } else if (activeStep == 3) {
@@ -287,7 +287,7 @@ function Declaration({ obj }) {
         validator.isEmpty(complementaires) ||
         id_eff === 0
       ) {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
         test = false;
       } else {
         dispatch(
@@ -318,7 +318,7 @@ function Declaration({ obj }) {
             posologie: posologie,
           })
         ).then((data) => {
-          notify(1, "Insertion avec succes");
+          notify(1, t("add_txt"));
           setTimeout(async () => {
             window.location.reload();
           }, 1500);

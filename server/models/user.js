@@ -111,7 +111,7 @@ var User = sequelize.define(
       },
     },
   },
-  { timestamps: false }
+  { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
 
 User.belongsTo(Role, { as: "roles", foreignKey: "id_role" });

@@ -12,8 +12,10 @@ import { openDB } from "idb";
 /* import { Notifications } from "react-push-notification"; */
 import { fetchAnnee } from "../Redux/anneeReduce";
 import { fetchGouvernorat } from "../Redux/gouvernoratReduce";
+import { useTranslation } from "react-multi-lang";
 
 function Profile({ obj,onlineStatus }) {
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -50,9 +52,9 @@ function Profile({ obj,onlineStatus }) {
       login === "" ||
       (password !== "" && password.length < 6)
     ) {
-      notify(2, "Toutes les données sont obligatoires");
+      notify(2, t("erreur"));
     } else {
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
       dispatch(profilUpdated({ nom, prenom, tel, login, password, id }));
     }
   }
@@ -222,10 +224,10 @@ function Profile({ obj,onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Nom* </label>
+                            <label>{t("User.name")}* </label>
                             <Form.Control
                               defaultValue={nom}
-                              placeholder="Nom"
+                              placeholder={t("User.name")}
                               type="text"
                               onChange={(value) => {
                                 setNom(value.target.value);
@@ -235,10 +237,10 @@ function Profile({ obj,onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Prénom </label>
+                            <label>{t("User.last_name")} </label>
                             <Form.Control
                               defaultValue={prenom}
-                              placeholder="Prénom"
+                              placeholder={t("User.last_name")}
                               type="text"
                               onChange={(value) => {
                                 setPrenom(value.target.value);
@@ -264,7 +266,7 @@ function Profile({ obj,onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Mot de passe* (6 chiffre minimum)</label>
+                            <label>{t("User.password")}* (6 chiffre minimum)</label>
                             <Form.Control
                               id="mdp_user"
                               defaultValue=""
@@ -280,7 +282,7 @@ function Profile({ obj,onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Telephone </label>
+                            <label>{t("User.tel")} </label>
                             <Form.Control
                               defaultValue={tel}
                               placeholder="Telephone"

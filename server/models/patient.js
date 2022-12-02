@@ -93,13 +93,17 @@ var patient = sequelize.define(
       },
     },
   },
+  { charset: "utf8", collate: "utf8_general_ci" }
 );
 
-patient.belongsTo(user, { as: "users", foreignKey: "id_user" }); 
+patient.belongsTo(user, { as: "users", foreignKey: "id_user" });
 
 patient.belongsTo(ages, { as: "ages", foreignKey: "ageCategorie" });
 
-patient.belongsTo(indication, { as: "indications", foreignKey: "id_indication" });
+patient.belongsTo(indication, {
+  as: "indications",
+  foreignKey: "id_indication",
+});
 
 patient.belongsTo(passager, { as: "passagers", foreignKey: "id_passager" });
 

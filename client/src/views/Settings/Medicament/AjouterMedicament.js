@@ -85,7 +85,7 @@ function AjouterMedicament({ onlineStatus }) {
         cursor.update(objMedicament);
       }
       await tx.done;
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     } else {
       let medicamentStore = tx.objectStore("medicaments");
       let medicament = await medicamentStore.getAll();
@@ -105,7 +105,7 @@ function AjouterMedicament({ onlineStatus }) {
             ? medicament[medicament.length - 1].id + 1
             : 1,
       });
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     }
 
     setTimeout(async () => {
@@ -122,16 +122,16 @@ function AjouterMedicament({ onlineStatus }) {
         ).then((val) => {
           if (val.payload.msg === true) {
             if (isNaN(location.id) === true) {
-              notify(1, "Insertion avec succes");
+              notify(1, t("add_txt"));
             } else {
-              notify(1, "Modifier avec succes");
+              notify(1, t("update_txt"));
             }
           } else {
-            notify(2, "Problème de connexion");
+            notify(2, t("problem"));
           }
         });
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
 
       setTimeout(async () => {
@@ -141,7 +141,7 @@ function AjouterMedicament({ onlineStatus }) {
       if (nom !== "" && form !== "" && dosage !== "") {
         saveMedicamentIndex();
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     }
   }

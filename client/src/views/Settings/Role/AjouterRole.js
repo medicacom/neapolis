@@ -49,7 +49,7 @@ function AjouterRole({ onlineStatus }) {
         cursor.update(objRole);
       }
       await tx.done;
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     } else {
       let rolesStore = tx.objectStore("roles");
       let roles = await rolesStore.getAll();
@@ -61,7 +61,7 @@ function AjouterRole({ onlineStatus }) {
         saved: 0,
         id: roles[roles.length - 1].id + 1,
       });
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     }
 
     setTimeout(async () => {
@@ -73,18 +73,18 @@ function AjouterRole({ onlineStatus }) {
       if (nom !== "" && order !== "") {
         dispatch(roleAdded({ nom, role, order, id }));
         if (isNaN(location.id) === true) {
-          notify(1, "Insertion avec succes");
+          notify(1, t("add_txt"));
         } else {
-          notify(1, "Modifier avec succes");
+          notify(1, t("update_txt"));
         }
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     } else {
       if (nom !== "" && order !== "") {
         saveRoleIndex();
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     }
 

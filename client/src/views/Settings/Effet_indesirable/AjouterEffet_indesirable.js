@@ -50,7 +50,7 @@ function AjouterEffet_indesirable({ onlineStatus }) {
         cursor.update(objEffet_indesirable);
       }
       await tx.done;
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     } else {
       let effet_indesirableStore = tx.objectStore("effet_indesirables");
       let effet_indesirable = await effet_indesirableStore.getAll();
@@ -64,7 +64,7 @@ function AjouterEffet_indesirable({ onlineStatus }) {
             ? effet_indesirable[effet_indesirable.length - 1].id + 1
             : 1,
       });
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     }
     setTimeout(async () => {
       listeEffet_indesirable();
@@ -76,12 +76,12 @@ function AjouterEffet_indesirable({ onlineStatus }) {
         dispatch(effet_indesirableAdded({ description, id })).then((data) => {
           if (data.payload.msg === true) {
             if (isNaN(location.id) === true) {
-              notify(1, "Insertion avec succes");
+              notify(1, t("add_txt"));
             } else {
-              notify(1, "Modifier avec succes");
+              notify(1, t("update_txt"));
             }
           } else {
-            notify(2, "Problème de connexion");
+            notify(2, t("problem"));
           }
 
           setTimeout(async () => {
@@ -89,13 +89,13 @@ function AjouterEffet_indesirable({ onlineStatus }) {
           }, 1500);
         });
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     } else {
       if (description !== "") {
         saveEffet_indesirableIndex();
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     }
   }

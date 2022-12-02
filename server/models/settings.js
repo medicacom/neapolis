@@ -43,7 +43,7 @@ var Settings = sequelize.define(
       allowNull: true,
     },
   },
-  { timestamps: false }
+  { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
 
 // create all the defined tables in the specified database.

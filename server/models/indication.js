@@ -30,13 +30,23 @@ var indication = sequelize.define('indications', {
         unique: false,
         allowNull: true,         
     },
+    description_en: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    description_ar: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
     etat: {
       type: Sequelize.INTEGER,
       unique: false,
       allowNull: true,
       defaultValue: 1,
     },
-}, { timestamps: false });
+}, { timestamps: false, charset: "utf8", collate: "utf8_general_ci" });
 
 // create all the defined tables in the specified database.
 sequelize.sync()

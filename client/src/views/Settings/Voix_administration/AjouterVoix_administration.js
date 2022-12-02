@@ -50,7 +50,7 @@ function AjouterVoix_administration({ onlineStatus }) {
         cursor.update(objVoix_administration);
       }
       await tx.done;
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     } else {
       let voix_administrationStore = tx.objectStore("voix_administrations");
       let voix_administration = await voix_administrationStore.getAll();
@@ -64,7 +64,7 @@ function AjouterVoix_administration({ onlineStatus }) {
             ? voix_administration[voix_administration.length - 1].id + 1
             : 1,
       });
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     }
     setTimeout(async () => {
       listeVoix_administration();
@@ -76,16 +76,16 @@ function AjouterVoix_administration({ onlineStatus }) {
         dispatch(voix_administrationAdded({ description, id })).then((val) => {
           if (val.payload.msg === true) {
             if (isNaN(location.id) === true) {
-              notify(1, "Insertion avec succes");
+              notify(1, t("add_txt"));
             } else {
-              notify(1, "Modifier avec succes");
+              notify(1, t("update_txt"));
             }
           } else {
-            notify(2, "Problème de connexion");
+            notify(2, t("problem"));
           }
         });
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
       setTimeout(async () => {
         listeVoix_administration();
@@ -94,7 +94,7 @@ function AjouterVoix_administration({ onlineStatus }) {
       if (description !== "") {
         saveVoix_administrationIndex();
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     }
   }

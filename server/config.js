@@ -1,5 +1,5 @@
 var config = {
-  base: "neapolis",
+  base: "neapolis1",
   root: "root",
   host: "localhost",
   password: "",
@@ -8,8 +8,9 @@ var config = {
   /* base: "neapolis",
   root: "user",
   host: "km813502-001.eu.clouddb.ovh.net",
-  password: "Mayssa123", 
-  port: "35702", */
+  password: "Mayssa123",
+  port: "35702",
+  path:"http://localhost:4000/new/" */
 };
 module.exports = {
   connection: config,

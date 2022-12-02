@@ -1,6 +1,10 @@
 {
   "save": "Save",
+  "add_txt": "Successful insertion",
+  "update_txt": "Edit successfully",
+  "erreur": "Check your data",
   "list": "Back to the list",
+  "problem": "Problème de connexion",
   "back": "back",
   "next": "next",
   "sign_in": "Sign in",
@@ -43,6 +47,7 @@
     "update_effect": "Edit side effect"
   },
   "User": {
+    "profile":"profile",
     "name": "Name",
     "last_name": "Last name",
     "login": "Login",
@@ -52,6 +57,7 @@
     "actions": "actions",
     "Validation": "Validation",
     "password": "password",
+    "password_err": "6 chiffre minimum",
     "gouvernorat": "Gouvernorate",
     "specialite": "Speciality",
     "tel": "Phone",
@@ -102,5 +108,14 @@
     "form": "form",
     "dosage": "dosage",
     "indication": "Indication"
+  },
+  "news": {
+    "add": "Add a news",
+    "update": "Edit news",
+    "list": "List of news",
+    "title": "Title",
+    "description": "Description",
+    "file": "File",
+    "user": "user"
   }
 }

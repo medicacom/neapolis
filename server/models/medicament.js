@@ -33,6 +33,18 @@ var medicaments = sequelize.define('medicaments', {
     allowNull: true, 
       
   },
+	nom_en: {
+    type: Sequelize.STRING,
+    unique: false,
+    allowNull: true, 
+      
+  },
+	nom_ar: {
+    type: Sequelize.STRING,
+    unique: false,
+    allowNull: true, 
+      
+  },
 	form: {
     type: Sequelize.STRING,
     unique: false,
@@ -67,7 +79,7 @@ var medicaments = sequelize.define('medicaments', {
     allowNull: true,
     defaultValue: 1,
   },
-}, { timestamps: false });
+}, { timestamps: false, charset: "utf8", collate: "utf8_general_ci" });
 
 medicaments.belongsTo(voix_administration, { as: "voix_administrations", foreignKey: "id_voix" });
 

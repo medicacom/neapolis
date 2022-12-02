@@ -49,7 +49,7 @@ function AjouterIndication({ onlineStatus }) {
         cursor.update(objIndication);
       }
       await tx.done;
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     } else {
       let indicationStore = tx.objectStore("indications");
       let indication = await indicationStore.getAll();
@@ -63,7 +63,7 @@ function AjouterIndication({ onlineStatus }) {
             ? indication[indication.length - 1].id + 1
             : 1,
       });
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     }
 
     setTimeout(async () => {
@@ -76,16 +76,16 @@ function AjouterIndication({ onlineStatus }) {
         dispatch(indicationAdded({ description, id })).then((val) => {
           if (val.payload.msg === true) {
             if (isNaN(location.id) === true) {
-              notify(1, "Insertion avec succes");
+              notify(1, t("add_txt"));
             } else {
-              notify(1, "Modifier avec succes");
+              notify(1, t("update_txt"));
             }
           } else {
-            notify(2, "Problème de connexion");
+            notify(2, t("problem"));
           }
         });
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
 
       setTimeout(async () => {
@@ -95,7 +95,7 @@ function AjouterIndication({ onlineStatus }) {
       if (description !== "") {
         saveIndicationIndex();
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     }
   }

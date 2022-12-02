@@ -11,8 +11,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
 import Select from "react-select";
 import { getPersonnel } from "../../../Redux/usersReduce";
+import { useTranslation } from "react-multi-lang";
 function AjouterNews({ onlineStatus }) {
-  /* var ifConnected = window.navigator.onLine; */
+  const t = useTranslation();
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -63,7 +64,7 @@ function AjouterNews({ onlineStatus }) {
         cursor.update(objNews);
       }
       await tx.done;
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     } else {
       let newsStore = tx.objectStore("news");
       let news = await newsStore.getAll();
@@ -99,19 +100,19 @@ function AjouterNews({ onlineStatus }) {
                 if (isNaN(location.id) === true) {
                   notify(1, "Insertion avec succes");
                 } else {
-                  notify(1, "Modifier avec succes");
+                  notify(1, t("update_txt"));
                 }
                 send(val.payload.data.id);
               } else {
-                notify(2, "Problème de connexion");
+                notify(2, t("problem"));
               }
             });
           } else {
-            notify(2, "Vérifier vos donnée");
+            notify(2, t("erreur"));
           }
         });
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
 
       setTimeout(async () => {
@@ -121,7 +122,7 @@ function AjouterNews({ onlineStatus }) {
       if (date !== "" && description !== "" && titre !== "") {
         saveNewsIndex();
       } else {
-        notify(2, "Vérifier vos donnée");
+        notify(2, t("erreur"));
       }
     }
   }
@@ -193,7 +194,7 @@ function AjouterNews({ onlineStatus }) {
                   <span className="btn-label">
                     <i className="fas fa-list"></i>
                   </span>
-                  Retour à la liste
+                  {t("list")}
                 </Button>
               </Col>
             </Row>
@@ -205,8 +206,8 @@ function AjouterNews({ onlineStatus }) {
                       <Card.Header>
                         <Card.Title as="h4">
                           {typeof location.id == "undefined"
-                            ? "Ajouter news"
-                            : "Modifier news"}
+                            ? t("news.add")
+                            : t("news.update")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -214,10 +215,10 @@ function AjouterNews({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Titre * </label>
+                            <label>{t("news.title")} * </label>
                             <Form.Control
                               defaultValue={titre}
-                              placeholder="Titre"
+                              placeholder={t("news.title")}
                               type="text"
                               onChange={(value) => {
                                 setTitre(value.target.value);
@@ -255,10 +256,10 @@ function AjouterNews({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>File * </label>
+                            <label>{t("news.file")} * </label>
                             <Form.Control
                               defaultValue={file}
-                              placeholder="file"
+                              placeholder={t("news.file")}
                               type="file"
                               onChange={(value) => {
                                 setFile(value.target.files[0]);
@@ -270,10 +271,10 @@ function AjouterNews({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group id="roleClass">
-                            <label>User* </label>
+                            <label>{t("news.user")}* </label>
                             <Select
                               isMulti
-                              placeholder="User"
+                              placeholder={t("news.user")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={userSelect}
@@ -292,7 +293,7 @@ function AjouterNews({ onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

@@ -148,13 +148,13 @@ function Inscription({ onlineStatus }) {
         })
       ).then((data) => {
         if (data.payload === true) {
-          if (isNaN(location.id) === true) notify(1, "Insertion avec succes");
-          else notify(1, "Modifier avec succes");
+          if (isNaN(location.id) === true) notify(1, t("add_txt"));
+          else notify(1, t("update_txt"));
           setTimeout(async () => {
             listeUser();
           }, 1500);
         } else {
-          notify(2, "Problème de connexion");
+          notify(2, t("problem"));
         }
       });
     }

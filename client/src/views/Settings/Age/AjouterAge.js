@@ -38,9 +38,9 @@ function AjouterAge() {
   function submitForm(event) {
     dispatch(ageAdded({ description: description, id: id }));
     if (isNaN(location.id) === true) {
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     } else {
-      notify(1, "Modifier avec succes");
+      notify(1, t("update_txt"));
     }
   }
 
