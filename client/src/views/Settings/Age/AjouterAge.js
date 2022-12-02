@@ -17,6 +17,8 @@ function AjouterAge() {
   if (isNaN(location.id) === true) document.title = "Ajouter age";
   else document.title = "Modifier le age";
   const [description, setDescription] = React.useState("");
+  const [descriptionEn, setDescriptionEn] = React.useState("");
+  const [descriptionAr, setDescriptionAr] = React.useState("");
   const [id, setId] = React.useState(0);
 
   const notify = (type, msg) => {
@@ -36,7 +38,12 @@ function AjouterAge() {
       );
   };
   function submitForm(event) {
-    dispatch(ageAdded({ description: description, id: id }));
+    dispatch(ageAdded({
+      description: description,
+      description_en: descriptionEn,
+      description_ar: descriptionAr,
+      id: id,
+    }));
     if (isNaN(location.id) === true) {
       notify(1, t("add_txt"));
     } else {
@@ -53,6 +60,8 @@ function AjouterAge() {
           listeAge();
         } else {
           setDescription(entities.description);
+          setDescriptionAr(entities.description_ar);
+          setDescriptionEn(entities.description_en);
           setId(location.id);
         }
       }
@@ -102,13 +111,41 @@ function AjouterAge() {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Age* </label>
+                            <label>Description* </label>
                             <Form.Control
                               defaultValue={description}
                               placeholder="Age"
                               type="text"
                               onChange={(value) => {
                                 setDescription(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col className="pl-1" md="6">
+                          <Form.Group>
+                            <label>Description EN* </label>
+                            <Form.Control
+                              defaultValue={descriptionEn}
+                              placeholder="Description EN"
+                              type="text"
+                              onChange={(value) => {
+                                setDescriptionEn(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>Description AR* </label>
+                            <Form.Control
+                              defaultValue={descriptionAr}
+                              placeholder="Description AR"
+                              type="text"
+                              onChange={(value) => {
+                                setDescriptionAr(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>

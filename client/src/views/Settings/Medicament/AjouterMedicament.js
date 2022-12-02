@@ -39,6 +39,8 @@ function AjouterMedicament({ onlineStatus }) {
   const navigate = useHistory();
   const [dosage, setDosage] = React.useState("");
   const [nom, setNom] = React.useState("");
+  const [nomEn, setNomEn] = React.useState("");
+  const [nomAr, setNomAr] = React.useState("");
   const [form, setForm] = React.useState("");
   const [id, setId] = React.useState(0);
 
@@ -118,7 +120,16 @@ function AjouterMedicament({ onlineStatus }) {
       var id_indication = indicationSelect.value;
       if (nom !== "" && form !== "" && dosage !== "") {
         dispatch(
-          medicamentAdded({ nom, form, dosage, id_voix, id_indication, id })
+          medicamentAdded({
+            nom,
+            nomAr,
+            nomEn,
+            form,
+            dosage,
+            id_voix,
+            id_indication,
+            id,
+          })
         ).then((val) => {
           if (val.payload.msg === true) {
             if (isNaN(location.id) === true) {
@@ -228,6 +239,8 @@ function AjouterMedicament({ onlineStatus }) {
     var medicament = await dispatch(medicamentGetById(location.id));
     var entities = medicament.payload;
     setNom(entities.nom);
+    setNomAr(entities.nom_ar);
+    setNomEn(entities.nom_en);
     setDosage(entities.dosage);
     setForm(entities.form);
     setIndicationSelect({
@@ -310,6 +323,34 @@ function AjouterMedicament({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
+                            <label>{t("name")} EN* </label>
+                            <Form.Control
+                              defaultValue={nomEn}
+                              placeholder={t("name") + "EN"}
+                              type="text"
+                              onChange={(value) => {
+                                setNomEn(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>{t("name")} AR* </label>
+                            <Form.Control
+                              defaultValue={nomAr}
+                              placeholder={t("name") + "AR"}
+                              type="text"
+                              onChange={(value) => {
+                                setNomAr(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col className="pl-1" md="6">
+                          <Form.Group>
                             <label>{t("Drugs.dosage")}* </label>
                             <Form.Control
                               defaultValue={dosage}
@@ -324,7 +365,7 @@ function AjouterMedicament({ onlineStatus }) {
                       </Row>
                       <Row>
                         <Col className="pr-1" md="6">
-                          <Form.Group >
+                          <Form.Group>
                             <label>Indication* </label>
                             <Select
                               placeholder="Indication"
@@ -339,7 +380,7 @@ function AjouterMedicament({ onlineStatus }) {
                           </Form.Group>
                         </Col>
                         <Col className="pl-1" md="6">
-                          <Form.Group >
+                          <Form.Group>
                             <label>{t("Drugs.dosage")}* </label>
                             <Select
                               placeholder={t("Drugs.voice")}

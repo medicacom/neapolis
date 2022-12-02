@@ -34,6 +34,8 @@ function AjouterIndication({ onlineStatus }) {
   const location = useParams();
   const navigate = useHistory();
   const [description, setDescription] = React.useState("");
+  const [descriptionEn, setDescriptionEn] = React.useState("");
+  const [descriptionAr, setDescriptionAr] = React.useState("");
   const [id, setId] = React.useState(0);
 
   async function saveIndicationIndex() {
@@ -73,7 +75,12 @@ function AjouterIndication({ onlineStatus }) {
   function submitForm() {
     if (onlineStatus === 1) {
       if (description !== "") {
-        dispatch(indicationAdded({ description, id })).then((val) => {
+        dispatch(indicationAdded({
+          description: description,
+          description_en: descriptionEn,
+          description_ar: descriptionAr,
+          id: id,
+        })).then((val) => {
           if (val.payload.msg === true) {
             if (isNaN(location.id) === true) {
               notify(1, t("add_txt"));
@@ -119,7 +126,9 @@ function AjouterIndication({ onlineStatus }) {
       if (isNaN(location.id) === false) {
         var indication = await dispatch(indicationGetById(location.id));
         var entities = indication.payload;
-        setDescription(entities.titre);
+        setDescription(entities.description);
+        setDescriptionAr(entities.description_ar);
+        setDescriptionEn(entities.description_en);
         setId(location.id);
       }
     }
@@ -178,6 +187,34 @@ function AjouterIndication({ onlineStatus }) {
                               type="text"
                               onChange={(value) => {
                                 setDescription(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col className="pl-1" md="6">
+                          <Form.Group>
+                            <label>Description EN* </label>
+                            <Form.Control
+                              defaultValue={descriptionEn}
+                              placeholder="Description EN"
+                              type="text"
+                              onChange={(value) => {
+                                setDescriptionEn(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>Description AR* </label>
+                            <Form.Control
+                              defaultValue={descriptionAr}
+                              placeholder="Description AR"
+                              type="text"
+                              onChange={(value) => {
+                                setDescriptionAr(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>

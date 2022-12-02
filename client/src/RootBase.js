@@ -5,42 +5,38 @@ import AdminNavbar from "./components/Navbars/AdminNavbar";
 import Footer from "./components/Footer/Footer";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { getRootByRole } from "./Redux/rootBaseReduce";
-import { verification,getDetailUser } from "./Redux/usersReduce";
+import { verification, getDetailUser } from "./Redux/usersReduce";
 import { useDispatch } from "react-redux";
-import { openDB } from 'idb/with-async-ittr'; 
+import { openDB } from "idb/with-async-ittr";
 import { updateDB } from "./Redux/offlineReduce";
 
-function RootBase({id}) {
+function RootBase({ id }) {
   let db;
   const location = useLocation();
   const dispatch = useDispatch();
-  /* const {users} = useSelector((state) => state.users); */
-  
-  const [users, setUsers] = React.useState(null);  
-  const [usersOff, setUsersOff] = React.useState(null);  
-  const [loaderTable, setLoaderTable] = React.useState(true);  
+
+  const [users, setUsers] = React.useState(null);
+  const [usersOff, setUsersOff] = React.useState(null);
+  const [loaderTable, setLoaderTable] = React.useState(true);
   const [onlineStatus, setOnlineStatus] = React.useState(1);
   const [entities, setEntities] = React.useState([]);
   const [entitiesOff, setEntitiesOff] = React.useState([]);
 
   //mode online
   const getRoutes = (routes) => {
-    var id_role = onlineStatus === 1?users.user.id_role:usersOff.id_role;
-    var obj = onlineStatus === 1?users:usersOff;
+    var id_role = onlineStatus === 1 ? users.user.id_role : usersOff.id_role;
+    var obj = onlineStatus === 1 ? users : usersOff;
     return routes.map((prop, key) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (
-        prop.role.includes(id_role) ||
-        prop.role.includes(20)
-      ) {
+      if (prop.role.includes(id_role) || prop.role.includes(20)) {
         var component = React.createElement(
           Components[prop.componentStr],
-          { obj:obj,onlineStatus:onlineStatus },
+          { obj: obj, onlineStatus: onlineStatus },
           null
         );
-        return <Route path={prop.path} key={key} render={()=>component} />;
+        return <Route path={prop.path} key={key} render={() => component} />;
       }
       return null;
     });
@@ -48,23 +44,23 @@ function RootBase({id}) {
 
   async function initRoot() {
     db = await openDB("medis", 1, {});
-    const tx = db.transaction('rootBase', 'readwrite');
-    const index = tx.store.index('parent');
-    let store = tx.objectStore('rootBase');
+    const tx = db.transaction("rootBase", "readwrite");
+    const index = tx.store.index("parent");
+    let store = tx.objectStore("rootBase");
     let rootArray = await store.getAll();
     var arrayView = [];
     for (const key in rootArray) {
       var e = rootArray[key];
-      if(e.parent !==0) {
-        var rolesFils=e.role;
+      if (e.parent !== 0) {
+        var rolesFils = e.role;
         var splitRoleFils = rolesFils.split(",");
-        var arrayRoleFils=[];
-        splitRoleFils.forEach(element=>{
+        var arrayRoleFils = [];
+        splitRoleFils.forEach((element) => {
           arrayRoleFils.push(parseInt(element));
-        })
+        });
         arrayView.push({
           className: e.className,
-          path: "/"+e.path,
+          path: "/" + e.path,
           name: e.name,
           icon: e.icon,
           role: arrayRoleFils,
@@ -77,17 +73,17 @@ function RootBase({id}) {
     var arrayParent = [];
     for await (const cursor of index.iterate(0)) {
       var objRole = { ...cursor.value };
-      const pos = arrayView.map(e => e.parent).indexOf(objRole.id);
-      
-      var rolesFils=objRole.role;
+      const pos = arrayView.map((e) => e.parent).indexOf(objRole.id);
+
+      var rolesFils = objRole.role;
       var splitRoleFils = rolesFils.split(",");
-      var arrayRole=[];
-      splitRoleFils.forEach(element=>{
+      var arrayRole = [];
+      splitRoleFils.forEach((element) => {
         arrayRole.push(parseInt(element));
-      })
-      if(pos === -1){
+      });
+      if (pos === -1) {
         var obj = {
-          path: "/"+objRole.path,
+          path: "/" + objRole.path,
           className: objRole.className,
           name: objRole.name,
           icon: objRole.icon,
@@ -99,13 +95,13 @@ function RootBase({id}) {
       } else {
         var obj = {
           collapse: true,
-          path: "/"+objRole.path,
+          path: "/" + objRole.path,
           name: objRole.name,
-          state: "pere"+objRole.id,
+          state: "pere" + objRole.id,
           className: objRole.className,
           icon: objRole.icon,
           role: arrayRole,
-          views:arrayView
+          views: arrayView,
         };
         arrayParent.push(obj);
       }
@@ -115,70 +111,18 @@ function RootBase({id}) {
 
   async function initUser() {
     db = await openDB("medis", 1, {});
-    const tx = db.transaction('detailUser', 'readwrite');
-    let store = tx.objectStore('detailUser');
+    const tx = db.transaction("detailUser", "readwrite");
+    let store = tx.objectStore("detailUser");
     let detail = await store.getAll();
-    if(detail.length !==0)
-    setUsersOff(detail[0]);
+    if (detail.length !== 0) setUsersOff(detail[0]);
   }
 
-  // async function saveData(user) {
-  //   if (user){
-  //     db = await openDB("medis", 1, {});
-
-  //     /** start get all table **/
-  //     const tx = db.transaction('roles', 'readwrite');
-  //     let rolesStore = tx.objectStore('roles');
-  //     let roles = await rolesStore.getAll();
-
-  //     const tx1 = db.transaction('users', 'readwrite');
-  //     let userStore = tx1.objectStore('users');
-  //     let userSave = await userStore.getAll();
-      
-  //     var newsStore = await db.getAllFromIndex("news", "saved", 0);
-  //     console.log(newsStore)
-  //     /* let newsSave = await newsStore.getAll(); */
-      
-  //     var final = roles.concat(userSave);      
-  //     /* var final = final.concat(newsSave); */
-  //     /** end get all table **/
-
-  //     /** start role **/
-  //     var insertRole = [];
-  //     var arrayFinal = [];
-  //     /* for (const key in final) {
-  //       const element = final[key];
-  //       if(element.type_table == 2){          
-  //         if(element.saved === 0){        
-  //           insertRole.push({
-  //             nom: element.nom,
-  //             role: element.role,
-  //             order: element.order,          
-  //           });
-  //           updateRole(element)
-  //         } else if(element.updated === 1){
-  //           arrayFinal.push(element);
-  //           updateRole(element)
-  //         }
-  //       } else if(element.type_table == 3){
-  //         if(element.saved === 0 || element.updated === 1){
-  //           arrayFinal.push(element)
-  //           updateUser(element)
-  //         }
-  //       }
-  //     } */
-  //     dispatch(updateDB({ insertRole:insertRole, final:arrayFinal ,id:user.user.id })).then(()=>{
-  //       setLoaderTable(false);
-  //     });
-
-  //   }
-  // }
-  async function updateIndex(ch){
-    const tx = db.transaction(ch, 'readwrite');
-    const index = tx.store.index('saved');
+  async function updateIndex(ch) {
+    const tx = db.transaction(ch, "readwrite");
+    const index = tx.store.index("saved");
     var nb = 0;
     for await (const cursor of index.iterate(0)) {
-      nb++
+      nb++;
       var obj = { ...cursor.value };
       obj.saved = 1;
       cursor.update(obj);
@@ -187,7 +131,7 @@ function RootBase({id}) {
     return nb;
   }
   async function saveData(user) {
-    if (user){
+    if (user) {
       db = await openDB("medis", 1, {});
 
       /** start get all table **/
@@ -195,8 +139,16 @@ function RootBase({id}) {
       var roleStore = await db.getAllFromIndex("roles", "saved", 0);
       var userStore = await db.getAllFromIndex("users", "saved", 0);
       var newsStore = await db.getAllFromIndex("news", "saved", 0);
-      var indicationsStore = await db.getAllFromIndex("indications", "saved", 0);
-      var voixStore = await db.getAllFromIndex("voix_administrations", "saved", 0);
+      var indicationsStore = await db.getAllFromIndex(
+        "indications",
+        "saved",
+        0
+      );
+      var voixStore = await db.getAllFromIndex(
+        "voix_administrations",
+        "saved",
+        0
+      );
       var effStore = await db.getAllFromIndex("effet_indesirables", "saved", 0);
       var medicamentStore = await db.getAllFromIndex("medicaments", "saved", 0);
 
@@ -213,76 +165,86 @@ function RootBase({id}) {
       var nbM = await updateIndex("medicaments");
 
       /** start update all table **/
-      
-      var len1 = (nbR + nbN + nbU + nbI + nbV + nbE + nbM);
-      var len2 = (newsStore.length + roleStore.length + userStore.length + indicationsStore.length + voixStore.length + effStore.length + medicamentStore.length);
+
+      var len1 = nbR + nbN + nbU + nbI + nbV + nbE + nbM;
+      var len2 =
+        newsStore.length +
+        roleStore.length +
+        userStore.length +
+        indicationsStore.length +
+        voixStore.length +
+        effStore.length +
+        medicamentStore.length;
       /* var insertRole = [];
       var arrayFinal = []; */
-      dispatch(updateDB({
-        newsStore: newsStore,
-        userStore: userStore,
-        roleStore: roleStore,
-        indicationsStore: indicationsStore,
-        voixStore: voixStore,
-        effStore: effStore,
-        medicamentStore:medicamentStore,
-        id: user.user.id 
-      })).then(()=>{
-        if(len1===len2)
-          setLoaderTable(false);
+      dispatch(
+        updateDB({
+          newsStore: newsStore,
+          userStore: userStore,
+          roleStore: roleStore,
+          indicationsStore: indicationsStore,
+          voixStore: voixStore,
+          effStore: effStore,
+          medicamentStore: medicamentStore,
+          id: user.user.id,
+        })
+      ).then(() => {
+        if (len1 === len2) setLoaderTable(false);
       });
-
     }
   }
 
   //verif token
-  const getRoot = useCallback(async (user) => {
-    if (user) {
-      dispatch(getRootByRole(user.user.id_role)).then(val=>{
-        if(val.payload.status){
-          initRoot();
-        }
-        else {
-          setEntities(val.payload)
-        }
-      })
-      saveData(user);
-    }
-  }, [dispatch,saveData]);
+  const getRoot = useCallback(
+    async (user) => {
+      if (user) {
+        dispatch(getRootByRole(user.user.id_role)).then((val) => {
+          if (val.payload.status) {
+            initRoot();
+          } else {
+            setEntities(val.payload);
+          }
+        });
+        saveData(user);
+      }
+    },
+    [dispatch, saveData]
+  );
 
   const getUser = useCallback(async () => {
-    
-    dispatch(getDetailUser(id)).then(val=>{
-      if(val.payload.status){
+    dispatch(getDetailUser(id)).then((val) => {
+      if (val.payload.status) {
         setOnlineStatus(0);
         initRoot();
         initUser();
         setLoaderTable(false);
-      }
-      else {
+      } else {
         setOnlineStatus(1);
         var res = val.payload.data;
         setUsers(res);
-        verifToken(res)
+        verifToken(res);
         /* getRoot(res); */
       }
-    })
+    });
   }, [dispatch]);
-  
+
   //verif token
-  const verifToken = useCallback(async (res) => {
-    var response = await dispatch(verification());
-    if(response.payload === false){
-      localStorage.clear();
-      window.location.replace("/login");
-    } else {
-      getRoot(res);
-    }
-  }, [dispatch,getRoot]);
+  const verifToken = useCallback(
+    async (res) => {
+      var response = await dispatch(verification());
+      if (response.payload === false) {
+        localStorage.clear();
+        window.location.replace("/login");
+      } else {
+        getRoot(res);
+      }
+    },
+    [dispatch, getRoot]
+  );
 
   useEffect(() => {
-    getUser()
-    if(location.pathname === "/"){
+    getUser();
+    if (location.pathname === "/") {
       window.location.replace("/declaration");
     }
     /* getUser(users); */
@@ -290,25 +252,34 @@ function RootBase({id}) {
 
   return (
     <>
-    
       {/* <div className="preloader">
       </div> */}
-      {loaderTable?
+      {loaderTable ? (
         <div class="loader-container">
           <div class="loader"></div>
         </div>
-      :""}
-      {users && entities.length>0 && onlineStatus === 1 && !loaderTable? (
-        <div className="wrapper">
-          {location.pathname !=="/declaration"?<Sidebar users={users} onlineStatus={onlineStatus} />:""}
-          <div className={location.pathname !=="/declaration"?"main-panel":""}>
-            {location.pathname !=="/declaration"?<AdminNavbar users={users} onlineStatus={onlineStatus} />:""}
+      ) : (
+        ""
+      )}
+      {users && entities.length > 0 && onlineStatus === 1 && !loaderTable ? (
+        <div className="wrapper" dir="ltr">
+          {location.pathname !== "/declaration" ? (
+            <Sidebar users={users} onlineStatus={onlineStatus} />
+          ) : (
+            ""
+          )}
+          <div
+            className={location.pathname !== "/declaration" ? "main-panel" : ""}
+          >
+            {location.pathname !== "/declaration" ? (
+              <AdminNavbar users={users} onlineStatus={onlineStatus} />
+            ) : (
+              ""
+            )}
             <div className="content">
-              <Switch>
-                {entities.length>0?getRoutes(entities):""}
-              </Switch>
+              <Switch>{entities.length > 0 ? getRoutes(entities) : ""}</Switch>
             </div>
-            {location.pathname !=="/declaration"?<Footer />:""}
+            {location.pathname !== "/declaration" ? <Footer /> : ""}
             <div
               className="close-layer"
               onClick={() =>
@@ -317,16 +288,21 @@ function RootBase({id}) {
             />
           </div>
         </div>
-      ) : ""}
+      ) : (
+        ""
+      )}
 
-      {usersOff && entitiesOff.length>0 && onlineStatus === 0 && !loaderTable ? (
+      {usersOff &&
+      entitiesOff.length > 0 &&
+      onlineStatus === 0 &&
+      !loaderTable ? (
         <div className="wrapper">
           <Sidebar users={usersOff} onlineStatus={onlineStatus} />
           <div className="main-panel">
             <AdminNavbar users={usersOff} onlineStatus={onlineStatus} />
             <div className="content">
               <Switch>
-                {entitiesOff.length>0?getRoutes(entitiesOff):""}
+                {entitiesOff.length > 0 ? getRoutes(entitiesOff) : ""}
               </Switch>
             </div>
             <Footer />
@@ -338,7 +314,9 @@ function RootBase({id}) {
             />
           </div>
         </div>
-      ) : ""}
+      ) : (
+        ""
+      )}
     </>
   );
 }

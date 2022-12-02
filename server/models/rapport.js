@@ -84,7 +84,7 @@ var rapport = sequelize.define(
     },
     id_user: {
       type: Sequelize.INTEGER,
-      unique: false, 
+      unique: false,
       allowNull: true,
       references: {
         model: user,
@@ -126,13 +126,19 @@ rapport.belongsTo(patient, { as: "patients", foreignKey: "id_patient" });
 
 rapport.belongsTo(user, { as: "users", foreignKey: "id_user" });
 
-rapport.belongsTo(medicament, { as: "medicaments", foreignKey: "id_medicament" });
+rapport.belongsTo(medicament, {
+  as: "medicaments",
+  foreignKey: "id_medicament",
+});
 
-rapport.belongsTo(effet_indesirable, { as: "effet_indesirables", foreignKey: "id_eff" });
+rapport.belongsTo(effet_indesirable, {
+  as: "effet_indesirables",
+  foreignKey: "id_eff",
+});
 
 rapport.belongsTo(voix, { as: "voix_administrations", foreignKey: "id_voix" });
 
-// create all the defined tables in the specified database. 
+// create all the defined tables in the specified database.
 sequelize
   .sync()
   .then(() => {

@@ -1,9 +1,12 @@
-import React, { useEffect,useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { toast, ToastContainer } from "react-toastify";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { specialiteAdded, specialiteGetById } from "../../../Redux/specialiteReduce";
+import {
+  specialiteAdded,
+  specialiteGetById,
+} from "../../../Redux/specialiteReduce";
 import { verification } from "../../../Redux/usersReduce";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-multi-lang";
@@ -13,8 +16,10 @@ function AjouterSpecialite() {
   const dispatch = useDispatch();
   const location = useParams();
   if (isNaN(location.id) === true) document.title = "Ajouter un specialite";
-  else  document.title = "Modifier le specialite";
+  else document.title = "Modifier le specialite";
   const [nom, setNom] = React.useState("");
+  const [nomEn, setNomEn] = React.useState("");
+  const [nomAr, setNomAr] = React.useState("");
   const [id, setId] = React.useState(0);
   const notify = (type, msg) => {
     if (type === 1)
@@ -33,21 +38,20 @@ function AjouterSpecialite() {
       );
   };
   function submitForm(event) {
-    if(nom === "")      
-      notify(2, "Ligne Ims est obligatoire");   
+    if (nom === "") notify(2, "Ligne Ims est obligatoire");
     else {
-      dispatch(specialiteAdded({ nom, id }));
-      if(isNaN(location.id) === true)
-        notify(1, t("add_txt"))
-      else  
-        notify(1, t("update_txt"));
+      dispatch(
+        specialiteAdded({ nom: nom, nom_ar: nomAr, nom_en: nomEn, id: id })
+      );
+      if (isNaN(location.id) === true) notify(1, t("add_txt"));
+      else notify(1, t("update_txt"));
     }
   }
 
   //verif token
   const verifToken = useCallback(async () => {
     var response = await dispatch(verification());
-    if(response.payload === false){
+    if (response.payload === false) {
       localStorage.clear();
       window.location.replace("/login");
     }
@@ -59,12 +63,14 @@ function AjouterSpecialite() {
         var specialite = await dispatch(specialiteGetById(location.id));
         var entities = specialite.payload;
         setNom(entities.nom);
+        setNomAr(entities.nom_ar);
+        setNomEn(entities.nom_en);
         setId(location.id);
       }
     }
     verifToken();
     getSpecialite();
-  }, [location.id,dispatch,verifToken]);
+  }, [location.id, dispatch, verifToken]);
 
   function listeSpecialite() {
     window.location.replace("/listSpecialite");
@@ -98,7 +104,9 @@ function AjouterSpecialite() {
                     <Card.Header>
                       <Card.Header>
                         <Card.Title as="h4">
-                          { typeof location.id == "undefined" ? t("speciality.add") : t("speciality.update") }
+                          {typeof location.id == "undefined"
+                            ? t("speciality.add")
+                            : t("speciality.update")}
                         </Card.Title>
                       </Card.Header>
                     </Card.Header>
@@ -113,6 +121,34 @@ function AjouterSpecialite() {
                               type="text"
                               onChange={(value) => {
                                 setNom(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>{t("name")} EN* </label>
+                            <Form.Control
+                              defaultValue={nomEn}
+                              placeholder={t("name") + " EN"}
+                              type="text"
+                              onChange={(value) => {
+                                setNomEn(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>{t("name")} AR* </label>
+                            <Form.Control
+                              defaultValue={nomAr}
+                              placeholder={t("name") + "AR"}
+                              type="text"
+                              onChange={(value) => {
+                                setNomAr(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>

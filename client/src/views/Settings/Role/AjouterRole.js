@@ -31,6 +31,8 @@ function AjouterRole({ onlineStatus }) {
   const location = useParams();
   const navigate = useHistory();
   const [nom, setNom] = React.useState("");
+  const [nomEn, setNomEn] = React.useState("");
+  const [nomAr, setNomAr] = React.useState("");
   const [role] = React.useState(0);
   const [order, setOrder] = React.useState("");
   const [id, setId] = React.useState(0);

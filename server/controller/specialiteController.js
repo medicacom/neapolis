@@ -6,10 +6,15 @@ const auth = require("../middlewares/passport");
 // Desplay all lignes of client ...
 router.post("/addSpecialite",auth, (req, res) => {
   var id = req.body.id;
+  var nom = req.body.nom;
+  var nom_en = req.body.nom_en;
+  var nom_ar = req.body.nom_ar;
   if (id == 0) {
     specialites
       .create({
-        nom: req.body.nom,
+        nom: nom,
+        nom_en: nom_en,
+        nom_ar: nom_ar,
         etat: 1,
       })
       .then((r) => {
@@ -25,7 +30,9 @@ router.post("/addSpecialite",auth, (req, res) => {
       } else {
         specialites
           .update({
-            nom: req.body.nom,
+            nom: nom,
+            nom_en: nom_en,
+            nom_ar: nom_ar,
             etat: 1,
           },{ where: { id: id } })
           .then((r2) => {

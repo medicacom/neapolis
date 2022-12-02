@@ -116,7 +116,10 @@ var User = sequelize.define(
 
 User.belongsTo(Role, { as: "roles", foreignKey: "id_role" });
 
-User.belongsTo(gouvernorat, { as: "gouvernorats", foreignKey: "id_gouvernorat" });
+User.belongsTo(gouvernorat, {
+  as: "gouvernorats",
+  foreignKey: "id_gouvernorat",
+});
 
 User.belongsTo(specialite, { as: "specialites", foreignKey: "id_sp" });
 
@@ -130,15 +133,16 @@ User.prototype.validPassword = function (password) {
 };
 
 // create all the defined tables in the specified database.
-sequelize.sync() 
+sequelize
+  .sync()
   .then(() => {
     User.findAll().then(function (u) {
-      if (u.length == 0) { 
+      if (u.length == 0) {
         User.create({
           nom_prenom: "admin",
           login: "admin",
           email: "admin@admin.com",
-          tel: 0, 
+          tel: 0,
           id_role: 1,
           password: "26411058mk",
           etat: 1,

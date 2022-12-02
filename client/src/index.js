@@ -35,7 +35,7 @@ let lang = window.localStorage.getItem("lang");
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("arB");
+console.log("wrapper");
 
 openDB("medis", 1, {
   upgrade(db) {

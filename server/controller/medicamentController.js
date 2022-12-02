@@ -8,6 +8,8 @@ const webpush = require("web-push");
 router.post("/addMedicament", auth, (req, res) => {
   var id = req.body.id;
   var nom = req.body.nom;
+  var nom_ar = req.body.nomAr;
+  var nom_en = req.body.nomEn;
   var form = req.body.form;
   var dosage = req.body.dosage;
   var id_indication = req.body.id_indication;
@@ -16,6 +18,8 @@ router.post("/addMedicament", auth, (req, res) => {
     medicament
       .create({
         nom: nom,
+        nom_ar: nom_ar,
+        nom_en: nom_en,
         form: form,
         dosage: dosage,
         id_voix: id_voix,
@@ -37,6 +41,8 @@ router.post("/addMedicament", auth, (req, res) => {
           .update(
             {
               nom: nom,
+              nom_ar: nom_ar,
+              nom_en: nom_en,
               form: form,
               dosage: dosage,
               id_voix: id_voix,

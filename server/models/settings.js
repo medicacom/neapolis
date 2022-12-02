@@ -49,17 +49,24 @@ var Settings = sequelize.define(
 // create all the defined tables in the specified database.
 sequelize
   .sync()
-  .then(() => console.log("settings table has been successfully created, if one doesn't exist"))
+  .then(() =>
+    console.log(
+      "settings table has been successfully created, if one doesn't exist"
+    )
+  )
   .catch((error) => console.log("This error occured", error));
 
-  Settings.findAll().then(function (sett) {
-    if (sett.length == 0) {
-      Settings
-        .create({name:"Medicacom",logo:"logo.png",icon:"favicon.ico"})
-        .then((r) => {})
-        .catch((error) => {});
-    }
-  });
-   
+Settings.findAll().then(function (sett) {
+  if (sett.length == 0) {
+    Settings.create({
+      name: "Medicacom",
+      logo: "logo.png",
+      icon: "favicon.ico",
+    })
+      .then((r) => {})
+      .catch((error) => {});
+  }
+});
+
 // export setting model for use in other files.
 module.exports = Settings;

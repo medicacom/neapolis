@@ -20,6 +20,8 @@ function AjouterRootBase(props) {
   const navigate = useHistory();
   //input
   const [name, setName] = React.useState("");
+  const [nameEn, setNameEn] = React.useState("");
+  const [nameAr, setNameAr] = React.useState("");
   const [className, setClassName] = React.useState("");
   const [role, setRole] = React.useState("");
   const [ordre, setOrdre] = React.useState(0);
@@ -115,6 +117,8 @@ function AjouterRootBase(props) {
       dispatch(
         rootBaseAdded({
           name,
+          nameAr,
+          nameEn,
           className,
           component,
           icon,
@@ -154,6 +158,8 @@ function AjouterRootBase(props) {
           var root = await dispatch(rootGetById(location.id));
           var entities = root.payload;
           setName(entities.name);
+          setNameAr(entities.name_ar);
+          setNameEn(entities.name_en);
           setParent(entities.parent);
           setPath(entities.path);
           setIcon(entities.icon);
@@ -227,6 +233,42 @@ function AjouterRootBase(props) {
                               type="text"
                               onChange={(value) => {
                                 setName(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                          {nameRequired ? null : (
+                            <label className="error">
+                              Nom est obligatoire.
+                            </label>
+                          )}
+                        </Col>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>Name EN* </label>
+                            <Form.Control
+                              defaultValue={nameEn}
+                              placeholder="Nom"
+                              type="text"
+                              onChange={(value) => {
+                                setNameEn(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                          {nameRequired ? null : (
+                            <label className="error">
+                              Nom est obligatoire.
+                            </label>
+                          )}
+                        </Col>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>Name AR* </label>
+                            <Form.Control
+                              defaultValue={nameAr}
+                              placeholder="Nom"
+                              type="text"
+                              onChange={(value) => {
+                                setNameEn(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>

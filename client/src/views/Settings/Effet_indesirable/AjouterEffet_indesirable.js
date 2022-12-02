@@ -35,6 +35,8 @@ function AjouterEffet_indesirable({ onlineStatus }) {
   const location = useParams();
   const navigate = useHistory();
   const [description, setDescription] = React.useState("");
+  const [descriptionEn, setDescriptionEn] = React.useState("");
+  const [descriptionAr, setDescriptionAr] = React.useState("");
   const [id, setId] = React.useState(0);
 
   async function saveEffet_indesirableIndex() {
@@ -73,7 +75,14 @@ function AjouterEffet_indesirable({ onlineStatus }) {
   function submitForm() {
     if (onlineStatus === 1) {
       if (description !== "") {
-        dispatch(effet_indesirableAdded({ description, id })).then((data) => {
+        dispatch(
+          effet_indesirableAdded({
+            description: description,
+            description_en: descriptionEn,
+            description_ar: descriptionAr,
+            id: id,
+          })
+        ).then((data) => {
           if (data.payload.msg === true) {
             if (isNaN(location.id) === true) {
               notify(1, t("add_txt"));
@@ -119,7 +128,9 @@ function AjouterEffet_indesirable({ onlineStatus }) {
           effet_indesirableGetById(location.id)
         );
         var entities = effet_indesirable.payload;
-        setDescription(entities.titre);
+        setDescription(entities.description);
+        setDescriptionAr(entities.description_ar);
+        setDescriptionEn(entities.description_en);
         setId(location.id);
       }
     }
@@ -178,6 +189,34 @@ function AjouterEffet_indesirable({ onlineStatus }) {
                               type="text"
                               onChange={(value) => {
                                 setDescription(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col className="pl-1" md="6">
+                          <Form.Group>
+                            <label>Description EN* </label>
+                            <Form.Control
+                              defaultValue={descriptionEn}
+                              placeholder="Description EN"
+                              type="text"
+                              onChange={(value) => {
+                                setDescriptionEn(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className="pr-1" md="6">
+                          <Form.Group>
+                            <label>Description AR* </label>
+                            <Form.Control
+                              defaultValue={descriptionAr}
+                              placeholder="Description AR"
+                              type="text"
+                              onChange={(value) => {
+                                setDescriptionAr(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>

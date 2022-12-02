@@ -11,6 +11,8 @@ router.post("/addRoot", auth, (req, res) => {
     root
       .create({
         name: req.body.name,
+        name_en: req.body.nameEn,
+        name_ar: req.body.nameAr,
         path: req.body.path,
         component: req.body.component,
         icon: req.body.icon,
@@ -34,6 +36,8 @@ router.post("/addRoot", auth, (req, res) => {
           .update(
             {
               name: req.body.name,
+              name_en: req.body.nameEn,
+              name_ar: req.body.nameAr,
               path: req.body.path,
               component: req.body.component,
               icon: req.body.icon,

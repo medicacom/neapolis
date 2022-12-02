@@ -1,16 +1,21 @@
 const express = require("express");
 const router = express.Router();
 var age = require("../models/age");
-var tests = require("../models/test");
 const auth = require("../middlewares/passport");
 const { Op } = require("sequelize"); 
 // Desplay all lignes of client ...
 router.post("/addAge", auth, (req, res) => {
   var id = req.body.id;
+  var description = req.body.description;
+  var description_en = req.body.description_en;
+  var description_ar = req.body.description_ar;
   if (id == 0) {
     age
       .create({
-        description: req.body.description,
+        description: description,
+        description_en: description_en,
+        description_ar: description_ar,
+        etat: 1,
       })
       .then((r) => {
         return res.status(200).send(true);
@@ -25,14 +30,12 @@ router.post("/addAge", auth, (req, res) => {
       } else {
         age
           .update({
-            description: req.body.description,
+            description: description,
+            description_en: description_en,
+            description_ar: description_ar,
+            etat: 1,
           },{ where: { id: id } })
-          .then((r2) => {
-            if(req.body.selected === 1)
-              age
-                .update({
-                  selected:0,
-                },{ where: { id: {[Op.ne]:req.body.id} } })
+          .then(() => {
             return res.status(200).send(true);
           })
           .catch((error) => {

@@ -2,23 +2,18 @@ const express = require("express");
 const router = express.Router();
 var effet_indesirable = require("../models/effet_indesirable");
 const auth = require("../middlewares/passport");
-const webpush = require("web-push");
-const publicVapidKey =
-  "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo";
-const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
-
-webpush.setVapidDetails(
-  "mailto:feriani.khalil2@gmail.com",
-  publicVapidKey,
-  privateVapidKey
-);
 // Desplay all lignes of client ...
 router.post("/addEffet_indesirable", auth, (req, res) => {
   var id = req.body.id;
+  var description = req.body.description;
+  var description_en = req.body.description_en;
+  var description_ar = req.body.description_ar;
   if (id == 0) {
     effet_indesirable
       .create({
-        description: req.body.description,
+        description: description,
+        description_en: description_en,
+        description_ar: description_ar
       })
       .then((r) => {
         return res.status(200).send({data:r,msg:true});
@@ -33,7 +28,9 @@ router.post("/addEffet_indesirable", auth, (req, res) => {
       } else {
         effet_indesirable
           .update({
-            description: req.body.description,
+            description: description,
+            description_en: description_en,
+            description_ar: description_ar
           },{ where: { id: id } })
           .then((r) => {
             return res.status(200).send({data:r,msg:true});
@@ -113,31 +110,5 @@ router.put("/changeEtat/:id", auth, (req, res) => {
         });
     }
   });
-});
-
-// Subscribe Route
-router.post("/subscribe/:id", async(req, res) => {
-  // Get pushSubscription object
-  var id = req.params.id;
-  const subscription = req.body;
-  var findEffet_indesirable = await effet_indesirable.findOne({ where: { id: id } });
-  // Send 201 - resource created
-  res.status(201).json({});
-  /* const data = fs.readFileSync('../client/src/assets/img/logo.png');
-  console.log("first",data) */
-  // Create payload
-  const payload = JSON.stringify({
-    title: findEffet_indesirable.dataValues.titre,
-    body: {
-      body: findEffet_indesirable.dataValues.description,      
-      icon: "/logo.png",
-      /* icon: "http://image.ibb.co/frYOFd/tmlogo.png", */
-    },
-  });
-
-  // Pass object into sendNotification
-  webpush
-    .sendNotification(subscription, payload)
-    .catch((err) => console.error(err));
 });
 module.exports = router;

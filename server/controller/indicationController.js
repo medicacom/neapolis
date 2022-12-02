@@ -2,23 +2,19 @@ const express = require("express");
 const router = express.Router();
 var indication = require("../models/indication");
 const auth = require("../middlewares/passport");
-const webpush = require("web-push");
-const publicVapidKey =
-  "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo";
-const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
-
-webpush.setVapidDetails(
-  "mailto:feriani.khalil2@gmail.com",
-  publicVapidKey,
-  privateVapidKey
-);
 // Desplay all lignes of client ...
 router.post("/addIndication", auth, (req, res) => {
   var id = req.body.id;
+  var description = req.body.description;
+  var description_en = req.body.description_en;
+  var description_ar = req.body.description_ar;
   if (id == 0) {
     indication
       .create({
-        description: req.body.description,
+        description: description,
+        description_en: description_en,
+        description_ar: description_ar,
+        etat: 1,
       })
       .then((r) => {
         return res.status(200).send({data:r,msg:true});
@@ -33,7 +29,10 @@ router.post("/addIndication", auth, (req, res) => {
       } else {
         indication
           .update({
-            description: req.body.description,
+            description: description,
+            description_en: description_en,
+            description_ar: description_ar,
+            etat: 1,
           },{ where: { id: id } })
           .then((r) => {
             return res.status(200).send({data:r,msg:true});
