@@ -12,8 +12,12 @@ import MaterialReactTable from "material-react-table";
 import { useHistory } from "react-router";
 import { openDB } from "idb";
 import { useTranslation } from "react-multi-lang";
+import { MRT_Localization_FR } from "material-react-table/locales/fr";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
+import { MRT_Localization_AR } from "../../utils/ar_table";
 // core components
 function ListIndication({ onlineStatus }) {
+  let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   let db;
   const dispatch = useDispatch();
@@ -60,17 +64,6 @@ function ListIndication({ onlineStatus }) {
                 }
               />
             </Button>
-            {/*  <Button
-              id={"idLigne_" + cell.row.original.id}
-              onClick={(e) => {
-                confirmMessage(cell.row.original.id,e);
-              }}
-              variant="danger"
-              size="sm"
-              className="text-danger btn-link delete"
-            >
-              <i className="fa fa-trash" id={"idLigne_" + cell.row.original.id}/>
-            </Button> */}
           </div>
         ),
       },
@@ -94,35 +87,11 @@ function ListIndication({ onlineStatus }) {
         </strong>
       );
   };
-  const confirmMessage = (id, e) => {
-    setAlert(
-      <SweetAlert
-        style={{ display: "block", marginTop: "-100px" }}
-        title="Vous éte sure de supprime cette indication?"
-        onConfirm={() => deleteIndication(id, e)}
-        onCancel={() => hideAlert()}
-        confirmBtnBsStyle="info"
-        cancelBtnBsStyle="danger"
-        confirmBtnText="Oui"
-        cancelBtnText="Non"
-        showCancel
-      >
-        {/* Vous éte sure de supprime cette User? */}
-      </SweetAlert>
-    );
-  };
   const hideAlert = () => {
     setAlert(null);
   };
   function ajouter() {
     navigate.push("ajouterIndication");
-  }
-  function deleteIndication(id, e) {
-    dispatch(indicationDeleted({ id })).then((val) => {
-      notify(1, "Indication supprimer avec succes");
-      getIndication();
-      hideAlert();
-    });
   }
 
   //storeIndication
@@ -184,6 +153,13 @@ function ListIndication({ onlineStatus }) {
         enableBottomToolbar={true}
         enableTopToolbar={true}
         muiTableBodyRowProps={{ hover: false }}
+        localization={
+          lang === "fr"
+            ? MRT_Localization_FR
+            : lang === "ar"
+            ? MRT_Localization_AR
+            : MRT_Localization_EN
+        }
       />
     );
   }

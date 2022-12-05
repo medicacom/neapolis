@@ -13,7 +13,7 @@ function Sidebar({ background, users, onlineStatus }) {
   const { rootBase } = useSelector((state) => state.rootBase);
   var routes = rootBase ? rootBase[0] : [];
   const [routesIndex, setRoutesIndex] = React.useState([]);
-  var token = localStorage.getItem("x-access-token");
+  var styleM = lang !== "ar" ? "sidebar" : "sidebar sidebar-ar";
   var id_role = onlineStatus === 1 ? users.user.id_role : users.id_role;
 
   async function initRoot() {
@@ -202,7 +202,7 @@ function Sidebar({ background, users, onlineStatus }) {
   } */
   return (
     <>
-      <div className="sidebar" data-color={background}>
+      <div className={styleM} data-color={background}>
         <div className="sidebar-wrapper">
           <div className="logo">
             <div className="bglogo">

@@ -215,9 +215,9 @@ li.nav-item .hidden.nav-link {
   cursor: pointer;
 }
 
-.dropdown-menu.show {
+/* .dropdown-menu.show {
   left: -60px;
-}
+} */
 
 .navbar-nav .nav-item .dropdown-menu:before, .navbar-nav .nav-item .dropdown-menu:after {
   content: none !important;
@@ -949,9 +949,11 @@ a.dropdown-item {
   background-color: #0885c870 !important;
   color: white !important;
 }
+
 .btn-success {
   background-color: #87cb16 !important;
 }
+
 .d-grid {
   display: grid;
 }
@@ -966,4 +968,87 @@ a.dropdown-item {
   width: 18px !important;
   margin: 0 8px !important;
   cursor: pointer;
+}
+
+/** arabic style **/
+.sidebar-ar {
+  right: 0 !important;
+  left: initial !important;
+}
+
+.main-panel-ar {
+  float: left !important;
+}
+
+.sidebar-ar .nav-item {
+  text-align: right;
+}
+
+.sidebar-ar i {
+  float: right !important;
+  margin-right: 0 !important;
+  margin-left: 20px;
+}
+
+.sidebar-ar .caret {
+  left: 0 !important;
+  right: initial !important;
+}
+
+.sidebar .nav {
+  padding: 0;
+  padding-left: 22px;
+}
+
+.sidebar-ar .nav {
+  padding-right: 22px;
+}
+
+.main-panel-ar .css-1kpq11i {
+  direction: ltr;
+}
+
+.main-panel-ar .float-left {
+  float: right !important;
+}
+
+.main-panel-ar .pull-right {
+  float: left;
+}
+
+.main-panel-ar .card-title {
+  text-align: right;
+}
+
+.main-panel-ar .pr-1 {
+  padding-right: 15px !important;
+  padding-left: 0.25rem !important;
+}
+
+.main-panel-ar .pl-1 {
+  padding-left: 15px !important;
+  padding-right: 0.25rem !important;
+}
+
+.main-panel-ar h4.title {
+  text-align: right;
+}
+
+.main-panel-ar footer .copyright {
+  float: left;
+}
+
+.main-panel-ar .dropdown-menu .dropdown-item img {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+.main-panel-ar .dropdown-menu .dropdown-item {
+  text-align: right;
+}
+
+.main-panel-ar label {
+  float: right;
+  margin-right: 6px;
+  margin-top: 10px;
 }

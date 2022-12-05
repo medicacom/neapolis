@@ -24,7 +24,7 @@ router.post("/addMedicament", auth, (req, res) => {
         dosage: dosage,
         id_voix: id_voix,
         id_indication: id_indication,
-        etat:1
+        etat: 1,
       })
       .then((r) => {
         return res.status(200).send({ data: r, msg: true });
@@ -47,7 +47,7 @@ router.post("/addMedicament", auth, (req, res) => {
               dosage: dosage,
               id_voix: id_voix,
               id_indication: id_indication,
-              etat:1
+              etat: 1,
             },
             { where: { id: id } }
           )

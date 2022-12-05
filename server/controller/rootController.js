@@ -19,7 +19,7 @@ router.post("/addRoot", auth, (req, res) => {
         role: req.body.role,
         parent: req.body.parent,
         ordre: req.body.ordre,
-        className: req.body.className
+        className: req.body.className,
       })
       .then((r) => {
         return res.status(200).send(true);
@@ -44,7 +44,7 @@ router.post("/addRoot", auth, (req, res) => {
               role: req.body.role,
               parent: req.body.parent,
               ordre: req.body.ordre,
-              className: req.body.className
+              className: req.body.className,
             },
             { where: { id: id } }
           )
@@ -76,7 +76,6 @@ router.get("/getRoot/:id", auth, (req, res) => {
   });
 });
 
-
 router.delete("/deleteRoot/:id", auth, (req, res) => {
   var id = req.params.id;
   root.findOne({ where: { id: id } }).then(function (r1) {
@@ -96,11 +95,15 @@ router.delete("/deleteRoot/:id", auth, (req, res) => {
 });
 
 router.get("/getRootByRole/:role", auth, async (req, res) => {
-  var idRole = req.params.role; 
+  var idRole = req.params.role;
   var getRootPere = await root.findAll({
     where: {
-      parent: 0,      
-      [Op.or]: [{ role: { [Op.like]: "%" + idRole + "%" } }, { role: 0 }, { role: 20 }],
+      parent: 0,
+      [Op.or]: [
+        { role: { [Op.like]: "%" + idRole + "%" } },
+        { role: 0 },
+        { role: 20 },
+      ],
       /* role: { [Op.like]: "%" + idRole + "%" }, */
     },
     order: [["ordre", "asc"]],
@@ -113,15 +116,18 @@ router.get("/getRootByRole/:role", auth, async (req, res) => {
       },
       order: [["ordre", "asc"]],
     });
-    var roles=getRootPere[key].dataValues.role;
+    var roles = getRootPere[key].dataValues.role;
     var splitRole = roles.split(",");
-    var arrayRole=[];
-    splitRole.forEach(elemnt=>{
+    var arrayRole = [];
+    splitRole.forEach((elemnt) => {
       arrayRole.push(parseInt(elemnt));
-    })
+    });
     if (getRootFils.length == 0) {
       //
-      var p =getRootPere[key].dataValues.name != "404 not found"? "/"+ getRootPere[key].dataValues.path : "*";
+      var p =
+        getRootPere[key].dataValues.name != "404 not found"
+          ? "/" + getRootPere[key].dataValues.path
+          : "*";
       arrayRoots.push({
         path: p,
         name: getRootPere[key].dataValues.name,
@@ -131,19 +137,19 @@ router.get("/getRootByRole/:role", auth, async (req, res) => {
         role: arrayRole,
         componentStr: getRootPere[key].dataValues.component,
         className: getRootPere[key].dataValues.className,
-        type: getRootPere[key].dataValues.type
+        type: getRootPere[key].dataValues.type,
       });
     } else {
       var arrayView = [];
       getRootFils.forEach((e) => {
-        var rolesFils=e.dataValues.role;
+        var rolesFils = e.dataValues.role;
         var splitRoleFils = rolesFils.split(",");
-        var arrayRoleFils=[];
-        splitRoleFils.forEach(elemnt=>{
+        var arrayRoleFils = [];
+        splitRoleFils.forEach((elemnt) => {
           arrayRoleFils.push(parseInt(elemnt));
-        })
+        });
         arrayView.push({
-          path: "/"+e.dataValues.path,
+          path: "/" + e.dataValues.path,
           name: e.dataValues.name,
           name_en: e.dataValues.name_en,
           name_ar: e.dataValues.name_ar,
@@ -155,16 +161,16 @@ router.get("/getRootByRole/:role", auth, async (req, res) => {
       });
       arrayRoots.push({
         collapse: true,
-        path: "/"+getRootPere[key].dataValues.path,
+        path: "/" + getRootPere[key].dataValues.path,
         name: getRootPere[key].dataValues.name,
         name_en: getRootPere[key].dataValues.name_en,
         name_ar: getRootPere[key].dataValues.name_ar,
-        state: "pere"+key,
+        state: "pere" + key,
         icon: getRootPere[key].dataValues.icon,
         type: getRootPere[key].dataValues.type,
         role: arrayRole,
-        views:arrayView
-      })
+        views: arrayView,
+      });
     }
   }
   return res.status(200).send(arrayRoots);

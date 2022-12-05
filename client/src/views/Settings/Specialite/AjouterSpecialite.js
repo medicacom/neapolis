@@ -87,7 +87,7 @@ function AjouterSpecialite() {
                   id="saveBL"
                   className="btn-wd  mr-1 float-left"
                   type="button"
-                  variant="info"
+                  variant="success"
                   onClick={listeSpecialite}
                 >
                   <span className="btn-label">
@@ -158,7 +158,7 @@ function AjouterSpecialite() {
                       <Button
                         className="btn-fill pull-right"
                         type="button"
-                        variant="info"
+                        variant="success"
                         onClick={submitForm}
                       >
                         {t("save")}

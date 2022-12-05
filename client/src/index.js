@@ -25,6 +25,7 @@ import {
 import en from "./views/utils/en.json";
 import fr from "./views/utils/fr.json";
 import ar from "./views/utils/ar.json";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 setDefaultTranslations({ fr, en, ar });
 setDefaultLanguage("fr");
@@ -35,7 +36,7 @@ let lang = window.localStorage.getItem("lang");
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("wrapper");
+console.log("power");
 
 openDB("medis", 1, {
   upgrade(db) {

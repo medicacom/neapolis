@@ -11,6 +11,10 @@ import { openDB } from "idb/with-async-ittr";
 import { updateDB } from "./Redux/offlineReduce";
 
 function RootBase({ id }) {
+  let lang = window.localStorage.getItem("lang");
+  var dir = lang !=="ar"?"ltr":"rtl";
+  var styleM = lang !=="ar"?"main-panel":"main-panel main-panel-ar";
+
   let db;
   const location = useLocation();
   const dispatch = useDispatch();
@@ -252,8 +256,6 @@ function RootBase({ id }) {
 
   return (
     <>
-      {/* <div className="preloader">
-      </div> */}
       {loaderTable ? (
         <div class="loader-container">
           <div class="loader"></div>
@@ -262,14 +264,14 @@ function RootBase({ id }) {
         ""
       )}
       {users && entities.length > 0 && onlineStatus === 1 && !loaderTable ? (
-        <div className="wrapper" dir="ltr">
+        <div className="wrapper" dir={dir}>
           {location.pathname !== "/declaration" ? (
             <Sidebar users={users} onlineStatus={onlineStatus} />
           ) : (
             ""
           )}
           <div
-            className={location.pathname !== "/declaration" ? "main-panel" : ""}
+            className={location.pathname !== "/declaration" ? styleM : ""}
           >
             {location.pathname !== "/declaration" ? (
               <AdminNavbar users={users} onlineStatus={onlineStatus} />

@@ -77,7 +77,7 @@ function Header({ users, onlineStatus }) {
           ></Navbar.Brand> */}
         </div>
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ml-auto" navbar>
+          <Nav className={lang !== "ar"?"ml-auto":"mr-auto"} navbar>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
                 aria-expanded={false}
@@ -156,7 +156,8 @@ function Header({ users, onlineStatus }) {
                   profile
                 </Dropdown.Item>
                 <Dropdown.Item href="#" onClick={LogOut}>
-                  <i className="nc-icon nc-button-power"></i>
+                  {/* <i className="nc-icon nc-button-power"></i> */}
+                  <i class="fas fa-power-off"></i>
                   Déconnecter
                 </Dropdown.Item>
               </Dropdown.Menu>

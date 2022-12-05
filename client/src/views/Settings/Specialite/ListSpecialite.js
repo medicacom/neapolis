@@ -9,9 +9,13 @@ import { useHistory } from "react-router-dom";
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import { useTranslation } from "react-multi-lang";
+import { MRT_Localization_FR } from 'material-react-table/locales/fr';
+import { MRT_Localization_EN } from 'material-react-table/locales/en';
+import { MRT_Localization_AR } from '../../utils/ar_table';
 
 // core components
 function ListSpecialite() {
+  let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   document.title = "Liste des specialites";
   const dispatch = useDispatch();
@@ -131,6 +135,13 @@ function ListSpecialite() {
         enableBottomToolbar={true}
         enableTopToolbar={true}
         muiTableBodyRowProps={{ hover: false }}
+        localization={
+          lang === "fr"
+            ? MRT_Localization_FR
+            : lang === "ar"
+            ? MRT_Localization_AR
+            : MRT_Localization_EN
+        }
       />
     );
   }
@@ -145,7 +156,7 @@ function ListSpecialite() {
               id="saveBL"
               className="btn-wd  mr-1 float-left"
               type="button"
-              variant="info"
+              variant="success"
               onClick={ajouter}
             >
               <span className="btn-label">

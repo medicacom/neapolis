@@ -24,8 +24,8 @@ function ListRole({ onlineStatus }) {
         accessorKey: "nom",
       },
       {
+        header: t("actions"),
         accessorKey: "id",
-        header: "actions",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
             <Button

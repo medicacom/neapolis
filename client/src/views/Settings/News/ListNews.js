@@ -12,8 +12,12 @@ import MaterialReactTable from "material-react-table";
 import { useHistory } from "react-router";
 import { openDB } from "idb";
 import { useTranslation } from "react-multi-lang";
+import { MRT_Localization_FR } from 'material-react-table/locales/fr';
+import { MRT_Localization_EN } from 'material-react-table/locales/en';
+import { MRT_Localization_AR } from '../../utils/ar_table';
 // core components
 function ListNews({ onlineStatus }) {
+  let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   let db;
   const dispatch = useDispatch();
@@ -166,6 +170,13 @@ function ListNews({ onlineStatus }) {
         enableBottomToolbar={true}
         enableTopToolbar={true}
         muiTableBodyRowProps={{ hover: false }}
+        localization={
+          lang === "fr"
+            ? MRT_Localization_FR
+            : lang === "ar"
+            ? MRT_Localization_AR
+            : MRT_Localization_EN
+        }
       />
     );
   }

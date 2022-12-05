@@ -10,11 +10,15 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import { toast, ToastContainer } from "react-toastify";
 import MaterialReactTable from "material-react-table";
 import { useMemo } from "react";
-import { useTranslation } from 'react-multi-lang'
+import { useTranslation } from "react-multi-lang";
+import { MRT_Localization_FR } from "material-react-table/locales/fr";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
+import { MRT_Localization_AR } from "../utils/ar_table";
 
 // core components
 function ListDeclaration() {
-  const t = useTranslation()
+  let lang = window.localStorage.getItem("lang");
+  const t = useTranslation();
   document.title = "Liste des ages";
   const dispatch = useDispatch();
   const navigate = useHistory();
@@ -24,7 +28,7 @@ function ListDeclaration() {
     () => [
       //column definitions...
       {
-        header: t('Declaration.user'),
+        header: t("Declaration.user"),
         accessorKey: "users.nom",
         Cell: ({ cell, row }) => (
           <div>
@@ -40,7 +44,7 @@ function ListDeclaration() {
         ),
       },
       {
-        header: t('Declaration.patients'),
+        header: t("Declaration.patients"),
         accessorKey: "patients.sexe",
         Cell: ({ cell, row }) => (
           <div>
@@ -53,11 +57,11 @@ function ListDeclaration() {
         ),
       },
       {
-        header: t('Declaration.drugs'),
+        header: t("Declaration.drugs"),
         accessorKey: "medicaments.nom",
       },
       {
-        header: t('Declaration.date'),
+        header: t("Declaration.date"),
         accessorKey: "createdAt",
         Cell: ({ cell, row }) => (
           <div>
@@ -75,7 +79,7 @@ function ListDeclaration() {
         ),
       },
       {
-        header: t('Declaration.detail'),
+        header: t("Declaration.detail"),
         accessorKey: "id",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
@@ -123,13 +127,15 @@ function ListDeclaration() {
       >
         <Row>
           <Col md="4">
-            <h3>{t('Declaration.list')}</h3>
+            <h3>{t("Declaration.list")}</h3>
             <ul>
               <li>
                 <strong>Nom personnel: </strong>
                 {data.users
                   ? data.users.nom + " " + data.users.prenom
-                  : data.patients.passagers.nom + " " + data.patients.passagers.prenom}
+                  : data.patients.passagers.nom +
+                    " " +
+                    data.patients.passagers.prenom}
                 {/* {data.users.nom + " " + data.users.prenom} */}
               </li>
               {/* <li>
@@ -145,7 +151,7 @@ function ListDeclaration() {
                 {data.users.specialites.nom}
               </li> */}
               <li>
-                <strong>{t('Declaration.date')}: </strong>
+                <strong>{t("Declaration.date")}: </strong>
                 {new Date(
                   new Date(data.patients.createdAt).getTime() -
                     new Date(data.patients.createdAt).getTimezoneOffset() *
@@ -155,19 +161,19 @@ function ListDeclaration() {
                   .slice(0, 10)}
               </li>
               <li>
-                <strong>{t('Declaration.list')}: </strong>
+                <strong>{t("Declaration.list")}: </strong>
                 {data.patients.initiales}
               </li>
               <li>
-                <strong>{t('Declaration.gendre')}: </strong>
+                <strong>{t("Declaration.gendre")}: </strong>
                 {data.patients.sexe === 1
-                  ? t('Declaration.man')
+                  ? t("Declaration.man")
                   : data.patients.sexe === 2
-                  ? t('Declaration.woman')
-                  : t('Declaration.other')}
+                  ? t("Declaration.woman")
+                  : t("Declaration.other")}
               </li>
               <li>
-                <strong>{t('Declaration.age')}: </strong>
+                <strong>{t("Declaration.age")}: </strong>
                 {data.patients.age === 1
                   ? data.patients.dateNaissance
                   : data.patients.age === 2
@@ -175,61 +181,61 @@ function ListDeclaration() {
                   : data.patients.ages.description}
               </li>
               <li>
-                <strong>{t('Declaration.indication')}: </strong>
+                <strong>{t("Declaration.indication")}: </strong>
                 {data.patients.indications.description}
               </li>
             </ul>
           </Col>
           <Col md="4">
-            <h3>{t('Declaration.suspect')}</h3>
+            <h3>{t("Declaration.suspect")}</h3>
             <ul>
               <li>
-                <strong>{t('Declaration.name_drug')}: </strong>
+                <strong>{t("Declaration.name_drug")}: </strong>
                 {data.medicaments.nom}
               </li>
               <li>
-                <strong>{t('Declaration.numero')}: </strong>
+                <strong>{t("Declaration.numero")}: </strong>
                 {data.numero}
               </li>
               <li>
-                <strong>{t('Declaration.dosage')}: </strong>
+                <strong>{t("Declaration.dosage")}: </strong>
                 {data.posologie}
               </li>
               <li>
-                <strong>{t('Declaration.voice')}: </strong>
+                <strong>{t("Declaration.voice")}: </strong>
                 {data.voix_administrations.description}
               </li>
               <li>
-                <strong>{t('Declaration.start')}: </strong>
+                <strong>{t("Declaration.start")}: </strong>
                 {data.dateDebutAdmin}
               </li>
               <li>
-                <strong>{t('Declaration.end')}: </strong>
+                <strong>{t("Declaration.end")}: </strong>
                 {data.dateFinAdmin}
               </li>
             </ul>
           </Col>
           <Col md="4">
-            <h3>{t('Declaration.effects')}</h3>
+            <h3>{t("Declaration.effects")}</h3>
             <ul>
               <li>
-                <strong>{t('Declaration.effects')}: </strong>
+                <strong>{t("Declaration.effects")}: </strong>
                 {data.effet_indesirables.description}
               </li>
               <li>
-                <strong>{t('Declaration.start')}: </strong>
+                <strong>{t("Declaration.start")}: </strong>
                 {data.dateDebut}
               </li>
               <li>
-                <strong>{t('Declaration.end')}: </strong>
+                <strong>{t("Declaration.end")}: </strong>
                 {data.dateFin}
               </li>
               <li>
-                <strong>{t('Declaration.information')}: </strong>
+                <strong>{t("Declaration.information")}: </strong>
                 {data.information}
               </li>
               <li>
-                <strong>{t('Declaration.complementary')}: </strong>
+                <strong>{t("Declaration.complementary")}: </strong>
                 {data.complementaires}
               </li>
             </ul>
@@ -258,6 +264,13 @@ function ListDeclaration() {
         enableBottomToolbar={true}
         enableTopToolbar={true}
         muiTableBodyRowProps={{ hover: false }}
+        localization={
+          lang === "fr"
+            ? MRT_Localization_FR
+            : lang === "ar"
+            ? MRT_Localization_AR
+            : MRT_Localization_EN
+        }
       />
     );
   }
@@ -282,7 +295,7 @@ function ListDeclaration() {
             </Button>
           </Col>
           <Col md="12">
-            <h4 className="title">{t('Declaration.list')}</h4>
+            <h4 className="title">{t("Declaration.list")}</h4>
             <Card>
               <Card.Body>
                 <ListTable list={entities}></ListTable>

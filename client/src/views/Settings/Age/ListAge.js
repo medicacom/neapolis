@@ -8,9 +8,13 @@ import { toast, ToastContainer } from "react-toastify";
 import MaterialReactTable from "material-react-table";
 import { useMemo } from "react";
 import { useTranslation } from "react-multi-lang";
+import { MRT_Localization_FR } from "material-react-table/locales/fr";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
+import { MRT_Localization_AR } from "../../utils/ar_table";
 
 // core components
 function ListAge() {
+  let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   document.title = "Liste des ages";
   const dispatch = useDispatch();
@@ -132,6 +136,13 @@ function ListAge() {
         enableBottomToolbar={true}
         enableTopToolbar={true}
         muiTableBodyRowProps={{ hover: false }}
+        localization={
+          lang === "fr"
+            ? MRT_Localization_FR
+            : lang === "ar"
+            ? MRT_Localization_AR
+            : MRT_Localization_EN
+        }
       />
     );
   }

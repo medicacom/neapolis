@@ -19,6 +19,7 @@
     "react-bootstrap-sweetalert": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^11.4.2",
+    "react-helmet": "^6.1.0",
     "react-leaflet": "^4.0.2",
     "react-multi-lang": "^2.2.0",
     "react-redux": "^7.2.6",

@@ -11,9 +11,13 @@ import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb";
 import { useTranslation } from "react-multi-lang";
+import { MRT_Localization_FR } from 'material-react-table/locales/fr';
+import { MRT_Localization_EN } from 'material-react-table/locales/en';
+import { MRT_Localization_AR } from '../../utils/ar_table';
 
 // core components
 function ListPersonel({ onlineStatus }) {
+  let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   let db;
   const notify = (type, msg) => {
@@ -59,18 +63,18 @@ function ListPersonel({ onlineStatus }) {
           : cell.row.original.nom_role,
     },
     {
-      header: t("User.state"),
+      header: t("User.email"),
       accessorKey: "email",
     },
     {
-      header: t("User.actions"),
+      header: t("state"),
       accessorKey: "etat",
       Cell: ({ cell }) =>
         cell.row.original.etat === 1 ? "Activé" : "Désactivé",
     },
     {
       accessorKey: "id",
-      header: "actions",
+      header: t("actions"),
       Cell: ({ cell, row }) => (
         <div className="actions-right block_action">
           <Button
@@ -271,6 +275,13 @@ function ListPersonel({ onlineStatus }) {
         enableBottomToolbar={true}
         enableTopToolbar={true}
         muiTableBodyRowProps={{ hover: false }}
+        localization={
+          lang === "fr"
+            ? MRT_Localization_FR
+            : lang === "ar"
+            ? MRT_Localization_AR
+            : MRT_Localization_EN
+        }
       />
     );
   }

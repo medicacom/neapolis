@@ -3,8 +3,8 @@
   "add_txt": "Insertion avec succes",
   "update_txt": "Modifier avec succes",
   "erreur": "Vérifier vos donnée",
-  "problem": "Connection problem",
-  "back": "précédent",
+  "problem": "Problème de communication",
+  "back": "Précédent",
   "next": "Suivant",
   "sign_in": "Se connecter",
   "list": "Retour à la liste",
@@ -15,6 +15,8 @@
   "enable": "Activer avec succès",
   "disable": "Désactiver avec succès",
   "name": "Nom",
+  "actions": "Actions",
+  "state": "État",
   "age": {
     "list": "Liste des âges",
     "add": "Ajouter un âge",
@@ -47,13 +49,12 @@
     "update_effect": "Modifier effet indésirable"
   },
   "User": {
-    "profile":"profil",
+    "profile": "profil",
     "name": "Nom",
     "last_name": "Prenom",
     "login": "Login",
     "email": "E-mail",
     "role": "Rôle",
-    "state": "Etat",
     "actions": "actions",
     "validation": "Validation",
     "password": "Mot de passe",
@@ -64,11 +65,11 @@
     "add": "Ajouter un utilisateur",
     "update": "Modifier utilisateur",
     "listU": "Liste des utilisateurs",
-    "listP": "Liste des personnel de santé non valide",
-    "listV": "Liste des personnel de santés valider"
+    "listP": "Liste réfusé",
+    "listV": "Liste accepté"
   },
   "Declaration": {
-    "list": "Liste des declarations",
+    "list": "Liste des déclarations",
     "patients": "Patients",
     "patient": "Patient",
     "drugs": "médicaments",
