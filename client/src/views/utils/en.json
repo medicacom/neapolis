@@ -17,6 +17,8 @@
   "name": "Name",
   "actions": "Actions",
   "state": "State",
+  "disconnect": "Disconnect",
+  "description": "Description",
   "age": {
     "list": "List of ages",
     "add": "Add a age",
@@ -70,9 +72,10 @@
   },
   "Declaration": {
     "list": "List of declarations",
+    "add": "Add a declaration",
     "patients": "Patients",
     "patient": "The patient",
-    "drugs": "Medicines",
+    "drugs": "Suspect medicine",
     "date": "Date",
     "user": "User",
     "detail": "Detail",
@@ -81,9 +84,8 @@
     "txt_indication": "In the case of a newborn or infant, indicate if the medication was administered to:*",
     "indication": "Indication",
     "age": "Age of the patient",
-    "suspect": "Suspect medicine",
     "name_drug": "Name of the medicine",
-    "batch": "Batch number",
+    "numero": "Batch number",
     "dosage": "Dosage",
     "voice": "Voice administrations",
     "voice_txt": "How was the medicine administered",
@@ -117,6 +119,13 @@
     "title": "Title",
     "description": "Description",
     "file": "File",
+    "date": "date",
     "user": "user"
+  },
+  "lang": {
+    "en": "English",
+    "fr": "French",
+    "ar": "Arabic",
+    "language": "Language"
   }
 }

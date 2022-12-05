@@ -28,12 +28,12 @@ function ListEffet_indesirable({ onlineStatus }) {
     () => [
       //column definitions...
       {
-        header: "Description",
+        header: t("description"),
         accessorKey: "description",
       },
       {
+        header: t("actions"),
         accessorKey: "id",
-        header: "actions",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
             <Button

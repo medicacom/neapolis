@@ -16,7 +16,6 @@ import { MRT_Localization_AR } from "../../utils/ar_table";
 function ListAge() {
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
-  document.title = "Liste des ages";
   const dispatch = useDispatch();
   const navigate = useHistory();
   const [entities, setEntities] = React.useState([]);
@@ -40,12 +39,12 @@ function ListAge() {
     () => [
       //column definitions...
       {
-        header: "Age",
+        header: t("description"),
         accessorKey: "description",
       },
       {
+        header: t("actions"),
         accessorKey: "id",
-        header: "actions",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
             <Button

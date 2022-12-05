@@ -108,6 +108,17 @@ function Sidebar({ background, users, onlineStatus }) {
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       var st = {};
+      
+      /* document.title =
+        (lang === "fr" && location.pathname === prop.name) ? prop.name : lang === "en" ? prop.name_en : prop.name_ar; */
+      if (lang === "fr" && location.pathname === prop.path)
+        document.title = prop.name;
+      else if (lang === "en" && location.pathname === prop.path)
+        document.title = prop.name_en;
+      else if (lang === "ar" && location.pathname === prop.path)
+        document.title = prop.name_en;
+      /* else 
+        document.title = prop.name; */
       if (prop.role.includes(id_role) || prop.role.includes(20)) {
         if (prop.redirect) {
           return null;

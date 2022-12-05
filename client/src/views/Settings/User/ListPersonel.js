@@ -11,9 +11,9 @@ import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb";
 import { useTranslation } from "react-multi-lang";
-import { MRT_Localization_FR } from 'material-react-table/locales/fr';
-import { MRT_Localization_EN } from 'material-react-table/locales/en';
-import { MRT_Localization_AR } from '../../utils/ar_table';
+import { MRT_Localization_FR } from "material-react-table/locales/fr";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
+import { MRT_Localization_AR } from "../../utils/ar_table";
 
 // core components
 function ListPersonel({ onlineStatus }) {
@@ -73,8 +73,8 @@ function ListPersonel({ onlineStatus }) {
         cell.row.original.etat === 1 ? "Activé" : "Désactivé",
     },
     {
-      accessorKey: "id",
       header: t("actions"),
+      accessorKey: "id",
       Cell: ({ cell, row }) => (
         <div className="actions-right block_action">
           <Button

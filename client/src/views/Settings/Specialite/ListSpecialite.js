@@ -45,14 +45,14 @@ function ListSpecialite() {
         accessorKey: "nom",
       },
       {
-        header: "Etat",
+        header: t("state"),
         accessorKey: "etat",
         Cell: ({ cell }) =>
           cell.row.original.etat === 1 ? "Activé" : "Désactive",
       },
       {
+        header: t("actions"),
         accessorKey: "id",
-        header: "actions",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
             <Button

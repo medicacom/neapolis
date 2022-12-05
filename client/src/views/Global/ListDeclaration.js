@@ -19,7 +19,6 @@ import { MRT_Localization_AR } from "../utils/ar_table";
 function ListDeclaration() {
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
-  document.title = "Liste des ages";
   const dispatch = useDispatch();
   const navigate = useHistory();
   const [alert, setAlert] = React.useState(null);
@@ -291,7 +290,7 @@ function ListDeclaration() {
               <span className="btn-label">
                 <i className="fas fa-plus"></i>
               </span>
-              Ajouter un declaration
+              {t("Declaration.add")}
             </Button>
           </Col>
           <Col md="12">

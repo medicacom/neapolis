@@ -90,7 +90,6 @@ function AjouterNews({ onlineStatus }) {
     if (onlineStatus === 1) {
       if (date !== "" && description !== "" && titre !== "" && userSelect.length !== 0) {
         dispatch(saveFile({ dataArray })).then((value) => {
-          console.log(value);
           var filename = value.payload.filename;
           if (filename !== "") {
             dispatch(
@@ -115,9 +114,9 @@ function AjouterNews({ onlineStatus }) {
         notify(2, t("erreur"));
       }
 
-      setTimeout(async () => {
+      /* setTimeout(async () => {
         listeNews();
-      }, 1500);
+      }, 1500); */
     } else {
       if (date !== "" && description !== "" && titre !== "") {
         saveNewsIndex();

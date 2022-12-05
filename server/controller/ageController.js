@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 var age = require("../models/age");
 const auth = require("../middlewares/passport");
-const { Op } = require("sequelize"); 
+const { Op } = require("sequelize");
 // Desplay all lignes of client ...
 router.post("/addAge", auth, (req, res) => {
   var id = req.body.id;
@@ -24,17 +24,20 @@ router.post("/addAge", auth, (req, res) => {
         return res.status(403).send(false);
       });
   } else {
-    age.findOne({ where: { id: id } }).then(function (r1) { 
+    age.findOne({ where: { id: id } }).then(function (r1) {
       if (!r1) {
         return res.status(403).send(false);
       } else {
         age
-          .update({
-            description: description,
-            description_en: description_en,
-            description_ar: description_ar,
-            etat: 1,
-          },{ where: { id: id } })
+          .update(
+            {
+              description: description,
+              description_en: description_en,
+              description_ar: description_ar,
+              etat: 1,
+            },
+            { where: { id: id } }
+          )
           .then(() => {
             return res.status(200).send(true);
           })
@@ -45,8 +48,8 @@ router.post("/addAge", auth, (req, res) => {
     });
   }
 });
-router.post("/allAge",(req, res) => {
-  age.findAll({order:["id"]}).then(function (r) {
+router.post("/allAge", (req, res) => {
+  age.findAll({ order: ["id"] }).then(function (r) {
     return res.status(200).send(r);
   });
 });
@@ -58,7 +61,8 @@ router.delete("/deleteAge/:id", auth, (req, res) => {
     if (!r1) {
       return res.status(403).send(false);
     } else {
-      age.destroy({ where: { id: id } })
+      age
+        .destroy({ where: { id: id } })
         .then((r2) => {
           return res.status(200).send(true);
         })
@@ -68,7 +72,7 @@ router.delete("/deleteAge/:id", auth, (req, res) => {
     }
   });
 });
-router.post("/getAge",auth, (req, res) => {
+router.post("/getAge", auth, (req, res) => {
   var id = req.headers["id"];
   age.findOne({ where: { id: id } }).then(function (r1) {
     if (!r1) {

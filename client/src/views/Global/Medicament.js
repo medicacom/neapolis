@@ -40,7 +40,7 @@ function Step4(props) {
                             <label>{t("Declaration.numero")}* </label>
                             <Form.Control
                               defaultValue={props.numero}
-                              placeholder="Numéro du lot"
+                              placeholder={t("Declaration.numero")}
                               name="Numero"
                               className="required"
                               type="text"
@@ -55,10 +55,10 @@ function Step4(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>{t('Declaration.initials')}* </label>
+                            <label>{t('Declaration.dosage')}* </label>
                             <Form.Control
                               defaultValue={props.posologie}
-                              placeholder="Posologie"
+                              placeholder={t('Declaration.dosage')}
                               name="Posologie"
                               className="required"
                               type="text"

@@ -36,7 +36,7 @@ let lang = window.localStorage.getItem("lang");
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("power");
+console.log("listeNews");
 
 openDB("medis", 1, {
   upgrade(db) {

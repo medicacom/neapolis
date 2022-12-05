@@ -24,10 +24,13 @@ import { toast, ToastContainer } from "react-toastify";
 import { Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
-import { useTranslation } from 'react-multi-lang'
+import { useTranslation } from "react-multi-lang";
 
 function Declaration({ obj }) {
-  const t = useTranslation()
+  const t = useTranslation();
+  var lang = localStorage.getItem("lang");
+  var icon1 = lang ==="ar"?"fas fa-angle-double-left":"fas fa-angle-double-right";
+  var icon2 = lang ==="ar"?"fas fa-angle-double-right":"fas fa-angle-double-left";
   var token = localStorage.getItem("x-access-token");
   var id = 0;
   var nom_prenom = "";
@@ -55,10 +58,10 @@ function Declaration({ obj }) {
       );
   };
   const steps = [
-    t('Declaration.data'),
-    t('Declaration.suspect'),
-    t('Declaration.drugs'),
-    t('Declaration.effects'),
+    t("Declaration.data"),
+    t("Declaration.patient"),
+    t("Declaration.drugs"),
+    t("Declaration.effects"),
   ];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
@@ -357,27 +360,27 @@ function Declaration({ obj }) {
 
   const handleBack = () => {
     var newCompleted = completed;
-    delete newCompleted[activeStep - 1]
-    setCompleted(newCompleted);    
+    delete newCompleted[activeStep - 1];
+    setCompleted(newCompleted);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   return (
     <>
       <ToastContainer />
-      <div className="declaration">
+      <div className={lang === "ar"?"dec-ar declaration":"declaration"}>
         <Row>
           <Col md="6">
             <img src={require("../../assets/img/logo.png")} alt="medicacom" />
           </Col>
           <Col md="6">
             <Button
-              className="btn-fill float-right"
+              className={lang === "ar"?"btn-fill float-left btn-declaration":"btn-fill float-right btn-declaration"}
               type="button"
               variant="success"
               onClick={onClick}
             >
-              {token !== null ? nom_prenom : t('sign-in')}
+              {token !== null ? nom_prenom : t("sign-in")}
             </Button>
           </Col>
         </Row>
@@ -385,9 +388,7 @@ function Declaration({ obj }) {
           <Stepper nonLinear activeStep={activeStep}>
             {steps.map((label, index) => (
               <Step key={label} completed={completed[index]}>
-                <StepButton color="inherit">
-                  {label}
-                </StepButton>
+                <StepButton color="inherit">{label}</StepButton>
               </Step>
             ))}
           </Stepper>
@@ -468,14 +469,14 @@ function Declaration({ obj }) {
           <Col md="6">
             <div className="handleBack">
               <Button
-                disabled={activeStep === 0?true:false}
+                disabled={(activeStep === 0 || (activeStep === 1 && token !== null)) ? true : false}
                 className="btn-fill"
                 type="button"
                 variant="success"
                 onClick={handleBack}
               >
-                <i class="fas fa-angle-double-left"></i>
-                  {t('back')}
+                <i class={icon2}></i>
+                {t("back")}
               </Button>
             </div>
           </Col>
@@ -487,8 +488,12 @@ function Declaration({ obj }) {
                 variant="success"
                 onClick={handleComplete}
               >
-                {activeStep === 3 ? t('save') : t('next')}
-                <i class={activeStep < 3 ?"fas fa-angle-double-right" : "fas fa-save"}></i>
+                {activeStep === 3 ? t("save") : t("next")}
+                <i
+                  class={
+                    activeStep < 3 ? icon1 : "fas fa-save"
+                  }
+                ></i>
               </Button>
             </div>
           </Col>

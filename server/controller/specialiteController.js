@@ -4,7 +4,7 @@ var specialites = require("../models/specialite");
 const auth = require("../middlewares/passport");
 
 // Desplay all lignes of client ...
-router.post("/addSpecialite",auth, (req, res) => {
+router.post("/addSpecialite", auth, (req, res) => {
   var id = req.body.id;
   var nom = req.body.nom;
   var nom_en = req.body.nom_en;
@@ -29,12 +29,15 @@ router.post("/addSpecialite",auth, (req, res) => {
         return res.status(403).send(false);
       } else {
         specialites
-          .update({
-            nom: nom,
-            nom_en: nom_en,
-            nom_ar: nom_ar,
-            etat: 1,
-          },{ where: { id: id } })
+          .update(
+            {
+              nom: nom,
+              nom_en: nom_en,
+              nom_ar: nom_ar,
+              etat: 1,
+            },
+            { where: { id: id } }
+          )
           .then((r2) => {
             return res.status(200).send(true);
           })
@@ -52,13 +55,14 @@ router.post("/allSpecialite", (req, res) => {
 });
 
 //Delete client
-router.delete("/deleteSpecialite/:id",auth, (req, res) => {
+router.delete("/deleteSpecialite/:id", auth, (req, res) => {
   var id = req.params.id;
   specialites.findOne({ where: { id: id } }).then(function (r1) {
     if (!r1) {
       return res.status(403).send(false);
     } else {
-      specialites.destroy({ where: { id: id } })
+      specialites
+        .destroy({ where: { id: id } })
         .then((r2) => {
           return res.status(200).send(true);
         })
@@ -68,7 +72,7 @@ router.delete("/deleteSpecialite/:id",auth, (req, res) => {
     }
   });
 });
-router.post("/getSpecialite",auth, (req, res) => {
+router.post("/getSpecialite", auth, (req, res) => {
   var id = req.headers["id"];
   specialites.findOne({ where: { id: id } }).then(function (r1) {
     if (!r1) {
@@ -108,7 +112,7 @@ router.put("/changerEtat/:id", auth, (req, res) => {
 router.post("/getActive", auth, (req, res) => {
   specialites
     .findAll({
-      where:{etat:1}
+      where: { etat: 1 },
     })
     .then(function (r) {
       return res.status(200).send(r);

@@ -1,9 +1,11 @@
 import React from "react";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-multi-lang";
 
 function Header({ users, onlineStatus }) {
   var lang = window.localStorage.getItem("lang");
+  const t = useTranslation();
   var navigate = useHistory();
   let nom =
     onlineStatus === 1
@@ -77,7 +79,7 @@ function Header({ users, onlineStatus }) {
           ></Navbar.Brand> */}
         </div>
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className={lang !== "ar"?"ml-auto":"mr-auto"} navbar>
+          <Nav className={lang !== "ar" ? "ml-auto" : "mr-auto"} navbar>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
                 aria-expanded={false}
@@ -88,7 +90,7 @@ function Header({ users, onlineStatus }) {
                 variant="default"
                 className="m-0"
               >
-                <span className="no-icon">Langue</span>
+                <span className="no-icon">{t("lang.language")}</span>
               </Dropdown.Toggle>
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
                 <Dropdown.Item
@@ -103,7 +105,7 @@ function Header({ users, onlineStatus }) {
                     src={require("../../assets/img/en.png")}
                     alt="medicacom"
                   />
-                  English
+                  {t("lang.en")}
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={lang === "fr" ? "active_lang" : ""}
@@ -117,7 +119,7 @@ function Header({ users, onlineStatus }) {
                     src={require("../../assets/img/fr.png")}
                     alt="medicacom"
                   />
-                  Francais
+                  {t("lang.fr")}
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={lang === "ar" ? "active_lang" : ""}
@@ -131,7 +133,7 @@ function Header({ users, onlineStatus }) {
                     src={require("../../assets/img/ar.png")}
                     alt="medicacom"
                   />
-                  Arabe
+                  {t("lang.ar")}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -153,12 +155,12 @@ function Header({ users, onlineStatus }) {
                   onClick={(e) => navigate.push("/profile")}
                 >
                   <i className="fas fa-user"></i>
-                  profile
+                  {t("User.profile")}
                 </Dropdown.Item>
                 <Dropdown.Item href="#" onClick={LogOut}>
                   {/* <i className="nc-icon nc-button-power"></i> */}
                   <i class="fas fa-power-off"></i>
-                  Déconnecter
+                  {t("disconnect")}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

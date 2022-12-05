@@ -867,7 +867,7 @@ a.dropdown-item {
   background-color: #9e9e9e12 !important
 }
 
-.declaration .row .btn {
+.declaration .row .btn-declaration {
   margin-top: 35px;
 }
 
@@ -970,6 +970,14 @@ a.dropdown-item {
   cursor: pointer;
 }
 
+.sidebar .nav {
+  padding: 0;
+}
+
+.sidebar .nav .nav {
+  padding-left: 22px;
+}
+
 /** arabic style **/
 .sidebar-ar {
   right: 0 !important;
@@ -995,12 +1003,7 @@ a.dropdown-item {
   right: initial !important;
 }
 
-.sidebar .nav {
-  padding: 0;
-  padding-left: 22px;
-}
-
-.sidebar-ar .nav {
+.sidebar-ar .nav .nav {
   padding-right: 22px;
 }
 
@@ -1047,8 +1050,55 @@ a.dropdown-item {
   text-align: right;
 }
 
+.main-panel-ar div {
+  text-align: right;
+}
+
 .main-panel-ar label {
-  float: right;
   margin-right: 6px;
+}
+
+.main-panel-ar td {
+  text-align: right;
+}
+
+.dec-ar img {
+  float: right;
+}
+
+.dec-ar.declaration .handleBack .btn {
+  float: right;
+  margin-bottom: 25px;
+  margin-right: 14px;
+}
+
+.dec-ar.declaration .submit-dec .btn {
+  float: left;
+}
+
+.dec-ar.declaration .submit-dec .btn {
+  margin-left: 15px;
+}
+
+.dec-ar.declaration div {
+  text-align: right;
+}
+
+.dec-ar.declaration .form-check-radio .form-check-label {
+  padding-left: 0;
+  padding-right: 30px;
+}
+
+.dec-ar .form-check-radio .form-check-sign:before, .dec-ar .form-check-radio .form-check-sign:after {
+  left: 0;
+  right: 4px;
+}
+
+.dec-ar.declaration div label {
+  color: #000;
+}
+
+.declaration div label {
+  color: #000;
   margin-top: 10px;
 }

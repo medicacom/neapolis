@@ -17,6 +17,7 @@ import { openDB } from "idb/with-async-ittr";
 import { useTranslation } from "react-multi-lang";
 function AjouterMedicament({ onlineStatus }) {
   const t = useTranslation();
+  let lang = window.localStorage.getItem("lang");
   let db;
   const notify = (type, msg) => {
     if (type === 1)
@@ -47,25 +48,25 @@ function AjouterMedicament({ onlineStatus }) {
   const [optionsVoix, setOptionsVoix] = React.useState([
     {
       value: "",
-      label: "Voix",
+      label: lang === "fr" ? "Voix" : lang === "en" ? "Voice" : "صوت",
       isDisabled: true,
     },
   ]);
   const [voixSelect, setVoixSelect] = React.useState({
     value: 0,
-    label: "Voix",
+    label: lang === "fr" ? "Voix" : lang === "en" ? "Voice" : "صوت",
   });
 
   const [optionsIndication, setOptionsIndication] = React.useState([
     {
       value: "",
-      label: "Role",
+      label: lang === "ar" ? "دلالة" : "Indication",
       isDisabled: true,
     },
   ]);
   const [indicationSelect, setIndicationSelect] = React.useState({
     value: 0,
-    label: "Indication",
+    label: lang === "ar" ? "دلالة" : "Indication",
   });
 
   async function saveMedicamentIndex() {
@@ -162,9 +163,16 @@ function AjouterMedicament({ onlineStatus }) {
     var role = await dispatch(getActiveIndication());
     var entities = role.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Indication" });
+    var label = lang === "ar" ? "دلالة" : "Indication";
+    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.description });
+      var desc =
+        lang === "fr"
+          ? e.description
+          : lang === "en"
+          ? e.description_en
+          : e.description_ar;
+      arrayOption.push({ value: e.id, label: desc });
     });
     setOptionsIndication(arrayOption);
   }, [dispatch]);
@@ -190,9 +198,16 @@ function AjouterMedicament({ onlineStatus }) {
     var role = await dispatch(getActiveVoix());
     var entities = role.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Voix" });
+    var label = lang === "fr" ? "Voix" : lang === "en" ? "Voice" : "صوت";
+    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.description });
+      var desc =
+        lang === "fr"
+          ? e.description
+          : lang === "en"
+          ? e.description_en
+          : e.description_ar;
+      arrayOption.push({ value: e.id, label: desc });
     });
     setOptionsVoix(arrayOption);
   }, [dispatch]);
@@ -366,9 +381,9 @@ function AjouterMedicament({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Indication* </label>
+                            <label>{t("Drugs.indication")}* </label>
                             <Select
-                              placeholder="Indication"
+                              placeholder={t("Drugs.indication")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               value={indicationSelect}

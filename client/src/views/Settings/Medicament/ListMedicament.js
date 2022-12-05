@@ -41,7 +41,7 @@ function ListMedicament({ onlineStatus }) {
         accessorKey: "dosage",
       },
       {
-        header: "actions",
+        header: t("actions"),
         accessorKey: "id",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">

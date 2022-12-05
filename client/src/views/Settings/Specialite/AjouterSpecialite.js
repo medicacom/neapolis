@@ -38,7 +38,7 @@ function AjouterSpecialite() {
       );
   };
   function submitForm(event) {
-    if (nom === "") notify(2, "Ligne Ims est obligatoire");
+    if (nom === "" || nomAr === "" || nomEn === "") notify(2, t("erreur"));
     else {
       dispatch(
         specialiteAdded({ nom: nom, nom_ar: nomAr, nom_en: nomEn, id: id })
@@ -125,7 +125,7 @@ function AjouterSpecialite() {
                             ></Form.Control>
                           </Form.Group>
                         </Col>
-                        <Col className="pr-1" md="6">
+                        <Col className="pl-1" md="6">
                           <Form.Group>
                             <label>{t("name")} EN* </label>
                             <Form.Control

@@ -17,6 +17,8 @@
   "name": "Nom",
   "actions": "Actions",
   "state": "État",
+  "disconnect": "Déconnecter",
+  "description": "Description",
   "age": {
     "list": "Liste des âges",
     "add": "Ajouter un âge",
@@ -70,9 +72,10 @@
   },
   "Declaration": {
     "list": "Liste des déclarations",
+    "add": "Ajouter une declaration",
     "patients": "Patients",
     "patient": "Patient",
-    "drugs": "médicaments",
+    "drugs": "Médicament suspect",
     "date": "Date",
     "user": "Utilisateur",
     "detail": "Détail",
@@ -81,7 +84,6 @@
     "txt_indication": "Dans le cas d’un nouveau -né ou d’un nourrisson, indiquez si le médicament a été administré à/au*",
     "indication": "Indication",
     "age": "Âge du patient",
-    "suspect": "Médicament suspect",
     "name_drug": "Nom du médicament",
     "numero": "Numéro du lot",
     "dosage": "Posologie",
@@ -117,6 +119,13 @@
     "title": "Titre",
     "description": "Description",
     "file": "Fichier",
-    "user": "Utilisateur"
+    "user": "Utilisateur",
+    "date": "date"
+  },
+  "lang": {
+    "en": "Anglais",
+    "fr": "Français",
+    "ar": "Arabe",
+    "language": "Langue"
   }
 }
