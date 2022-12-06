@@ -60,7 +60,7 @@
 .card.card-login img {
   width: 130px;
   text-align: center;
-  margin: 15px auto 30px;
+  margin: 0 auto 30px;
   /* filter: brightness(0) invert(1);
   -webkit-filter: brightness(0) invert(1);
   -webkit-transition: all 0.3s; */
@@ -849,7 +849,7 @@ a.dropdown-item {
   background-color: #f1f1f1;
   border-radius: 50px;
   margin: 50px auto;
-  padding: 0 38px;
+  padding: 2px 38px 0;
   width: 800px;
 }
 
@@ -868,7 +868,7 @@ a.dropdown-item {
 }
 
 .declaration .row .btn-declaration {
-  margin-top: 35px;
+  margin-top: 0;
 }
 
 .MuiBox-root.css-8atqhb .card {
@@ -881,7 +881,7 @@ a.dropdown-item {
 
 .declaration img {
   width: 130px;
-  margin: 20px 0;
+  /* margin: 20px 0; */
 }
 
 .css-8atqhb {
@@ -962,6 +962,7 @@ a.dropdown-item {
   text-align: right;
   margin-right: 16px;
   margin-top: 14px;
+  margin-bottom: 32px;
 }
 
 .flag img {
@@ -1083,21 +1084,26 @@ a.dropdown-item {
   margin-left: 15px;
 }
 
-.dec-ar.declaration div {
+.dec-ar.declaration div, .login-ar .inscription div {
   text-align: right;
 }
 
-.dec-ar.declaration .form-check-radio .form-check-label {
+.dec-ar.declaration .form-check-radio .form-check-label,
+.login-ar .inscription .form-check-radio .form-check-label {
   padding-left: 0;
   padding-right: 30px;
+  font-size: 16px;
 }
 
-.dec-ar .form-check-radio .form-check-sign:before, .dec-ar .form-check-radio .form-check-sign:after {
+.dec-ar .form-check-radio .form-check-sign:before,
+.dec-ar .form-check-radio .form-check-sign:after,
+.login-ar .inscription .form-check-radio .form-check-sign:before,
+.login-ar .inscription .form-check-radio .form-check-sign:after {
   left: 0;
   right: 4px;
 }
 
-.dec-ar.declaration div label {
+.login-ar .dec-ar.declaration div label {
   color: #000;
 }
 
@@ -1114,4 +1120,9 @@ a.dropdown-item {
 .sidebar-ar .sidebar-wrapper .nav .nav-link p {
   font-size: 16px;
   font-weight: 900 !important;
+}
+
+.footer-login .btn-link {
+  color: #23ccef !important;
+  text-decoration: underline !important;
 }

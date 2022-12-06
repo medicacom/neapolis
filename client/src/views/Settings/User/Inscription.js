@@ -9,12 +9,11 @@ import { fetchGouvernorat } from "../../../Redux/gouvernoratReduce";
 import { fetchSpecialite } from "../../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
-import { openDB } from "idb/with-async-ittr";
 import { useTranslation } from "react-multi-lang";
 
-function Inscription({ onlineStatus }) {
+function Inscription() {
   const t = useTranslation();
-  let db;
+  let lang = window.localStorage.getItem("lang");
   const notify = (type, msg) => {
     if (type === 1)
       toast.success(
@@ -41,6 +40,10 @@ function Inscription({ onlineStatus }) {
   const [email, setEmail] = React.useState("");
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [typeSpecialite, setTypeSpecialite] = React.useState(0);
+  const [specialite, setSpecialite] = React.useState(0);
+  const [autreSp, setAutreSp] = React.useState("");
+
   const [role] = React.useState(2);
   const [id] = React.useState(0);
   const [valide] = React.useState(0);
@@ -53,27 +56,27 @@ function Inscription({ onlineStatus }) {
   const [optionsGouvernorat, setOptionsGouvernorat] = React.useState([
     {
       value: "",
-      label: "Gouvernorat",
+      label: t("User.gouvernorat"),
       isDisabled: true,
     },
   ]);
   const [gouvernoratSelect, setGouvernoratSelect] = React.useState({
     value: 0,
-    label: "Gouvernorat",
+    label: t("User.gouvernorat"),
   });
 
   const [optionsSpecialite, setOptionsSpecialite] = React.useState([
     {
       value: "",
-      label: "Specialite",
+      label: t("User.specialite"),
       isDisabled: true,
     },
   ]);
   const [specialiteSelect, setSpecialiteSelect] = React.useState({
     value: 0,
-    label: "Specialite",
+    label: t("User.specialite"),
   });
-  async function submitForm(event) {
+  async function submitForm() {
     var required = document.getElementsByClassName("required");
     var testPassword = true;
     for (var i = 0; i < required.length + 1; i++) {
@@ -124,13 +127,15 @@ function Inscription({ onlineStatus }) {
       notify(2, "Choisire un role");
     }
     var id_gouvernorat = gouvernoratSelect.value;
-    var id_sp = specialiteSelect.value;
+    var id_sp = specialite;
+    var autre_sp = autreSp;
     if (
       !validator.isEmpty(nom) &&
       !validator.isEmpty(prenom) &&
       validator.isEmail(email) &&
       !validator.isEmpty(login) &&
-      testPassword === true
+      testPassword === true &&
+      id_sp !== 0
     ) {
       dispatch(
         userAdded({
@@ -145,16 +150,19 @@ function Inscription({ onlineStatus }) {
           id_sp,
           id_gouvernorat,
           valide,
+          autre_sp,
         })
       ).then((data) => {
-        if (data.payload === true) {
+        if (data.payload.msg === 1) {
           if (isNaN(location.id) === true) notify(1, t("add_txt"));
           else notify(1, t("update_txt"));
           setTimeout(async () => {
             listeUser();
           }, 1500);
-        } else {
+        } else if (data.payload.msg === 2) {
           notify(2, t("problem"));
+        } else if (data.payload.msg === 3) {
+          notify(2, t("exist"));
         }
       });
     }
@@ -165,25 +173,13 @@ function Inscription({ onlineStatus }) {
     var role = await dispatch(fetchGouvernorat());
     var entities = role.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Gouvernorat" });
+    arrayOption.push({ value: 0, label: t("User.gouvernorat") });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.libelle });
+      var label = lang === "fr" ? e.libelle : lang === "en" ? e.libelle_en : e.libelle_ar;
+      arrayOption.push({ value: e.id, label: label });
     });
     setOptionsGouvernorat(arrayOption);
   }, [dispatch]);
-
-  async function initGouvernorat() {
-    db = await openDB("medis", 1, {});
-    const tx = db.transaction("gouvernorats", "readwrite");
-    let gouvStore = tx.objectStore("gouvernorats");
-    let entities = await gouvStore.getAll();
-    var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Gouvernorat" });
-    entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.libelle });
-    });
-    setOptionsGouvernorat(arrayOption);
-  }
 
   /** end Gouvernorat **/
 
@@ -192,25 +188,13 @@ function Inscription({ onlineStatus }) {
     var role = await dispatch(fetchSpecialite());
     var entities = role.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Specialite" });
+    arrayOption.push({ value: 0, label: t("User.specialite") });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
+      var label = lang === "fr" ? e.nom : lang === "en" ? e.nom_en : e.nom_ar;
+      arrayOption.push({ value: e.id, label: label });
     });
     setOptionsSpecialite(arrayOption);
   }, [dispatch]);
-
-  async function initSpecialite() {
-    db = await openDB("medis", 1, {});
-    const tx = db.transaction("specialites", "readwrite");
-    let gouvStore = tx.objectStore("specialites");
-    let entities = await gouvStore.getAll();
-    var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Specialite" });
-    entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
-    });
-    setOptionsSpecialite(arrayOption);
-  }
 
   /** end Gouvernorat **/
 
@@ -225,8 +209,8 @@ function Inscription({ onlineStatus }) {
   return (
     <>
       <Container fluid>
-        <ToastContainer />
-        <div className="section-image">
+        {/* <ToastContainer /> */}
+        <div className="inscription">
           <Container>
             <Row>
               <Col md="12">
@@ -357,18 +341,90 @@ function Inscription({ onlineStatus }) {
                           </Form.Group>
                         </Col>
                         <Col md="12">
-                          <Form.Group id="roleClass">
-                            <Select
-                              placeholder={t("User.specialite")}
-                              className="react-select primary"
-                              classNamePrefix="react-select"
-                              value={specialiteSelect}
-                              onChange={(value) => {
-                                setSpecialiteSelect(value);
-                              }}
-                              options={optionsSpecialite}
-                            />
-                          </Form.Group>
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                defaultValue="1"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => setTypeSpecialite(1)}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("doctor")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                defaultValue="2"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => {
+                                  setTypeSpecialite(2);
+                                  setSpecialite(102);
+                                }}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("pharmacist")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                defaultValue="3"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => {
+                                  setTypeSpecialite(3);
+                                  setSpecialite(121);
+                                }}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("technician")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                defaultValue="4"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => {
+                                  setTypeSpecialite(4);
+                                  setSpecialite(120);
+                                }}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("other")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          {typeSpecialite === 1 ? (
+                            <Form.Group>
+                              <Select
+                                placeholder={t("User.specialite")}
+                                className="react-select primary"
+                                classNamePrefix="react-select"
+                                value={specialiteSelect}
+                                onChange={(value) => {
+                                  setSpecialiteSelect(value);
+                                  setSpecialite(value.value);
+                                }}
+                                options={optionsSpecialite}
+                              />
+                            </Form.Group>
+                          ) : typeSpecialite === 4 ? (
+                            <Form.Group>
+                              <Form.Control
+                                placeholder={t("other")}
+                                type="text"
+                                onBlur={(value) => {
+                                  setAutreSp(value.target.value);
+                                }}
+                              ></Form.Control>
+                            </Form.Group>
+                          ) : (
+                            ""
+                          )}
                         </Col>
                       </Row>
                       <br></br>

@@ -27,10 +27,12 @@ function Step1(props) {
     var role = await dispatch(fetchSpecialite());
     var entities = role.payload;
     var arrayOption = [];
-    var label = lang === "fr" ? "Specialite" : lang === "en" ? "Speciality" : "تخصص";
+    var label =
+      lang === "fr" ? "Specialite" : lang === "en" ? "Speciality" : "تخصص";
     arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      var nomSp = lang === "fr" ? e.nom : lang === e.nom_en ? "Speciality" : e.nom_ar;
+      var nomSp =
+        lang === "fr" ? e.nom : lang === e.nom_en ? "Speciality" : e.nom_ar;
       arrayOption.push({ value: e.id, label: nomSp });
     });
     setOptionsSpecialite(arrayOption);
@@ -115,7 +117,8 @@ function Step1(props) {
                           </Form.Group>
                         </Col>
                       </Row>
-                      <Row>
+
+                      {/* <Row>
                         <Col md="12">
                           <Form.Group id="roleClass">
                             <label>{t("User.specialite")} </label>
@@ -130,6 +133,101 @@ function Step1(props) {
                               options={optionsSpecialite}
                             />
                           </Form.Group>
+                        </Col>
+                      </Row> */}
+
+                      <Row>
+                        <Col md="12">
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                checked={props.typeSpecialite === 1 ? true : false}
+                                defaultValue="1"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => {
+                                  props.setTypeSpecialite(1);
+                                }}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("doctor")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                checked={props.typeSpecialite === 2 ? true : false}
+                                defaultValue="2"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => {
+                                  props.setTypeSpecialite(2);
+                                  props.setIdSpecialite(102);
+                                }}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("pharmacist")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                checked={props.typeSpecialite === 3 ? true : false}
+                                defaultValue="3"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => {
+                                  props.setTypeSpecialite(3);
+                                  props.setIdSpecialite(121);
+                                }}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("technician")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <Form.Check className="form-check-radio">
+                            <Form.Check.Label>
+                              <Form.Check.Input
+                                checked={props.typeSpecialite === 4 ? true : false}
+                                defaultValue="4"
+                                name="ageRadio"
+                                type="radio"
+                                onClick={() => {
+                                  props.setTypeSpecialite(4);
+                                  props.setIdSpecialite(120);
+                                }}
+                              ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                              {t("other")}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          {props.typeSpecialite === 1 ? (
+                            <Form.Group>
+                              <Select
+                                placeholder={t("User.specialite")}
+                                className="react-select primary"
+                                classNamePrefix="react-select"
+                                value={props.specialite}
+                                onChange={(value) => {
+                                  props.setSpecialite(value);
+                                  props.setIdSpecialite(value.value);
+                                }}
+                                options={optionsSpecialite}
+                              />
+                            </Form.Group>
+                          ) : props.typeSpecialite === 4 ? (
+                            <Form.Group>
+                              <Form.Control
+                                placeholder={t("other")}
+                                type="text"
+                                onBlur={(value) => {
+                                  props.setAutreSp(value.target.value);
+                                }}
+                              ></Form.Control>
+                            </Form.Group>
+                          ) : (
+                            ""
+                          )}
                         </Col>
                       </Row>
                       <div className="clearfix"></div>

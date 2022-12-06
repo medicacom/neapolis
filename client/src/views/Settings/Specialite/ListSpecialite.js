@@ -48,7 +48,7 @@ function ListSpecialite() {
         header: t("state"),
         accessorKey: "etat",
         Cell: ({ cell }) =>
-          cell.row.original.etat === 1 ? "Activé" : "Désactive",
+          cell.row.original.etat === 1 ? t("enabled") : "Désactive",
       },
       {
         header: t("actions"),

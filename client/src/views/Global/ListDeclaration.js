@@ -16,7 +16,7 @@ import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_AR } from "../utils/ar_table";
 
 // core components
-function ListDeclaration({obj}) {
+function ListDeclaration({ obj }) {
   var id_role = obj.user.id_role;
   var id = obj.user.id;
   let lang = window.localStorage.getItem("lang");
@@ -105,16 +105,46 @@ function ListDeclaration({obj}) {
     navigate.push("/declaration");
   }
 
-  const getDeclaration = useCallback(
-    async () => {
-      var dec = await dispatch(getDeclarations({id_role,id}));
-      setEntities(dec.payload);
-    },
-    [dispatch]
-  );
+  const getDeclaration = useCallback(async () => {
+    var dec = await dispatch(getDeclarations({ id_role, id }));
+    setEntities(dec.payload);
+  }, [dispatch]);
   const confirmMessage = async (id, e) => {
     var dec = await dispatch(getDeclarationsById(id));
     var data = await dec.payload;
+    var nomAge = "";
+    if (data.patients.ages) {
+      nomAge =
+        lang === "fr"
+          ? data.patients.ages.description
+          : lang === "en"
+          ? data.patients.ages.description_en
+          : data.patients.ages.description_ar;
+    }
+    var nomMed =
+      lang === "fr"
+        ? data.medicaments.nom
+        : lang === "en"
+        ? data.medicaments.nom_en
+        : data.medicaments.nom_ar;
+    var nomInd =
+      lang === "fr"
+        ? data.patients.indications.description
+        : lang === "en"
+        ? data.patients.indications.description_en
+        : data.patients.indications.description_ar;
+    var nomVoix =
+      lang === "fr"
+        ? data.voix_administrations.description
+        : lang === "en"
+        ? data.voix_administrations.description_en
+        : data.voix_administrations.description_ar;
+    var nomEff =
+      lang === "fr"
+        ? data.voix_administrations.description
+        : lang === "en"
+        ? data.effet_indesirables.description_en
+        : data.effet_indesirables.description_ar;
     setAlert(
       <SweetAlert
         customClass="pop-up-extra"
@@ -131,7 +161,7 @@ function ListDeclaration({obj}) {
             <h3>{t("Declaration.patient")}</h3>
             <ul>
               <li>
-                <strong>Nom personnel: </strong>
+                <strong>{t("Declaration.personal")}: </strong>
                 {data.users
                   ? data.users.nom + " " + data.users.prenom
                   : data.patients.passagers.nom +
@@ -179,11 +209,11 @@ function ListDeclaration({obj}) {
                   ? data.patients.dateNaissance
                   : data.patients.age === 2
                   ? data.patients.agePatient
-                  : data.patients.ages.description}
+                  : nomAge}
               </li>
               <li>
                 <strong>{t("Declaration.indication")}: </strong>
-                {data.patients.indications.description}
+                {nomInd}
               </li>
             </ul>
           </Col>
@@ -192,7 +222,7 @@ function ListDeclaration({obj}) {
             <ul>
               <li>
                 <strong>{t("Declaration.name_drug")}: </strong>
-                {data.medicaments.nom}
+                {nomMed}
               </li>
               <li>
                 <strong>{t("Declaration.numero")}: </strong>
@@ -204,7 +234,7 @@ function ListDeclaration({obj}) {
               </li>
               <li>
                 <strong>{t("Declaration.voice")}: </strong>
-                {data.voix_administrations.description}
+                {nomVoix}
               </li>
               <li>
                 <strong>{t("Declaration.start")}: </strong>
@@ -221,7 +251,7 @@ function ListDeclaration({obj}) {
             <ul>
               <li>
                 <strong>{t("Declaration.effects")}: </strong>
-                {data.effet_indesirables.description}
+                {nomEff}
               </li>
               <li>
                 <strong>{t("Declaration.start")}: </strong>

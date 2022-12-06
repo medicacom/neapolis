@@ -20,6 +20,13 @@
   "disconnect": "الخروج",
   "description": "وصف",
   "profile": "حسابي",
+  "exist": "المستخدم موجود",
+  "other":"autre",
+  "technician":"تقني صحة",
+  "pharmacist":"صيدلاني",
+  "doctor":"طبيب",
+  "enabled":"مفعل",
+  "disabled":"معطل",
   "age": {
     "list": "قائمة الأعمار",
     "add": "أضف عمرًا",
@@ -71,6 +78,7 @@
     "listV": "قائمة المقبولين"
   },
   "Declaration": {
+    "personal": "اسم شخصي",
     "list": "قائمة البلاغات",
     "add": "أضف البلاغ",
     "patients": "المرضى",

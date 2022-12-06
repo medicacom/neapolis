@@ -212,14 +212,16 @@ function AjouterUser({ onlineStatus }) {
             valide,
           })
         ).then((data) => {
-          if (data.payload === true) {
+          if (data.payload.msg === 1) {
             if (isNaN(location.id) === true) notify(1, t("add_txt"));
             else notify(1, t("update_txt"));
             setTimeout(async () => {
               listeUser();
             }, 1500);
-          } else {
+          } else if (data.payload.msg === 2){
             notify(2, t("problem"));
+          } else if (data.payload.msg === 3){
+            notify(2, t("exist"));
           }
         });
       } else {

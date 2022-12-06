@@ -41,6 +41,12 @@ function ListMedicament({ onlineStatus }) {
         accessorKey: "dosage",
       },
       {
+        header: t("state"),
+        accessorKey: "etat",
+        Cell: ({ cell }) =>
+          cell.row.original.etat === 1 ? t("enabled") : t("disabled"),
+      },
+      {
         header: t("actions"),
         accessorKey: "id",
         Cell: ({ cell, row }) => (

@@ -70,7 +70,7 @@ function ListPersonel({ onlineStatus }) {
       header: t("state"),
       accessorKey: "etat",
       Cell: ({ cell }) =>
-        cell.row.original.etat === 1 ? "Activé" : "Désactivé",
+        cell.row.original.etat === 1 ? t("enabled") : t("disabled"),
     },
     {
       header: t("actions"),

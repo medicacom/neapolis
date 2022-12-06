@@ -21,6 +21,9 @@ import { useTranslation } from "react-multi-lang";
 
 function LoginPage() {
   const t = useTranslation();
+  let lang = window.localStorage.getItem("lang");
+  var ar = lang === "ar" ? " login-ar" : "";
+
   document.title = "NEAPOLIS";
   let db;
   const notifyErr = (msg) =>
@@ -120,7 +123,7 @@ function LoginPage() {
           <Container>
             <Col className="mx-auto" lg="5" md="8">
               <Form action="" className="form" method="" onSubmit={submitForm}>
-                <Card className={"card-login " + cardClasses}>
+                <Card className={"card-login " + cardClasses+ar}>
                   <div className="flag">
                     <img
                       src={require("../../../assets/img/en.png")}
@@ -174,7 +177,7 @@ function LoginPage() {
                         </Tab.Pane>
                         <Tab.Pane eventKey="settings-icons">
                           <Row>
-                            <Col md="6">
+                            <Col md="12">
                               <Form.Group>
                                 <Form.Control
                                   onKeyPress={enterKeyPressed}
@@ -183,8 +186,9 @@ function LoginPage() {
                                   onChange={loginChange}
                                 ></Form.Control>
                               </Form.Group>
+                              <br></br>
                             </Col>
-                            <Col md="6">
+                            <Col md="12">
                               <Form.Group>
                                 <Form.Control
                                   placeholder={t("User.password")}
@@ -205,9 +209,9 @@ function LoginPage() {
                               {t("login")}
                             </Button>
                             <Button
-                              className="btn-wd"
+                              /* className="btn-wd" */
                               type="button"
-                              variant="info"
+                              variant="link"
                               onClick={() =>
                                 window.location.replace("/declaration")
                               }
@@ -218,35 +222,7 @@ function LoginPage() {
                         </Tab.Pane>
                       </Tab.Content>
                     </Tab.Container>
-                    {/* <Form.Group>
-                    <label>Login</label>
-                    <Form.Control
-                      onKeyPress={enterKeyPressed}
-                      placeholder="Login"
-                      type="text"
-                      onChange={loginChange}
-                    ></Form.Control>
-                  </Form.Group>
-                  <Form.Group>
-                    <label>Mot de passe</label>
-                    <Form.Control
-                      placeholder="Password"
-                      onKeyPress={enterKeyPressed}
-                      onChange={passwordChange}
-                      type="password"
-                    ></Form.Control>
-                  </Form.Group> */}
                   </Card.Body>
-                  {/* <Card.Footer className="ml-auto mr-auto">
-                  <Button
-                    className="btn-wd"
-                    type="button"
-                    variant="success"
-                    onClick={submitForm}
-                  >
-                    Connexion
-                  </Button>
-                </Card.Footer> */}
                 </Card>
               </Form>
             </Col>

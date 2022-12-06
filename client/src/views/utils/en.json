@@ -19,7 +19,14 @@
   "state": "State",
   "disconnect": "Disconnect",
   "description": "Description",
-  "profile":"profile",
+  "profile": "profile",
+  "exist": "User already exist",
+  "other":"Other",
+  "technician":"Health technician",
+  "pharmacist":"Pharmacist",
+  "doctor":"Doctor",
+  "enabled":"Enabled",
+  "disabled":"Disabled",
   "age": {
     "list": "List of ages",
     "add": "Add a age",
@@ -72,6 +79,7 @@
     "listV": "Validate list"
   },
   "Declaration": {
+    "personal": "personal name",
     "list": "List of declarations",
     "add": "Add a declaration",
     "patients": "Patients",

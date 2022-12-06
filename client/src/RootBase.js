@@ -12,8 +12,8 @@ import { updateDB } from "./Redux/offlineReduce";
 
 function RootBase({ id }) {
   let lang = window.localStorage.getItem("lang");
-  var dir = lang !=="ar"?"ltr":"rtl";
-  var styleM = lang !=="ar"?"main-panel":"main-panel main-panel-ar";
+  var dir = lang !== "ar" ? "ltr" : "rtl";
+  var styleM = lang !== "ar" ? "main-panel" : "main-panel main-panel-ar";
 
   let db;
   const location = useLocation();
@@ -270,9 +270,7 @@ function RootBase({ id }) {
           ) : (
             ""
           )}
-          <div
-            className={location.pathname !== "/declaration" ? styleM : ""}
-          >
+          <div className={location.pathname !== "/declaration" ? styleM : ""}>
             {location.pathname !== "/declaration" ? (
               <AdminNavbar users={users} onlineStatus={onlineStatus} />
             ) : (

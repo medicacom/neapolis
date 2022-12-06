@@ -110,6 +110,11 @@ var User = sequelize.define(
         key: "id",
       },
     },
+    autre_sp: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
   },
   { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
@@ -134,7 +139,7 @@ User.prototype.validPassword = function (password) {
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync()
+  .sync({alter:true})
   .then(() => {
     User.findAll().then(function (u) {
       if (u.length == 0) {

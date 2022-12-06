@@ -60,6 +60,11 @@ var passager = sequelize.define(
         key: "id",
       },
     },
+    autre_sp: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
   },
   { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
@@ -68,7 +73,7 @@ passager.belongsTo(specialite, { as: "specialites", foreignKey: "id_sp" });
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync()
+  .sync({alter:true})
   .then(() => {
     console.log(
       "passagers table has been successfully created, if one doesn't exist"

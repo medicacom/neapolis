@@ -33,10 +33,11 @@ var token = null;
 var hrefURL = null;
 token = localStorage.getItem("x-access-token");
 let lang = window.localStorage.getItem("lang");
+var dir = lang !== "ar" ? "ltr" : "rtl";
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("Redirect");
+console.log("typeSpecialite");
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -156,13 +157,15 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         {testLogin === 0 ? (
-          <Switch>
-            <Route exact path="/login">
-              <LoginPage />
-            </Route>
-            <Route path="/declaration" component={Declaration} />
-            <Redirect from="*" to="/login" />
-          </Switch>
+          <div className="wrapper" dir={dir}>
+            <Switch>
+              <Route exact path="/login">
+                <LoginPage />
+              </Route>
+              <Route path="/declaration" component={Declaration} />
+              <Redirect from="*" to="/login" />
+            </Switch>
+          </div>
         ) : (
           <RootBase id={id} />
         )}

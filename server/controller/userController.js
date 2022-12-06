@@ -72,43 +72,14 @@ router.post("/addUser", (req, res) => {
   var id_sp = req.body.id_sp;
   var id_gouvernorat = req.body.id_gouvernorat;
   var valide = req.body.valide;
-  if (id == 0) {
-    user
-      .create({
-        prenom: prenom,
-        nom: nom,
-        login: login,
-        email: email,
-        tel: tel,
-        id_role: role,
-        password: password,
-        id_gouvernorat: id_gouvernorat,
-        id_sp: id_sp,
-        etat: 1,
-        valider: valide,
-      })
-      .then((u) => {
-        return res.status(200).send(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        return res.status(400).send(error);
-      });
-  } else {
-    user.findOne({ where: { id: id } }).then(function (r1) {
-      if (!r1) {
-        return res.status(400).send(false);
-      } else {
-        var password = "";
-        if (req.body.password == "") {
-          password = r1.password;
-        } else {
-          const salt = bcrypt.genSaltSync();
-          password = bcrypt.hashSync(req.body.password, salt);
-        }
-        user
-          .update(
-            {
+  var autre_sp = req.body.autre_sp;
+  user
+    .findOne({ where: { email: email, id: { [Op.ne]: id } } })
+    .then(function (u1) {
+      if (!u1 || u1.email != email) {
+        if (id == 0) {
+          user
+            .create({
               prenom: prenom,
               nom: nom,
               login: login,
@@ -119,19 +90,58 @@ router.post("/addUser", (req, res) => {
               id_gouvernorat: id_gouvernorat,
               id_sp: id_sp,
               etat: 1,
-            },
-            { where: { id: id } }
-          )
-          .then((u) => {
-            return res.status(200).send(true);
-          })
-          .catch((error) => {
-            console.log(error);
-            return res.status(400).send(error);
+              valider: valide,
+              autre_sp: autre_sp,
+            })
+            .then((u) => {
+              return res.status(200).send({ error:[] , data: u, msg: 1 });
+            })
+            .catch((error) => {
+              return res.status(400).send(({ error:error , data: [], msg: 2 }));
+            });
+        } else {
+          user.findOne({ where: { id: id } }).then(function (r1) {
+            if (!r1) {
+              return res.status(400).send(({ error:error , data: [], msg: 2 }));
+            } else {
+              var password = "";
+              if (req.body.password == "") {
+                password = r1.password;
+              } else {
+                const salt = bcrypt.genSaltSync();
+                password = bcrypt.hashSync(req.body.password, salt);
+              }
+              user
+                .update(
+                  {
+                    prenom: prenom,
+                    nom: nom,
+                    login: login,
+                    email: email,
+                    tel: tel,
+                    id_role: role,
+                    password: password,
+                    id_gouvernorat: id_gouvernorat,
+                    id_sp: id_sp,
+                    etat: 1,
+                    autre_sp: autre_sp,
+                  },
+                  { where: { id: id } }
+                )
+                .then((u) => {
+                  return res.status(200).send(({ error:[] , data: u, msg: 1 }));
+                })
+                .catch((error) => {
+                  console.log(error);
+                  return res.status(400).send(({ error:error , data: [], msg: 2 }));
+                });
+            }
           });
+        }
+      } else {
+        return res.status(403).send({ error:[] , data: [], msg: 3 });
       }
     });
-  }
 });
 
 router.put("/changeEtat/:id", auth, (req, res) => {

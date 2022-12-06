@@ -19,7 +19,14 @@
   "state": "État",
   "disconnect": "Déconnecter",
   "description": "Description",
-  "profile":"profil",
+  "profile": "profil",
+  "exist": "L'utilisateur existe déjà",
+  "other": "Autre",
+  "technician": "Technicien de santé",
+  "pharmacist": "Pharmacien",
+  "doctor": "Médecin",
+  "enabled": "Activé",
+  "disabled": "Désactivé",
   "age": {
     "list": "Liste des âges",
     "add": "Ajouter un âge",
@@ -72,6 +79,7 @@
     "listV": "Liste accepté"
   },
   "Declaration": {
+    "personal": "Nom personnel",
     "list": "Liste des déclarations",
     "add": "Ajouter une declaration",
     "patients": "Patients",
