@@ -111,10 +111,10 @@ function AjouterAge() {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Description* </label>
+                            <label>{t("description")} * </label>
                             <Form.Control
                               defaultValue={description}
-                              placeholder="Age"
+                              placeholder="Description"
                               type="text"
                               onChange={(value) => {
                                 setDescription(value.target.value);
@@ -124,10 +124,10 @@ function AjouterAge() {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Description EN* </label>
+                            <label>{t("description")} EN* </label>
                             <Form.Control
                               defaultValue={descriptionEn}
-                              placeholder="Description EN"
+                              placeholder={t("description")+ " EN"}
                               type="text"
                               onChange={(value) => {
                                 setDescriptionEn(value.target.value);
@@ -139,10 +139,10 @@ function AjouterAge() {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Description AR* </label>
+                            <label>{t("description")} AR* </label>
                             <Form.Control
                               defaultValue={descriptionAr}
-                              placeholder="Description AR"
+                              placeholder={t("description")+ " AR"}
                               type="text"
                               onChange={(value) => {
                                 setDescriptionAr(value.target.value);

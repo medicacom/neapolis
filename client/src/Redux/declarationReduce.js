@@ -16,8 +16,8 @@ export const declarationAdded = createAsyncThunk("declaration/addDeclaration", a
   return declaration;
 });
 
-export const getDeclarations = createAsyncThunk("declaration/getDeclarations", async () => {
-  const response = await fetch(Configuration.BACK_BASEURL + "declaration/getDeclarations", {
+export const getDeclarations = createAsyncThunk("declaration/getDeclarations", async (action) => {
+  const response = await fetch(Configuration.BACK_BASEURL + "declaration/getDeclarations/"+action.id_role+"/"+action.id, {
     method: 'get',
     headers: {
       'Accept': 'application/json',

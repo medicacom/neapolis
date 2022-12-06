@@ -217,7 +217,7 @@ function Profile({ obj,onlineStatus }) {
                   <Card>
                     <Card.Header>
                       <Card.Header>
-                        <Card.Title as="h4">Mon profil</Card.Title>
+                        <Card.Title as="h4">{t("profile")}</Card.Title>
                       </Card.Header>
                     </Card.Header>
                     <Card.Body>
@@ -301,7 +301,7 @@ function Profile({ obj,onlineStatus }) {
                         variant="success"
                         onClick={submitForm}
                       >
-                        Enregistrer
+                        {t("save")}
                       </Button>
                       <div className="clearfix"></div>
                     </Card.Body>

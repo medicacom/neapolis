@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -36,7 +36,7 @@ let lang = window.localStorage.getItem("lang");
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("listeNews");
+console.log("Redirect");
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -157,17 +157,11 @@ root.render(
       <BrowserRouter>
         {testLogin === 0 ? (
           <Switch>
-            {/* <Route path="/">
-              <Declaration />
-            </Route>
-            <Redirect from="*" to="/login" /> */}
-            <Route exact path="/" component={Declaration} />
-            <Route path="/login">
+            <Route exact path="/login">
               <LoginPage />
             </Route>
-            <Route path="/*">
-              <Declaration />
-            </Route>
+            <Route path="/declaration" component={Declaration} />
+            <Redirect from="*" to="/login" />
           </Switch>
         ) : (
           <RootBase id={id} />

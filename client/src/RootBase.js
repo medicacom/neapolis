@@ -249,7 +249,7 @@ function RootBase({ id }) {
   useEffect(() => {
     getUser();
     if (location.pathname === "/") {
-      window.location.replace("/declaration");
+      window.location.replace("/profile");
     }
     /* getUser(users); */
   }, []);

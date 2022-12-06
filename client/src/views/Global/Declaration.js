@@ -154,9 +154,11 @@ function Declaration({ obj }) {
     var res = await dispatch(fetchAge());
     var entities = res.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Age" });
+    var label = lang === "fr" ? "Age" : lang === "en" ? "Age" : "عمر";
+    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.description });
+      var description = lang === "fr" ? e.description : lang === "en" ? e.description_en : e.description_ar;
+      arrayOption.push({ value: e.id, label: description });
     });
     setOptionsAge(arrayOption);
   }, [dispatch]);
@@ -167,9 +169,11 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveIndication());
     var entities = res.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Indication" });
+    var label = lang === "fr" ? "Indication" : lang === "en" ? "Indication" : "دلالة";
+    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.description });
+      var description = lang === "fr" ? e.description : lang === "en" ? e.description_en : e.description_ar;
+      arrayOption.push({ value: e.id, label: description });
     });
     setOptionsIndication(arrayOption);
   }, [dispatch]);
@@ -180,9 +184,11 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveEffet());
     var entities = res.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Effet indesirables" });
+    var label = lang === "fr" ? "Effet indesirables" : lang === "en" ? "Side effects" : "الآثار السلبية";
+    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.description });
+      var description = lang === "fr" ? e.description : lang === "en" ? e.description_en : e.description_ar;
+      arrayOption.push({ value: e.id, label: description });
     });
     setOptionsEffet(arrayOption);
   }, [dispatch]);
@@ -193,9 +199,11 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveMedicament());
     var entities = res.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Medicament" });
+    var label = lang === "fr" ? "Médicament" : lang === "en" ? "medicine" : "الدواء";
+    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
+      var nomMed = lang === "fr" ? e.nom : lang === e.nom_en ? "Speciality" : e.nom_ar;
+      arrayOption.push({ value: e.id, label: nomMed });
     });
     setOptionsMedicament(arrayOption);
   }, [dispatch]);
@@ -206,9 +214,11 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveVoix());
     var entities = res.payload;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Administré" });
+    var label = lang === "fr" ? "Administré" : lang === "en" ? "Drug administration" : "طريق تعاطي الدواء";
+    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.description });
+      var description = lang === "fr" ? e.description : lang === "en" ? e.description_en : e.description_ar;
+      arrayOption.push({ value: e.id, label: description });
     });
     setOptionsVoix(arrayOption);
   }, [dispatch]);
@@ -380,7 +390,7 @@ function Declaration({ obj }) {
               variant="success"
               onClick={onClick}
             >
-              {token !== null ? nom_prenom : t("sign-in")}
+              {token !== null ? nom_prenom : t("sign_in")}
             </Button>
           </Col>
         </Row>

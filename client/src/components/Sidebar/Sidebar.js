@@ -108,15 +108,12 @@ function Sidebar({ background, users, onlineStatus }) {
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       var st = {};
-      
-      /* document.title =
-        (lang === "fr" && location.pathname === prop.name) ? prop.name : lang === "en" ? prop.name_en : prop.name_ar; */
-      if (lang === "fr" && location.pathname === prop.path)
-        document.title = prop.name;
-      else if (lang === "en" && location.pathname === prop.path)
-        document.title = prop.name_en;
-      else if (lang === "ar" && location.pathname === prop.path)
-        document.title = prop.name_en;
+      var name = prop.name;
+      if (lang === "fr") name = prop.name;
+      else if (lang === "en" && prop.name_en !== null) name = prop.name_en;
+      else if (lang === "ar" && prop.name_ar !== null) name = prop.name_ar;
+      getTitle(prop.path, name);
+
       /* else 
         document.title = prop.name; */
       if (prop.role.includes(id_role) || prop.role.includes(20)) {
@@ -195,8 +192,23 @@ function Sidebar({ background, users, onlineStatus }) {
   };
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
+    /* if (lang === "fr" && location.pathname === routeName)
+      document.title = routes[i].name;
+    else if (lang === "en" && location.pathname === routeName)
+      document.title = routes[i].name_en;
+    else if (lang === "ar" && location.pathname === routeName)
+      document.title = routes[i].name_en; */
     return location.pathname === routeName ? "active" : "";
   };
+  function getTitle(routeName, name) {
+    /* if (lang === "fr" && location.pathname === routeName)
+      document.title = name;
+    else if (lang === "en" && location.pathname === routeName)
+      document.title = name;
+    else if (lang === "ar" && location.pathname === routeName) */
+    if (location.pathname.toUpperCase() === routeName.toUpperCase())
+      document.title = name;
+  }
   /* function getTitle(routeName, name) {
     if (location.pathname.toUpperCase() === routeName.toUpperCase()) {
       if (routeName !== "/telechargerFichier/:id/:idBl") {

@@ -227,10 +227,10 @@ function AjouterNews({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>Description * </label>
+                            <label>{t("description")} * </label>
                             <Form.Control
                               defaultValue={description}
-                              placeholder="Description"
+                              placeholder={t("description")}
                               type="text"
                               onChange={(value) => {
                                 setDescription(value.target.value);
@@ -242,10 +242,10 @@ function AjouterNews({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Date * </label>
+                            <label>{t("news.date")} * </label>
                             <Form.Control
                               defaultValue={date}
-                              placeholder="Date"
+                              placeholder={t("news.date")}
                               type="date"
                               onChange={(value) => {
                                 setDate(value.target.value);
@@ -255,8 +255,9 @@ function AjouterNews({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>{t("news.file")} * </label>
+                            <label>{t("news.file")} (jpg/jpeg) * </label>
                             <Form.Control
+                              accept=".jpg, .jpeg"
                               defaultValue={file}
                               placeholder={t("news.file")}
                               type="file"

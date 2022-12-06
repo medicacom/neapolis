@@ -13,14 +13,14 @@ import {
   Col,
   Tab,
   Nav,
-  Collapse,
+  Row,
 } from "react-bootstrap";
 import { openDB } from "idb/with-async-ittr";
 import Inscription from "./Inscription";
-import { useTranslation } from 'react-multi-lang'
+import { useTranslation } from "react-multi-lang";
 
 function LoginPage() {
-  const t = useTranslation()
+  const t = useTranslation();
   document.title = "NEAPOLIS";
   let db;
   const notifyErr = (msg) =>
@@ -159,11 +159,13 @@ function LoginPage() {
                       <Nav role="tablist" variant="tabs">
                         <Nav.Item>
                           <Nav.Link eventKey="settings-icons">
-                            {t('sign_in')}
+                            {t("sign_in")}
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                          <Nav.Link eventKey="info-icons">{t('register')}</Nav.Link>
+                          <Nav.Link eventKey="info-icons">
+                            {t("register")}
+                          </Nav.Link>
                         </Nav.Item>
                       </Nav>
                       <Tab.Content>
@@ -171,22 +173,28 @@ function LoginPage() {
                           <Inscription></Inscription>
                         </Tab.Pane>
                         <Tab.Pane eventKey="settings-icons">
-                          <Form.Group>
-                            <Form.Control
-                              onKeyPress={enterKeyPressed}
-                              placeholder="Login"
-                              type="text"
-                              onChange={loginChange}
-                            ></Form.Control>
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.Control
-                              placeholder={t('User.password')}
-                              onKeyPress={enterKeyPressed}
-                              onChange={passwordChange}
-                              type="password"
-                            ></Form.Control>
-                          </Form.Group>
+                          <Row>
+                            <Col md="6">
+                              <Form.Group>
+                                <Form.Control
+                                  onKeyPress={enterKeyPressed}
+                                  placeholder="Login"
+                                  type="text"
+                                  onChange={loginChange}
+                                ></Form.Control>
+                              </Form.Group>
+                            </Col>
+                            <Col md="6">
+                              <Form.Group>
+                                <Form.Control
+                                  placeholder={t("User.password")}
+                                  onKeyPress={enterKeyPressed}
+                                  onChange={passwordChange}
+                                  type="password"
+                                ></Form.Control>
+                              </Form.Group>
+                            </Col>
+                          </Row>
                           <div className="ml-auto mr-auto footer-login">
                             <Button
                               className="btn-wd"
@@ -194,7 +202,7 @@ function LoginPage() {
                               variant="info"
                               onClick={submitForm}
                             >
-                              {t('login')}
+                              {t("login")}
                             </Button>
                             <Button
                               className="btn-wd"
@@ -204,7 +212,7 @@ function LoginPage() {
                                 window.location.replace("/declaration")
                               }
                             >
-                              {t('statement')}
+                              {t("statement")}
                             </Button>
                           </div>
                         </Tab.Pane>

@@ -19,6 +19,7 @@
   "state": "État",
   "disconnect": "Déconnecter",
   "description": "Description",
+  "profile":"profil",
   "age": {
     "list": "Liste des âges",
     "add": "Ajouter un âge",

@@ -19,6 +19,7 @@
   "state": "State",
   "disconnect": "Disconnect",
   "description": "Description",
+  "profile":"profile",
   "age": {
     "list": "List of ages",
     "add": "Add a age",
@@ -41,9 +42,9 @@
     "update": "Edit indication"
   },
   "voice": {
-    "list": "List of voices",
-    "add_voice": "Add a voice",
-    "update_voice": "Edit voice"
+    "list": "List of drug administrations",
+    "add_voice": "Add a drug administration",
+    "update_voice": "Edit drug administration"
   },
   "effect": {
     "list": "List of side effects",
@@ -87,7 +88,7 @@
     "name_drug": "Name of the medicine",
     "numero": "Batch number",
     "dosage": "Dosage",
-    "voice": "Voice administrations",
+    "voice": "Drug administrations",
     "voice_txt": "How was the medicine administered",
     "start": "Start date",
     "end": "End date",
@@ -107,7 +108,7 @@
     "add": "Add a medicine",
     "update": "Edit medicine",
     "list": "List of medicines",
-    "voice": "voice",
+    "voice": "Drug administration",
     "form": "form",
     "dosage": "dosage",
     "indication": "Indication"

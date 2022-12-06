@@ -1019,9 +1019,9 @@ a.dropdown-item {
   float: left;
 }
 
-.main-panel-ar .card-title {
+/* .main-panel-ar .card-title {
   text-align: right;
-}
+} */
 
 .main-panel-ar .pr-1 {
   padding-right: 15px !important;
@@ -1033,8 +1033,10 @@ a.dropdown-item {
   padding-right: 0.25rem !important;
 }
 
-.main-panel-ar h4.title {
+.main-panel-ar h4 {
   text-align: right;
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .main-panel-ar footer .copyright {
@@ -1058,8 +1060,9 @@ a.dropdown-item {
   margin-right: 6px;
 }
 
-.main-panel-ar td {
+.main-panel-ar td, .main-panel-ar th {
   text-align: right;
+  font-size: 16px;
 }
 
 .dec-ar img {
@@ -1098,7 +1101,17 @@ a.dropdown-item {
   color: #000;
 }
 
+.main-panel-ar .css-1d8n9bt {
+  padding: 2px 24px;
+  float: right;
+}
+
 .declaration div label {
   color: #000;
   margin-top: 10px;
+}
+
+.sidebar-ar .sidebar-wrapper .nav .nav-link p {
+  font-size: 16px;
+  font-weight: 900 !important;
 }

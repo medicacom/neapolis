@@ -132,7 +132,10 @@ router.post("/addDeclaration", (req, res) => {
   }
 });
 
-router.get("/getDeclarations", auth, (req, res) => {
+router.get("/getDeclarations/:id_role/:id", auth, (req, res) => {
+  var id_role = req.params.id_role;
+  var id = req.params.id;
+  var where = id_role == 2 ? { id: id } : {};
   rapport
     .findAll({
       include: [
@@ -142,6 +145,7 @@ router.get("/getDeclarations", auth, (req, res) => {
         {
           model: user,
           as: "users",
+          where:where,
           include: ["specialites"],
         },
         {

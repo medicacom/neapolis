@@ -16,7 +16,9 @@ import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_AR } from "../utils/ar_table";
 
 // core components
-function ListDeclaration() {
+function ListDeclaration({obj}) {
+  var id_role = obj.user.id_role;
+  var id = obj.user.id;
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   const dispatch = useDispatch();
@@ -103,10 +105,10 @@ function ListDeclaration() {
     navigate.push("/declaration");
   }
 
-  const getAge = useCallback(
-    async (titre) => {
-      var age = await dispatch(getDeclarations());
-      setEntities(age.payload);
+  const getDeclaration = useCallback(
+    async () => {
+      var dec = await dispatch(getDeclarations({id_role,id}));
+      setEntities(dec.payload);
     },
     [dispatch]
   );
@@ -126,7 +128,7 @@ function ListDeclaration() {
       >
         <Row>
           <Col md="4">
-            <h3>{t("Declaration.list")}</h3>
+            <h3>{t("Declaration.patient")}</h3>
             <ul>
               <li>
                 <strong>Nom personnel: </strong>
@@ -186,7 +188,7 @@ function ListDeclaration() {
             </ul>
           </Col>
           <Col md="4">
-            <h3>{t("Declaration.suspect")}</h3>
+            <h3>{t("Declaration.drugs")}</h3>
             <ul>
               <li>
                 <strong>{t("Declaration.name_drug")}: </strong>
@@ -248,8 +250,8 @@ function ListDeclaration() {
   };
 
   useEffect(() => {
-    getAge();
-  }, [getAge]); //now shut up eslint
+    getDeclaration();
+  }, [getDeclaration]); //now shut up eslint
 
   function ListTable({ list }) {
     return (
