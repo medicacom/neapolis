@@ -38,24 +38,24 @@ function Profile({ obj,onlineStatus }) {
   var nomStore = onlineStatus === 1?obj.user.nom:obj.nom;
   var prenomStore = onlineStatus === 1?obj.user.prenom:obj.prenom;
   var telStore = onlineStatus === 1?obj.user.tel:obj.tel;
-  var loginStore = onlineStatus === 1?obj.user.login:obj.login;
+  var emailStore = onlineStatus === 1?obj.user.email:obj.email;
 
   const [nom, setNom] = React.useState(nomStore);
   const [prenom, setPrenom] = React.useState(prenomStore);
   const [tel, setTel] = React.useState(telStore);
-  const [login, setLogin] = React.useState(loginStore);
+  const [email, setEmail] = React.useState(emailStore);
   const [password, setPassword] = React.useState("");
   function submitForm() {
     if (
       nom === "" ||
       prenom === "" ||
-      login === "" ||
+      email === "" ||
       (password !== "" && password.length < 6)
     ) {
       notify(2, t("erreur"));
     } else {
       notify(1, t("update_txt"));
-      dispatch(profilUpdated({ nom, prenom, tel, login, password, id }));
+      dispatch(profilUpdated({ nom, prenom, tel, email, password, id }));
     }
   }
 
@@ -174,8 +174,8 @@ function Profile({ obj,onlineStatus }) {
 
   async function storeDetailUser() {
     let tx = db.transaction("detailUser", "readwrite");
-    const index = tx.store.index('login');
-    for await (let cursor of index.iterate(obj.user.login)) {
+    const index = tx.store.index('email');
+    for await (let cursor of index.iterate(obj.user.email)) {
       var objDetail = { ...cursor.value };
       objDetail.id = obj.user.id;
       objDetail.nom = obj.user.nom;
@@ -252,14 +252,14 @@ function Profile({ obj,onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>Login*</label>
+                            <label>{t("User.email")}*</label>
                             <Form.Control
-                              id="Login_user"
-                              defaultValue={login}
-                              placeholder="Login"
+                              id="Email_user"
+                              defaultValue={email}
+                              placeholder={t("User.email")}
                               type="text"
                               onChange={(value) => {
-                                setLogin(value.target.value);
+                                setEmail(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>

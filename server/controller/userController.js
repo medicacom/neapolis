@@ -68,21 +68,19 @@ router.post("/addUser", (req, res) => {
   var tel = req.body.tel;
   var role = req.body.role;
   var password = req.body.password;
-  var login = req.body.login;
   var id_sp = req.body.id_sp;
   var id_gouvernorat = req.body.id_gouvernorat;
   var valide = req.body.valide;
   var autre_sp = req.body.autre_sp;
   user
-    .findOne({ where: { login: login, id: { [Op.ne]: id } } })
+    .findOne({ where: { email: email, id: { [Op.ne]: id } } })
     .then(function (u1) {
-      if (!u1 || u1.login != login) {
+      if (!u1 || u1.email != email) {
         if (id == 0) {
           user
             .create({
               prenom: prenom,
               nom: nom,
-              login: login,
               email: email,
               tel: tel,
               id_role: role,
@@ -116,7 +114,6 @@ router.post("/addUser", (req, res) => {
                   {
                     prenom: prenom,
                     nom: nom,
-                    login: login,
                     email: email,
                     tel: tel,
                     id_role: role,
@@ -128,8 +125,8 @@ router.post("/addUser", (req, res) => {
                   },
                   { where: { id: id } }
                 )
-                .then((u) => {
-                  return res.status(200).send({ error: [], data: u, msg: 1 });
+                .then(() => {
+                  return res.status(200).send({ error: [], data: r1, msg: 1 });
                 })
                 .catch((error) => {
                   console.log(error);
@@ -297,7 +294,7 @@ router.post("/login", (req, res) => {
   user
     .findOne({
       include: ["roles"],
-      where: { login: login, etat: 1, valider: 1 },
+      where: { email: login, etat: 1, valider: 1 },
     })
     .then(function (u1) {
       if (!u1) {

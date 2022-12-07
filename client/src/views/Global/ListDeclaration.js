@@ -59,10 +59,15 @@ function ListDeclaration({ obj }) {
       {
         header: t("Declaration.drugs"),
         accessorKey: "medicaments.nom",
-        /* Cell: ({ cell, row }) => (
+        Cell: ({ cell, row }) => (
           <div>
+            {lang === "fr"
+              ? cell.row.original.medicaments.nom
+              : lang === "en"
+              ? cell.row.original.medicaments.nom_en
+              : cell.row.original.medicaments.nom_ar}
           </div>
-        ), */
+        ),
       },
       {
         header: t("Declaration.date"),

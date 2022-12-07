@@ -13,23 +13,18 @@ var configuration = require("../config");
 const user = require("../models/user");
 var config = configuration.connection;
 var Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  config.base,
-  config.root,
-  config.password,
-  {
-    host: config.host,
-    port: config.port,
-    dialect: "mysql",
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000,
-    },
-    operatorsAliases: false,
-  }
-);
+const sequelize = new Sequelize(config.base, config.root, config.password, {
+  host: config.host,
+  port: config.port,
+  dialect: "mysql",
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+  operatorsAliases: false,
+});
 
 /* webpush.setVapidDetails(
   "mailto:feriani.khalil2@gmail.com;dragonxi12341@gmail.com",
@@ -92,8 +87,8 @@ router.post("/addNews", auth, (req, res) => {
             },
             { where: { id: id } }
           )
-          .then((r) => {
-            return res.status(200).send({ data: r, msg: true });
+          .then(() => {
+            return res.status(200).send({ data: r1, msg: true });
           })
           .catch((error) => {
             return res.status(403).send({ error: error, msg: false });
@@ -187,7 +182,7 @@ router.post("/subscribe/:id", async (req, res) => {
       ],
     })
     .then((val) => {
-      var email = (val.dataValues.users.dataValues.emailU).replaceAll(",",";");
+      var email = val.dataValues.users.dataValues.emailU.replaceAll(",", ";");
       // Create payload
       const payload = JSON.stringify({
         title: findNews.dataValues.titre,
@@ -199,7 +194,7 @@ router.post("/subscribe/:id", async (req, res) => {
       });
       // Pass object into sendNotification
       webpush.setVapidDetails(
-        "mailto:"+email,
+        "mailto:" + email,
         publicVapidKey,
         privateVapidKey
       );

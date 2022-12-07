@@ -37,7 +37,7 @@ var dir = lang !== "ar" ? "ltr" : "rtl";
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("ageChangeEtat");
+console.log("email");
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -46,7 +46,7 @@ openDB("medis", 1, {
       keyPath: "idUser",
       autoIncrement: true,
     });
-    storeDetail.createIndex("login", "login");
+    storeDetail.createIndex("email", "email");
 
     //create role store
     var storeRoles = db.createObjectStore("roles", {

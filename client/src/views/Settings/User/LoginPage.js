@@ -77,11 +77,11 @@ function LoginPage() {
   }
 
   //storeDetailUser
-  async function storeDetailUser(login) {
+  async function storeDetailUser(email) {
     db = await openDB("medis", 1, {});
     let tx = db.transaction("detailUser", "readwrite");
-    const index = tx.store.index("login");
-    for await (let cursor of index.iterate(login)) {
+    const index = tx.store.index("email");
+    for await (let cursor of index.iterate(email)) {
       var objDetail = { ...cursor.value };
       localStorage.setItem("x-access-token", objDetail.token);
     }

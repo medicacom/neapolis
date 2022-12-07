@@ -51,10 +51,6 @@ function ListPersonel({ onlineStatus }) {
       accessorKey: "prenom",
     },
     {
-      header: t("User.login"),
-      accessorKey: "login",
-    },
-    {
       header: t("User.role"),
       accessorKey: "role",
       Cell: ({ cell }) =>
@@ -252,7 +248,6 @@ function ListPersonel({ onlineStatus }) {
           id: resUsers[index].id,
           nom: resUsers[index].nom,
           prenom: resUsers[index].prenom,
-          login: resUsers[index].login,
           email: resUsers[index].email,
           id_role: resUsers[index].id_role,
           tel: resUsers[index].tel,

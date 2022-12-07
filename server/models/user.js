@@ -41,11 +41,6 @@ var User = sequelize.define(
       unique: false,
       allowNull: true,
     },
-    login: {
-      type: Sequelize.STRING,
-      unique: false,
-      allowNull: false,
-    },
     email: {
       type: Sequelize.STRING,
       unique: false,
@@ -145,7 +140,6 @@ sequelize
       if (u.length == 0) {
         User.create({
           nom_prenom: "admin",
-          login: "admin",
           email: "admin@admin.com",
           tel: 0,
           id_role: 1,

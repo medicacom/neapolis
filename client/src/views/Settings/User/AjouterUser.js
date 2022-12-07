@@ -7,7 +7,6 @@ import { useParams, useHistory } from "react-router-dom";
 import { userAdded, userGetById } from "../../../Redux/usersReduce";
 import { fetchRole } from "../../../Redux/roleReduce";
 import { fetchGouvernorat } from "../../../Redux/gouvernoratReduce";
-import { fetchSpecialite } from "../../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb/with-async-ittr";
@@ -40,17 +39,12 @@ function AjouterUser({ onlineStatus }) {
   const [prenom, setPrenom] = React.useState("");
   const [tel, setTel] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [role, setRole] = React.useState(0);
   const [id, setId] = React.useState(0);
   const [valide] = React.useState(1);
   //required
-
-  const [emailRequired] = React.useState(true);
-  const [loginRequired] = React.useState(true);
-  const [passwordRequired] = React.useState(true);
-  const [roleRequired] = React.useState(true);
+  const [roleRequired, setRoleRequired] = React.useState(true);
   const etat = 1;
 
   const [options, setOptions] = React.useState([
@@ -98,7 +92,6 @@ function AjouterUser({ onlineStatus }) {
         var objRole = { ...cursor.value };
         objRole.nom = nom;
         objRole.prenom = prenom;
-        objRole.login = login;
         objRole.email = email;
         objRole.id_role = roleSelect.value;
         objRole.tel = tel;
@@ -117,7 +110,6 @@ function AjouterUser({ onlineStatus }) {
       await tx.objectStore("users").add({
         nom: nom,
         prenom: prenom,
-        login: login,
         email: email,
         id_role: roleSelect.value,
         tel: tel,
@@ -147,18 +139,18 @@ function AjouterUser({ onlineStatus }) {
           required[i].name !== "Password"
         ) {
           required[i].style.borderColor = "red";
-          document.getElementsByClassName("error")[i].innerHTML =
+          document.getElementsByClassName("error")[i].innerHTML = t("required");
+          /* document.getElementsByClassName("error")[i].innerHTML =
             required[i].name + " est obligatoire";
-          notify(2, required[i].name + " doit etre non vide");
+          notify(2, required[i].name + " doit etre non vide"); */
         }
         //condition email
         else if (
           required[i].name === "Email" &&
           !validator.isEmail(required[i].value)
         ) {
-          notify(2, "E-mail invalide");
-          document.getElementsByClassName("error")[i].innerHTML =
-            "E-mail invalide";
+          notify(2, t("invalide_email"));
+          document.getElementsByClassName("error")[i].innerHTML = t("invalide_email");
         }
         //condition password
         else if (
@@ -169,9 +161,8 @@ function AjouterUser({ onlineStatus }) {
         ) {
           if (!validator.isLength(required[i].value, { min: 6, max: 20 })) {
             testPassword = false;
-            notify(2, "Password doit etre minimum 6 charactére");
-            document.getElementsByClassName("error")[i].innerHTML =
-              "Password doit etre minimum 6 charactére";
+            notify(2, t("password_err"));
+            document.getElementsByClassName("error")[i].innerHTML = t("password_err");
           }
         }
       }
@@ -182,7 +173,8 @@ function AjouterUser({ onlineStatus }) {
     roleClass.style.borderColor = "#ccc";
     if (role === 0) {
       roleClass.style.borderColor = "red";
-      notify(2, "Choisire un role");
+      setRoleRequired(false)
+      notify(2, t("role_err"));
     }
     var id_gouvernorat = gouvernoratSelect.value;
     var id_sp = specialiteSelect.value;
@@ -191,7 +183,6 @@ function AjouterUser({ onlineStatus }) {
       !validator.isEmpty(nom) &&
       !validator.isEmpty(prenom) &&
       validator.isEmail(email) &&
-      !validator.isEmpty(login) &&
       testPassword === true &&
       role > 0
     ) {
@@ -203,7 +194,6 @@ function AjouterUser({ onlineStatus }) {
             prenom,
             email,
             tel,
-            login,
             password,
             id,
             etat,
@@ -229,6 +219,8 @@ function AjouterUser({ onlineStatus }) {
       } else {
         saveIndex();
       }
+    } else {
+      notify(2, t("erreur"));
     }
   }
 
@@ -238,7 +230,6 @@ function AjouterUser({ onlineStatus }) {
     setNom(entities.nom);
     setPrenom(entities.prenom);
     setEmail(entities.email);
-    setLogin(entities.login);
     setTel(entities.tel);
     setRole(entities.id_role);
     setRoleSelect({ value: entities.roles.id, label: entities.roles.nom });
@@ -318,7 +309,6 @@ function AjouterUser({ onlineStatus }) {
       setNom(obj.nom);
       setPrenom(obj.prenom);
       setEmail(obj.email);
-      setLogin(obj.login);
       setTel(obj.tel);
       setRole(obj.id_role);
       setRoleSelect({ value: obj.id_role, label: obj.nom_role });
@@ -415,27 +405,6 @@ function AjouterUser({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>{t("User.login")}* </label>
-                            <Form.Control
-                              defaultValue={login}
-                              placeholder={t("User.login")}
-                              className="required"
-                              name="Login"
-                              type="text"
-                              onChange={(value) => {
-                                setLogin(value.target.value);
-                              }}
-                            ></Form.Control>
-                          </Form.Group>
-                          <div className="error"></div>
-                          {loginRequired ? null : (
-                            <label className="error">
-                              Login est obligatoire.
-                            </label>
-                          )}
-                        </Col>
-                        <Col className="pl-1" md="6">
-                          <Form.Group>
                             <label>{t("User.password")}* </label>
                             <Form.Control
                               defaultValue={password}
@@ -448,11 +417,6 @@ function AjouterUser({ onlineStatus }) {
                               }}
                             ></Form.Control>
                             <div className="error"></div>
-                            {passwordRequired ? null : (
-                              <label className="error">
-                                Password est obligatoire.
-                              </label>
-                            )}
                           </Form.Group>
                         </Col>
                       </Row>
@@ -472,11 +436,6 @@ function AjouterUser({ onlineStatus }) {
                             ></Form.Control>
                           </Form.Group>
                           <div className="error"></div>
-                          {emailRequired ? null : (
-                            <label className="error">
-                              Email est obligatoire.
-                            </label>
-                          )}
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group id="roleClass">
@@ -527,21 +486,6 @@ function AjouterUser({ onlineStatus }) {
                             ></Form.Control>
                           </Form.Group>
                         </Col>
-                        {/* <Col className="pl-1" md="6">
-                          <Form.Group id="roleClass">
-                            <label>{t("User.specialite")} </label>
-                            <Select
-                              placeholder={t("User.specialite")}
-                              className="react-select primary"
-                              classNamePrefix="react-select"
-                              value={specialiteSelect}
-                              onChange={(value) => {
-                                setSpecialiteSelect(value);
-                              }}
-                              options={optionsSpecialite}
-                            />
-                          </Form.Group>
-                        </Col> */}
                       </Row>
                       <Row>
                       </Row>

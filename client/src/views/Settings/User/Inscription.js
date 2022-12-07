@@ -8,7 +8,7 @@ import { userAdded } from "../../../Redux/usersReduce";
 import { fetchGouvernorat } from "../../../Redux/gouvernoratReduce";
 import { fetchSpecialite } from "../../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-multi-lang";
 
 function Inscription() {
@@ -38,7 +38,6 @@ function Inscription() {
   const [prenom, setPrenom] = React.useState("");
   const [tel, setTel] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [typeSpecialite, setTypeSpecialite] = React.useState(0);
   const [specialite, setSpecialite] = React.useState(0);
@@ -50,7 +49,6 @@ function Inscription() {
   //required
 
   const [emailRequired] = React.useState(true);
-  const [loginRequired] = React.useState(true);
   const [passwordRequired] = React.useState(true);
 
   const [optionsGouvernorat, setOptionsGouvernorat] = React.useState([
@@ -89,18 +87,15 @@ function Inscription() {
           required[i].name !== "Password"
         ) {
           required[i].style.borderColor = "red";
-          document.getElementsByClassName("error")[i].innerHTML =
-            required[i].name + " est obligatoire";
-          notify(2, required[i].name + " doit etre non vide");
+          document.getElementsByClassName("error")[i].innerHTML = t("required");
         }
         //condition email
         else if (
           required[i].name === "Email" &&
           !validator.isEmail(required[i].value)
         ) {
-          notify(2, "E-mail invalide");
-          document.getElementsByClassName("error")[i].innerHTML =
-            "E-mail invalide";
+          notify(2, t("invalide_email"));
+          document.getElementsByClassName("error")[i].innerHTML = t("invalide_email");
         }
         //condition password
         else if (
@@ -111,9 +106,8 @@ function Inscription() {
         ) {
           if (!validator.isLength(required[i].value, { min: 6, max: 20 })) {
             testPassword = false;
-            notify(2, "Password doit etre minimum 6 charactére");
-            document.getElementsByClassName("error")[i].innerHTML =
-              "Password doit etre minimum 6 charactére";
+            notify(2, t("password_err"));
+            document.getElementsByClassName("error")[i].innerHTML = t("password_err");
           }
         }
       }
@@ -124,18 +118,22 @@ function Inscription() {
     roleClass.style.borderColor = "#ccc";
     if (role === 0) {
       roleClass.style.borderColor = "red";
-      notify(2, "Choisire un role");
+      notify(2, t("role_err"));
     }
     var id_gouvernorat = gouvernoratSelect.value;
     var id_sp = specialite;
     var autre_sp = autreSp;
+    var testSP = true;
+    if(id_sp === 120 && validator.isEmpty(autre_sp)){
+      testSP = false;
+    }
     if (
       !validator.isEmpty(nom) &&
       !validator.isEmpty(prenom) &&
       validator.isEmail(email) &&
-      !validator.isEmpty(login) &&
       testPassword === true &&
-      id_sp !== 0
+      id_sp !== 0 && 
+      testSP
     ) {
       dispatch(
         userAdded({
@@ -144,7 +142,6 @@ function Inscription() {
           prenom,
           email,
           tel,
-          login,
           password,
           role,
           id_sp,
@@ -165,7 +162,7 @@ function Inscription() {
         }
       });
     } else {
-      notify(2, t("error"));
+      notify(2, t("erreur"));
     }
   }
 
@@ -254,26 +251,6 @@ function Inscription() {
                         <Col md="12">
                           <Form.Group>
                             <Form.Control
-                              defaultValue={login}
-                              placeholder={t("User.login")}
-                              className="required"
-                              name="Login"
-                              type="text"
-                              onChange={(value) => {
-                                setLogin(value.target.value);
-                              }}
-                            ></Form.Control>
-                          </Form.Group>
-                          <div className="error"></div>
-                          {loginRequired ? null : (
-                            <label className="error">
-                              Login est obligatoire.
-                            </label>
-                          )}
-                        </Col>
-                        <Col md="12">
-                          <Form.Group>
-                            <Form.Control
                               defaultValue={password}
                               placeholder={t("User.password")}
                               className="required"
@@ -348,7 +325,10 @@ function Inscription() {
                                 defaultValue="1"
                                 name="ageRadio"
                                 type="radio"
-                                onClick={() => setTypeSpecialite(1)}
+                                onClick={() => {
+                                  setSpecialite(0);
+                                  setTypeSpecialite(1)}
+                                }
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("doctor")}
