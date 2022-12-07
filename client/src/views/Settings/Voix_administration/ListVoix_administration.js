@@ -106,35 +106,12 @@ function ListVoix_administration({ onlineStatus }) {
         </strong>
       );
   };
-  const confirmMessage = (id, e) => {
-    setAlert(
-      <SweetAlert
-        style={{ display: "block", marginTop: "-100px" }}
-        title="Vous éte sure de supprime cette voix_administration?"
-        onConfirm={() => deleteVoix_administration(id, e)}
-        onCancel={() => hideAlert()}
-        confirmBtnBsStyle="info"
-        cancelBtnBsStyle="danger"
-        confirmBtnText="Oui"
-        cancelBtnText="Non"
-        showCancel
-      >
-        {/* Vous éte sure de supprime cette User? */}
-      </SweetAlert>
-    );
-  };
+  
   const hideAlert = () => {
     setAlert(null);
   };
   function ajouter() {
     navigate.push("ajouterVoix_administration");
-  }
-  function deleteVoix_administration(id, e) {
-    dispatch(voix_administrationDeleted({ id })).then((val) => {
-      notify(1, "Voix_administration supprimer avec succes");
-      getVoix_administration();
-      hideAlert();
-    });
   }
 
   //storeVoix_administration

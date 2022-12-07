@@ -22,7 +22,7 @@ function Step2(props) {
                             <label>{t('Declaration.initials')}* </label>
                             <Form.Control
                               defaultValue={props.initiales}
-                              placeholder={t('Declaration.initials')}
+                              placeholder={t('Declaration.initials_place')}
                               name="Nom"
                               className="required"
                               type="text"

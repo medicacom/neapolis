@@ -77,16 +77,16 @@ function AjouterUser({ onlineStatus }) {
     label: "Gouvernorat",
   });
 
-  const [optionsSpecialite, setOptionsSpecialite] = React.useState([
+ /*  const [optionsSpecialite, setOptionsSpecialite] = React.useState([
     {
       value: "",
       label: "Specialite",
       isDisabled: true,
     },
-  ]);
+  ]); */
   const [specialiteSelect, setSpecialiteSelect] = React.useState({
-    value: 0,
-    label: "Specialite",
+    value: 120,
+    label: "Autre",
   });
 
   async function saveIndex() {
@@ -186,6 +186,7 @@ function AjouterUser({ onlineStatus }) {
     }
     var id_gouvernorat = gouvernoratSelect.value;
     var id_sp = specialiteSelect.value;
+    var autre_sp = roleSelect.label;
     if (
       !validator.isEmpty(nom) &&
       !validator.isEmpty(prenom) &&
@@ -210,6 +211,7 @@ function AjouterUser({ onlineStatus }) {
             id_sp,
             id_gouvernorat,
             valide,
+            autre_sp
           })
         ).then((data) => {
           if (data.payload.msg === 1) {
@@ -258,7 +260,8 @@ function AjouterUser({ onlineStatus }) {
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Role" });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
+      if(e.id !== 2)
+        arrayOption.push({ value: e.id, label: e.nom });
     });
     setOptions(arrayOption);
   }, [dispatch]);
@@ -271,7 +274,8 @@ function AjouterUser({ onlineStatus }) {
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Role" });
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
+      if(e.id !== 2)
+        arrayOption.push({ value: e.id, label: e.nom });
     });
     setOptions(arrayOption);
   }
@@ -305,33 +309,6 @@ function AjouterUser({ onlineStatus }) {
 
   /** end Gouvernorat **/
 
-  /** start Specialite **/
-  const getSpecialite = useCallback(async () => {
-    var role = await dispatch(fetchSpecialite());
-    var entities = role.payload;
-    var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Specialite" });
-    entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
-    });
-    setOptionsSpecialite(arrayOption);
-  }, [dispatch]);
-
-  async function initSpecialite() {
-    db = await openDB("medis", 1, {});
-    const tx = db.transaction("specialites", "readwrite");
-    let gouvStore = tx.objectStore("specialites");
-    let entities = await gouvStore.getAll();
-    var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Specialite" });
-    entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
-    });
-    setOptionsSpecialite(arrayOption);
-  }
-
-  /** end Gouvernorat **/
-
   async function initUser() {
     db = await openDB("medis", 1, {});
     const tx = db.transaction("users", "readwrite");
@@ -354,15 +331,13 @@ function AjouterUser({ onlineStatus }) {
     if (onlineStatus === 1) {
       getRole();
       getGouvernorat();
-      getSpecialite();
       if (isNaN(location.id) === false) getUserById();
     } else {
       initRole();
       initGouvernorat();
-      initSpecialite();
       if (isNaN(location.id) === false) initUser();
     }
-  }, [location.id, getUserById, getRole, getSpecialite, dispatch]);
+  }, [location.id, getUserById, getRole, dispatch]);
 
   function listeUser() {
     navigate.push("/utilisateurListe");
@@ -540,6 +515,19 @@ function AjouterUser({ onlineStatus }) {
                           </Form.Group>
                         </Col>
                         <Col className="pl-1" md="6">
+                          <Form.Group>
+                            <label>{t("User.tel")} </label>
+                            <Form.Control
+                              defaultValue={tel}
+                              placeholder={t("User.tel")}
+                              type="number"
+                              onChange={(value) => {
+                                setTel(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        {/* <Col className="pl-1" md="6">
                           <Form.Group id="roleClass">
                             <label>{t("User.specialite")} </label>
                             <Select
@@ -553,22 +541,9 @@ function AjouterUser({ onlineStatus }) {
                               options={optionsSpecialite}
                             />
                           </Form.Group>
-                        </Col>
+                        </Col> */}
                       </Row>
                       <Row>
-                        <Col className="pr-1" md="6">
-                          <Form.Group>
-                            <label>{t("User.tel")} </label>
-                            <Form.Control
-                              defaultValue={tel}
-                              placeholder={t("User.tel")}
-                              type="number"
-                              onChange={(value) => {
-                                setTel(value.target.value);
-                              }}
-                            ></Form.Control>
-                          </Form.Group>
-                        </Col>
                       </Row>
                       <Button
                         className="btn-fill pull-right"

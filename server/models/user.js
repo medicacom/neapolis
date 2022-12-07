@@ -81,7 +81,7 @@ var User = sequelize.define(
       type: Sequelize.INTEGER,
       unique: false,
       allowNull: true,
-      defaultValue: 1,
+      defaultValue: 0,
     },
     id_role: {
       type: Sequelize.INTEGER,

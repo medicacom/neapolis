@@ -76,6 +76,7 @@ function Declaration({ obj }) {
   const [specialite, setSpecialite] = React.useState({
     value: 0,
     label: "Specialite",
+    isDisabled: true,
   });
   const [typeSpecialite, setTypeSpecialite] = React.useState(0);
   const [idSpecialite, setIdSpecialite] = React.useState(0);
@@ -89,6 +90,7 @@ function Declaration({ obj }) {
   const [ageCategorie, setAgeCategorie] = React.useState({
     value: 0,
     label: t("select"),
+    isDisabled: true,
   });
   const [optionsAge, setOptionsAge] = React.useState([
     {
@@ -100,6 +102,7 @@ function Declaration({ obj }) {
   const [indication, setIndication] = React.useState({
     value: 0,
     label: t("select"),
+    isDisabled: true,
   });
   const [optionsIndication, setOptionsIndication] = React.useState([
     {
@@ -113,6 +116,7 @@ function Declaration({ obj }) {
   const [effet, setEffet] = React.useState({
     value: 0,
     label: t("select"),
+    isDisabled: true,
   });
   const [optionsEffet, setOptionsEffet] = React.useState([
     {
@@ -129,6 +133,7 @@ function Declaration({ obj }) {
   const [medicament, setMedicament] = React.useState({
     value: 0,
     label: t("select"),
+    isDisabled: true,
   });
   const [optionsMedicament, setOptionsMedicament] = React.useState([
     {
@@ -144,6 +149,7 @@ function Declaration({ obj }) {
   const [voix, setVoix] = React.useState({
     value: 0,
     label: t("select"),
+    isDisabled: true,
   });
   const [optionsVoix, setOptionsVoix] = React.useState([
     {
@@ -159,8 +165,8 @@ function Declaration({ obj }) {
     var res = await dispatch(fetchAge());
     var entities = res.payload;
     var arrayOption = [];
-    var label = lang === "fr" ? "Age" : lang === "en" ? "Age" : "عمر";
-    arrayOption.push({ value: 0, label: label });
+    /* var label = lang === "fr" ? "Age" : lang === "en" ? "Age" : "عمر";
+    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -179,9 +185,9 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveIndication());
     var entities = res.payload;
     var arrayOption = [];
-    var label =
+    /* var label =
       lang === "fr" ? "Indication" : lang === "en" ? "Indication" : "دلالة";
-    arrayOption.push({ value: 0, label: label });
+    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -200,13 +206,13 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveEffet());
     var entities = res.payload;
     var arrayOption = [];
-    var label =
+    /* var label =
       lang === "fr"
         ? "Effet indesirables"
         : lang === "en"
         ? "Side effects"
         : "الآثار السلبية";
-    arrayOption.push({ value: 0, label: label });
+    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -225,9 +231,9 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveMedicament());
     var entities = res.payload;
     var arrayOption = [];
-    var label =
-      lang === "fr" ? "Médicament" : lang === "en" ? "medicine" : "الدواء";
-    arrayOption.push({ value: 0, label: label });
+    /* var label =
+      lang === "fr" ? "Médicament" : lang === "en" ? "medicine" : "الدواء"; 
+    arrayOption.push({ value: 0, label: label });*/
     entities.forEach((e) => {
       var nomMed =
         lang === "fr" ? e.nom : lang === e.nom_en ? "Speciality" : e.nom_ar;
@@ -242,13 +248,13 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveVoix());
     var entities = res.payload;
     var arrayOption = [];
-    var label =
+    /* var label =
       lang === "fr"
         ? "Administré"
         : lang === "en"
         ? "Drug administration"
         : "طريق تعاطي الدواء";
-    arrayOption.push({ value: 0, label: label });
+    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -370,8 +376,13 @@ function Declaration({ obj }) {
           })
         ).then((data) => {
           notify(1, t("add_txt"));
-          setTimeout(async () => {
-            window.location.reload();
+          setTimeout(async () => {            
+            if (token === null) {
+              navigate.push("/login");
+            } else {
+              navigate.push("/listDeclaration");
+            }
+            /* window.location.reload(); */
           }, 1500);
         });
       }
@@ -418,37 +429,37 @@ function Declaration({ obj }) {
     <>
       <ToastContainer />
       <div className={lang === "ar" ? "dec-ar declaration" : "declaration"}>
-        <div className="flag">
-          <img
-            src={require("../../assets/img/en.png")}
-            alt="en"
-            onClick={(e) => {
-              window.localStorage.setItem("lang", "en");
-              window.location.reload();
-            }}
-          />
-          <img
-            src={require("../../assets/img/fr.png")}
-            alt="fr"
-            onClick={(e) => {
-              window.localStorage.setItem("lang", "fr");
-              window.location.reload();
-            }}
-          />
-          <img
-            src={require("../../assets/img/ar.png")}
-            alt="ar"
-            onClick={(e) => {
-              window.localStorage.setItem("lang", "ar");
-              window.location.reload();
-            }}
-          />
-        </div>
         <Row>
           <Col md="6">
             <img src={require("../../assets/img/logo.png")} alt="medicacom" />
           </Col>
           <Col md="6">
+            <div className="flag">
+              <img
+                src={require("../../assets/img/en.png")}
+                alt="en"
+                onClick={(e) => {
+                  window.localStorage.setItem("lang", "en");
+                  window.location.reload();
+                }}
+              />
+              <img
+                src={require("../../assets/img/fr.png")}
+                alt="fr"
+                onClick={(e) => {
+                  window.localStorage.setItem("lang", "fr");
+                  window.location.reload();
+                }}
+              />
+              <img
+                src={require("../../assets/img/ar.png")}
+                alt="ar"
+                onClick={(e) => {
+                  window.localStorage.setItem("lang", "ar");
+                  window.location.reload();
+                }}
+              />
+            </div>
             <Button
               className={
                 lang === "ar"
@@ -577,7 +588,7 @@ function Declaration({ obj }) {
                 variant="success"
                 onClick={handleComplete}
               >
-                {activeStep === 3 ? t("save") : t("next")}
+                {activeStep === 3 ? t("envoyer") : t("next")}
                 <i class={activeStep < 3 ? icon1 : "fas fa-save"}></i>
               </Button>
             </div>

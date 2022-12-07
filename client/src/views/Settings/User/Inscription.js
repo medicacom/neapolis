@@ -154,8 +154,7 @@ function Inscription() {
         })
       ).then((data) => {
         if (data.payload.msg === 1) {
-          if (isNaN(location.id) === true) notify(1, t("add_txt"));
-          else notify(1, t("update_txt"));
+          if (isNaN(location.id) === true) notify(1, t("demande_insciption"));
           setTimeout(async () => {
             listeUser();
           }, 1500);
@@ -165,6 +164,8 @@ function Inscription() {
           notify(2, t("exist"));
         }
       });
+    } else {
+      notify(2, t("error"));
     }
   }
 

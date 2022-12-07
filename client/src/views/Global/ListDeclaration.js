@@ -29,7 +29,7 @@ function ListDeclaration({ obj }) {
     () => [
       //column definitions...
       {
-        header: t("Declaration.user"),
+        header: t("Declaration.data"),
         accessorKey: "users.nom",
         Cell: ({ cell, row }) => (
           <div>
@@ -45,21 +45,24 @@ function ListDeclaration({ obj }) {
         ),
       },
       {
-        header: t("Declaration.patients"),
-        accessorKey: "patients.sexe",
+        header: t("User.specialite"),
+        accessorKey: "users.specialites",
         Cell: ({ cell, row }) => (
           <div>
-            {cell.row.original.patients.sexe === 1
-              ? "Homme"
-              : cell.row.original.patients.sexe === 2
-              ? "Femme"
-              : "Autre"}
+            {cell.row.original.users
+              ? cell.row.original.users.specialites.nom
+              : cell.row.original.patients.passagers.specialites.nom}
+            {/* {cell.row.original.users.specialites.nom} */}
           </div>
         ),
       },
       {
         header: t("Declaration.drugs"),
         accessorKey: "medicaments.nom",
+        /* Cell: ({ cell, row }) => (
+          <div>
+          </div>
+        ), */
       },
       {
         header: t("Declaration.date"),
@@ -149,11 +152,11 @@ function ListDeclaration({ obj }) {
       <SweetAlert
         customClass="pop-up-extra"
         style={{ display: "block", marginTop: "-100px" }}
-        title={"Détail déclaration"}
+        title={t("Declaration.details_dec")}
         onConfirm={() => hideAlert()}
         confirmBtnBsStyle="info"
         cancelBtnBsStyle="danger"
-        confirmBtnText="Oui"
+        confirmBtnText={t("Declaration.fermer")}
         cancelBtnText="Non"
       >
         <Row>

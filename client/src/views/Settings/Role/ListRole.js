@@ -44,7 +44,7 @@ function ListRole({ onlineStatus }) {
             >
               <i className="fa fa-edit" />
             </Button>
-            <Button
+            {/* <Button
               id={"idLigne_" + cell.row.original.id}
               onClick={(e) => {
                 confirmMessage(cell.row.original.id, e);
@@ -57,7 +57,7 @@ function ListRole({ onlineStatus }) {
                 className="fa fa-trash"
                 id={"idLigne_" + cell.row.original.id}
               />
-            </Button>
+            </Button> */}
           </div>
         ),
       },
@@ -81,35 +81,13 @@ function ListRole({ onlineStatus }) {
         </strong>
       );
   };
-  const confirmMessage = (id, e) => {
-    setAlert(
-      <SweetAlert
-        style={{ display: "block", marginTop: "-100px" }}
-        title="Vous éte sure de supprime cette role?"
-        onConfirm={() => deleteRole(id, e)}
-        onCancel={() => hideAlert()}
-        confirmBtnBsStyle="info"
-        cancelBtnBsStyle="danger"
-        confirmBtnText="Oui"
-        cancelBtnText="Non"
-        showCancel
-      >
-        {/* Vous éte sure de supprime cette User? */}
-      </SweetAlert>
-    );
-  };
+
   const hideAlert = () => {
     setAlert(null);
   };
+
   function ajouter() {
     navigate.push("ajouterRole");
-  }
-  function deleteRole(id, e) {
-    dispatch(roleDeleted({ id })).then((val) => {
-      notify(1, "Role supprimer avec succes");
-      getRole();
-      hideAlert();
-    });
   }
 
   //storeRoles

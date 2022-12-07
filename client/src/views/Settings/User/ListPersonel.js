@@ -72,7 +72,7 @@ function ListPersonel({ onlineStatus }) {
       Cell: ({ cell }) =>
         cell.row.original.etat === 1 ? t("enabled") : t("disabled"),
     },
-    {
+    /* {
       header: t("actions"),
       accessorKey: "id",
       Cell: ({ cell, row }) => (
@@ -107,7 +107,7 @@ function ListPersonel({ onlineStatus }) {
           </Button>
         </div>
       ),
-    },
+    }, */
     {
       header: t("User.validation"),
       accessorKey: "valider",
@@ -121,8 +121,9 @@ function ListPersonel({ onlineStatus }) {
               variant="success"
               size="sm"
             >
-              Valider <i className={"fa fa-check"} />
+              {t("validate")} <i className={"fa fa-check"} />
             </Button>
+            <br></br>
             <Button
               onClick={(event) => {
                 valideEtat(cell.row.original, 2);
@@ -131,11 +132,40 @@ function ListPersonel({ onlineStatus }) {
               size="sm"
               className={"btn-danger"}
             >
-              Refuser <i className={"fa fa-times"} />
+              {t("refuse")} <i className={"fa fa-times"} />
             </Button>
           </div>
         ) : (
-          ""
+          <div className="actions-right block_action">
+            <Button
+              onClick={() => {
+                navigate.push("/utilisateur/update/" + cell.row.original.id);
+              }}
+              variant="warning"
+              size="sm"
+              className="text-warning btn-link edit"
+            >
+              <i className="fa fa-edit" />
+            </Button>
+            <Button
+              onClick={(event) => {
+                changeEtat(cell.row.original.id, cell.row.original.etat);
+              }}
+              variant="danger"
+              size="sm"
+              className={
+                cell.row.original.etat === 1
+                  ? "text-success btn-link delete"
+                  : "text-danger btn-link delete"
+              }
+            >
+              <i
+                className={
+                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                }
+              />
+            </Button>
+          </div>
         ),
     },
     //end
@@ -198,7 +228,19 @@ function ListPersonel({ onlineStatus }) {
         email: ligne.email,
         nom: ligne.nom + " " + ligne.prenom,
       })
-    );
+    ).then((e1) => {
+      getUser();
+      switch (etat) {
+        case 1:
+          notify(1, t("validate"));
+          break;
+        case 2:
+          notify(1, t("refuse"));
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   //storeUsers

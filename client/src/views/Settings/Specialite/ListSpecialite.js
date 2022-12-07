@@ -48,7 +48,7 @@ function ListSpecialite() {
         header: t("state"),
         accessorKey: "etat",
         Cell: ({ cell }) =>
-          cell.row.original.etat === 1 ? t("enabled") : "Désactive",
+          cell.row.original.etat === 1 ? t("enabled") : t("disabled"),
       },
       {
         header: t("actions"),
@@ -74,8 +74,8 @@ function ListSpecialite() {
               size="sm"
               className={
                 cell.row.original.etat === 1
-                  ? "text-success btn-link delete"
-                  : "text-danger btn-link delete"
+                  ? "text-success btn-link"
+                  : "text-danger btn-link"
               }
             >
               <i

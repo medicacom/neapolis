@@ -77,7 +77,7 @@ function AjouterNews({ onlineStatus }) {
         etat: 1,
         id: news.length !== 0 ? news[news.length - 1].id + 1 : 1,
       });
-      notify(1, "Insertion avec succes");
+      notify(1, t("add_txt"));
     }
 
     setTimeout(async () => {
@@ -97,7 +97,7 @@ function AjouterNews({ onlineStatus }) {
             ).then((val) => {
               if (val.payload.msg === true) {
                 if (isNaN(location.id) === true) {
-                  notify(1, "Insertion avec succes");
+                  notify(1, t("add_txt"));
                 } else {
                   notify(1, t("update_txt"));
                 }
@@ -147,7 +147,7 @@ function AjouterNews({ onlineStatus }) {
     var user = await dispatch(getPersonnel());
     var entities = user.payload.findValider;
     var arrayOption = [];
-    arrayOption.push({ value: 0, label: "Personnel" });
+    /* arrayOption.push({ value: 0, label: "Personnel" }); */
     entities.forEach((e) => {
       arrayOption.push({ value: e.id, label: e.nom });
     });

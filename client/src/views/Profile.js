@@ -266,7 +266,7 @@ function Profile({ obj,onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>{t("User.password")}* (6 chiffre minimum)</label>
+                            <label>{t("User.password")}* ({t("User.password_err")})</label>
                             <Form.Control
                               id="mdp_user"
                               defaultValue=""

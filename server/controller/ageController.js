@@ -54,24 +54,31 @@ router.post("/allAge", (req, res) => {
   });
 });
 
-//Delete client
-router.delete("/deleteAge/:id", auth, (req, res) => {
+router.put("/changeEtat/:id", auth, (req, res) => {
   var id = req.params.id;
-  age.findOne({ where: { id: id } }).then(function (r1) {
-    if (!r1) {
+  age.findOne({ where: { id: id } }).then(function (u) {
+    var etat = 0;
+    if (u.dataValues.etat == 0) etat = 1;
+    if (!u) {
       return res.status(403).send(false);
     } else {
       age
-        .destroy({ where: { id: id } })
-        .then((r2) => {
+        .update(
+          {
+            etat: etat,
+          },
+          { where: { id: id } }
+        )
+        .then(() => {
           return res.status(200).send(true);
         })
-        .catch((error) => {
+        .catch(() => {
           return res.status(403).send(false);
         });
     }
   });
 });
+
 router.post("/getAge", auth, (req, res) => {
   var id = req.headers["id"];
   age.findOne({ where: { id: id } }).then(function (r1) {

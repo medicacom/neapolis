@@ -1,6 +1,6 @@
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback } from "react";
-import { fetchAge, deleteAge } from "../../../Redux/ageReduce";
+import { fetchAge, deleteAge, ageChangeEtat } from "../../../Redux/ageReduce";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -65,13 +65,21 @@ function ListAge() {
             </Button>
             <Button
               onClick={() => {
-                deleteMessage(cell.row.original.id);
+                changeEtat(cell.row.original.id, cell.row.original.etat);
               }}
               variant="danger"
               size="sm"
-              className="text-danger btn-link delete"
+              className={
+                cell.row.original.etat === 1
+                  ? "text-success btn-link"
+                  : "text-danger btn-link"
+              }
             >
-              <i className="fa fa-trash" />
+              <i
+                className={
+                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                }
+              />
             </Button>
           </div>
         ),
@@ -80,7 +88,6 @@ function ListAge() {
     ],
     []
   );
-  const [alert, setAlert] = React.useState(null);
   function ajouter() {
     navigate.push("/ajouterAge");
   }
@@ -96,35 +103,20 @@ function ListAge() {
   useEffect(() => {
     getAge();
   }, [getAge]); //now shut up eslint
-  const deleteMessage = useCallback(
-    async (id) => {
-      setAlert(
-        <SweetAlert
-          showCancel
-          style={{ display: "block", marginTop: "-100px" }}
-          title="Étes vous sure de supprimer cette ligne?"
-          onConfirm={() => deleteAges(id)}
-          onCancel={() => hideAlert()}
-          confirmBtnBsStyle="info"
-          cancelBtnBsStyle="danger"
-          confirmBtnText="Oui"
-          cancelBtnText="Non"
-        ></SweetAlert>
-      );
-    },
-    [dispatch]
-  );
-  const hideAlert = () => {
-    setAlert(null);
-  };
-  function deleteAges(id) {
-    dispatch(deleteAge(id)).then((e) => {
-      if (e.payload === true) {
-        notify(1, "Supprimer avec succes");
-        getAge();
-        hideAlert();
-      } else {
-        notify(2, "Vérifier vos données");
+
+  function changeEtat(id, e) {
+    /* setEntities([]); */
+    dispatch(ageChangeEtat(id)).then((e1) => {
+      getAge();
+      switch (e) {
+        case 0:
+          notify(1, t("enable"));
+          break;
+        case 1:
+          notify(1, t("disable"));
+          break;
+        default:
+          break;
       }
     });
   }
@@ -153,7 +145,6 @@ function ListAge() {
   }
   return (
     <>
-      {alert}
       <ToastContainer />
       <Container fluid>
         <Row>

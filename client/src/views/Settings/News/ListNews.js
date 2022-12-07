@@ -68,8 +68,8 @@ function ListNews({ onlineStatus }) {
               size="sm"
               className={
                 cell.row.original.etat === 1
-                  ? "text-success btn-link delete"
-                  : "text-danger btn-link delete"
+                  ? "text-success btn-link"
+                  : "text-danger btn-link"
               }
             >
               <i
@@ -106,13 +106,6 @@ function ListNews({ onlineStatus }) {
   };
   function ajouter() {
     navigate.push("ajouterNews");
-  }
-  function deleteNews(id, e) {
-    dispatch(newsDeleted({ id })).then((val) => {
-      notify(1, "News supprimer avec succes");
-      getNews();
-      hideAlert();
-    });
   }
 
   //storeNews
@@ -195,11 +188,11 @@ function ListNews({ onlineStatus }) {
       switch (etat) {
         case 0:
           obj.etat = 1;
-          notify(1, "Activer avec succes");
+          notify(1, t("enable"));
           break;
         case 1:
           obj.etat = 0;
-          notify(1, "Désactiver avec succes");
+          notify(1, t("disable"));
           break;
         default:
           break;

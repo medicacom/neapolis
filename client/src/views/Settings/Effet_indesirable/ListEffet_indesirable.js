@@ -106,35 +106,12 @@ function ListEffet_indesirable({ onlineStatus }) {
         </strong>
       );
   };
-  const confirmMessage = (id, e) => {
-    setAlert(
-      <SweetAlert
-        style={{ display: "block", marginTop: "-100px" }}
-        title="Vous éte sure de supprime cette effet_indesirable?"
-        onConfirm={() => deleteEffet_indesirable(id, e)}
-        onCancel={() => hideAlert()}
-        confirmBtnBsStyle="info"
-        cancelBtnBsStyle="danger"
-        confirmBtnText="Oui"
-        cancelBtnText="Non"
-        showCancel
-      >
-        {/* Vous éte sure de supprime cette User? */}
-      </SweetAlert>
-    );
-  };
+  
   const hideAlert = () => {
     setAlert(null);
   };
   function ajouter() {
     navigate.push("ajouterEffet_indesirable");
-  }
-  function deleteEffet_indesirable(id, e) {
-    dispatch(effet_indesirableDeleted({ id })).then((val) => {
-      notify(1, "Effet_indesirable supprimer avec succes");
-      getEffet_indesirable();
-      hideAlert();
-    });
   }
 
   //storeEffet_indesirable

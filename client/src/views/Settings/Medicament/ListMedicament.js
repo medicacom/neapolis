@@ -108,13 +108,6 @@ function ListMedicament({ onlineStatus }) {
   function ajouter() {
     navigate.push("ajouterMedicament");
   }
-  function deleteMedicament(id, e) {
-    dispatch(medicamentDeleted({ id })).then((val) => {
-      notify(1, "Medicament supprimer avec succes");
-      getMedicament();
-      hideAlert();
-    });
-  }
 
   //storeMedicament
   const storeMedicament = useCallback(async (resMedicament) => {

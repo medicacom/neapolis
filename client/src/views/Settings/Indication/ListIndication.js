@@ -178,11 +178,11 @@ function ListIndication({ onlineStatus }) {
       switch (etat) {
         case 0:
           obj.etat = 1;
-          notify(1, "Activer avec succes");
+          notify(1, t("enable"));
           break;
         case 1:
           obj.etat = 0;
-          notify(1, "Désactiver avec succes");
+          notify(1, t("disable"));
           break;
         default:
           break;
@@ -201,10 +201,10 @@ function ListIndication({ onlineStatus }) {
         getIndication();
         switch (e) {
           case 0:
-            notify(1, "Activer avec succes");
+            notify(1, t("enable"));
             break;
           case 1:
-            notify(1, "Désactiver avec succes");
+            notify(1, t("disable"));
             break;
           default:
             break;

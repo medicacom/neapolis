@@ -74,9 +74,9 @@ router.post("/addUser", (req, res) => {
   var valide = req.body.valide;
   var autre_sp = req.body.autre_sp;
   user
-    .findOne({ where: { email: email, id: { [Op.ne]: id } } })
+    .findOne({ where: { login: login, id: { [Op.ne]: id } } })
     .then(function (u1) {
-      if (!u1 || u1.email != email) {
+      if (!u1 || u1.login != login) {
         if (id == 0) {
           user
             .create({
@@ -94,15 +94,15 @@ router.post("/addUser", (req, res) => {
               autre_sp: autre_sp,
             })
             .then((u) => {
-              return res.status(200).send({ error:[] , data: u, msg: 1 });
+              return res.status(200).send({ error: [], data: u, msg: 1 });
             })
             .catch((error) => {
-              return res.status(400).send(({ error:error , data: [], msg: 2 }));
+              return res.status(400).send({ error: error, data: [], msg: 2 });
             });
         } else {
           user.findOne({ where: { id: id } }).then(function (r1) {
             if (!r1) {
-              return res.status(400).send(({ error:error , data: [], msg: 2 }));
+              return res.status(400).send({ error: error, data: [], msg: 2 });
             } else {
               var password = "";
               if (req.body.password == "") {
@@ -129,17 +129,19 @@ router.post("/addUser", (req, res) => {
                   { where: { id: id } }
                 )
                 .then((u) => {
-                  return res.status(200).send(({ error:[] , data: u, msg: 1 }));
+                  return res.status(200).send({ error: [], data: u, msg: 1 });
                 })
                 .catch((error) => {
                   console.log(error);
-                  return res.status(400).send(({ error:error , data: [], msg: 2 }));
+                  return res
+                    .status(400)
+                    .send({ error: error, data: [], msg: 2 });
                 });
             }
           });
         }
       } else {
-        return res.status(403).send({ error:[] , data: [], msg: 3 });
+        return res.status(403).send({ error: [], data: [], msg: 3 });
       }
     });
 });
@@ -177,30 +179,42 @@ router.put("/validation/:id", auth, (req, res) => {
   var valider = req.body.valider;
   var email = req.body.email;
   var nom = req.body.nom;
+  var msg = "";
+  var txt =
+    valider == 1
+      ? "Sujet :Valider d'inscription"
+      : "Sujet : Refuser d'inscription";
+  msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
   user.findOne({ where: { id: id } }).then(function (u) {
     if (!u) {
       return res.status(403).send(false);
     } else {
-      user
-        .update(
-          {
-            valider: valider,
-          },
-          { where: { id: id } }
-        )
-        .then((r2) => {
-          var msg = "";
-          var txt =
-            valider == 1
-              ? "Sujet :Valider d'inscription"
-              : "Sujet : Refuser d'inscription";
-          msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
-          sendMail("Inscription", msg, email, nom);
-          return res.status(200).send(true);
-        })
-        .catch((error) => {
-          return res.status(403).send(false);
-        });
+      if (valider == 1) {
+        user
+          .update(
+            {
+              valider: valider,
+            },
+            { where: { id: id } }
+          )
+          .then(() => {
+            sendMail("Inscription", msg, email, nom);
+            return res.status(200).send(true);
+          })
+          .catch(() => {
+            return res.status(403).send(false);
+          });
+      } else {
+        user
+          .destroy({ where: { id: id } })
+          .then(() => {
+            sendMail("Inscription", msg, email, nom);
+            return res.status(200).send(true);
+          })
+          .catch(() => {
+            return res.status(403).send(false);
+          });
+      }
     }
   });
 });
@@ -283,7 +297,7 @@ router.post("/login", (req, res) => {
   user
     .findOne({
       include: ["roles"],
-      where: { login: login, etat: 1 },
+      where: { login: login, etat: 1, valider: 1 },
     })
     .then(function (u1) {
       if (!u1) {

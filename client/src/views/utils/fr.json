@@ -27,24 +27,28 @@
   "doctor": "Médecin",
   "enabled": "Activé",
   "disabled": "Désactivé",
+  "validate": "Valider",
+  "refuse": "Refuser",
+  "envoyer": "envoyer",
+  "demande_insciption": "Votre demande a été envoyé avec succes",
   "age": {
     "list": "Liste des âges",
     "add": "Ajouter un âge",
     "update": "Modifier âge"
   },
   "role": {
-    "list": "Liste des rôle",
+    "list": "Liste des rôles",
     "add": "Ajouter un rôle",
     "update": "Modifier rôle",
     "order": "ordre"
   },
   "speciality": {
-    "list": "Liste des spécialité",
+    "list": "Liste des spécialités",
     "add": "Ajouter un spécialité",
     "update": "Modifier spécialité"
   },
   "indication": {
-    "list": "Liste des indication",
+    "list": "Liste des indications",
     "add": "Ajouter un indication",
     "update": "Modifier indication"
   },
@@ -54,7 +58,7 @@
     "update_voice": "Modifier voix"
   },
   "effect": {
-    "list": "Liste des effet indésirable",
+    "list": "Liste des effets indésirables",
     "add_effect": "Ajouter un effet indésirable",
     "update_effect": "Modifier effet indésirable"
   },
@@ -75,8 +79,8 @@
     "add": "Ajouter un utilisateur",
     "update": "Modifier utilisateur",
     "listU": "Liste des utilisateurs",
-    "listP": "Liste réfusé",
-    "listV": "Liste accepté"
+    "listP": "Liste des demandes en attentes",
+    "listV": "Liste des demandes acceptées"
   },
   "Declaration": {
     "personal": "Nom personnel",
@@ -88,8 +92,11 @@
     "date": "Date",
     "user": "Utilisateur",
     "detail": "Détail",
-    "initials": "Initials",
+    "initials": "Initiales",
+    "initials_place": "p. ex. A VDB",
     "gendre": "Sexe",
+    "details_dec": "Détail déclaration",
+    "fermer": "fermer",
     "txt_indication": "Dans le cas d’un nouveau -né ou d’un nourrisson, indiquez si le médicament a été administré à/au*",
     "indication": "Indication",
     "age": "Âge du patient",
@@ -122,9 +129,9 @@
     "indication": "Indication"
   },
   "news": {
-    "add": "Ajouter un actualité",
-    "update": "Modifier actualité",
-    "list": "Liste des actualités",
+    "add": "Ajouter une nouvelle",
+    "update": "Modifier nouvelle",
+    "list": "Liste des nouvelles",
     "title": "Titre",
     "description": "Description",
     "file": "Fichier",

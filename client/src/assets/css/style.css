@@ -232,10 +232,10 @@ li.nav-item .hidden.nav-link {
   height: auto !important;
 }
 
-.react-select__menu {
+/* .react-select__menu {
   position: relative !important;
   z-index: 999999999999999 !important;
-}
+} */
 
 .navbar .navbar-nav .nav-item .nav-link {
   color: #fff;
@@ -881,7 +881,7 @@ a.dropdown-item {
 
 .declaration img {
   width: 130px;
-  /* margin: 20px 0; */
+  margin-top: 10px;
 }
 
 .css-8atqhb {
@@ -1061,7 +1061,7 @@ a.dropdown-item {
   margin-right: 6px;
 }
 
-.main-panel-ar td, .main-panel-ar th {
+.main-panel-ar td {
   text-align: right;
   font-size: 16px;
 }
@@ -1109,7 +1109,7 @@ a.dropdown-item {
 
 .main-panel-ar .css-1d8n9bt {
   padding: 2px 24px;
-  float: right;
+  /* float: right; */
 }
 
 .declaration div label {
@@ -1125,4 +1125,53 @@ a.dropdown-item {
 .footer-login .btn-link {
   color: #23ccef !important;
   text-decoration: underline !important;
+}
+
+.main-panel-ar .MuiTable-root .btn {
+  font-size: 14px;
+  /* display: block; */
+  font-weight: 700;
+}
+
+.main-panel-ar th {
+  font-weight: 900;
+  font-size: 18px;
+  text-align: right;
+}
+
+.main-panel-ar .navbar .navbar-nav .dropdown-toggle:after {
+  margin-right: 5px;
+}
+
+.dec-ar.declaration .flag {
+  margin-bottom: 50px;
+}
+
+.dec-ar .css-a5nipc {
+  padding-left: 5px;
+  padding-right: 0;
+}
+
+.dec-ar div label {
+  color: #000;
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.dec-ar .css-h2cmlr .css-2fdkz6 {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.main-panel-ar .dropdown-menu .dropdown-item {
+  font-size: 16px !important;
+}
+
+.main-panel-ar .sweet-alert.pop-up-extra h3 {
+  text-align: right;
+}
+
+.main-panel-ar .sweet-alert.pop-up-extra li {
+  margin-right: 40px;
+  text-align: right;
 }

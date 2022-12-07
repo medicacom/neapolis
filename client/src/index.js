@@ -37,7 +37,7 @@ var dir = lang !== "ar" ? "ltr" : "rtl";
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("typeSpecialite");
+console.log("ageChangeEtat");
 
 openDB("medis", 1, {
   upgrade(db) {
