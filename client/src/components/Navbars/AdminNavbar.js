@@ -4,6 +4,8 @@ import { useHistory } from "react-router";
 import { useTranslation } from "react-multi-lang";
 
 function Header({ users, onlineStatus }) {
+  const [collapseOpen, setCollapseOpen] = React.useState(false);
+  console.log("collapseOpen",collapseOpen)
   var lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   var navigate = useHistory();
@@ -36,22 +38,6 @@ function Header({ users, onlineStatus }) {
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
-        <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
-          <Button
-            variant="dark"
-            className="d-lg-none btn-fill d-flex justify-content-center align-items-center rounded-circle p-2"
-            onClick={mobileSidebarToggle}
-          >
-            <i className="fas fa-ellipsis-v"></i>
-          </Button>
-          <Navbar.Brand
-            href="#home"
-            onClick={(e) => e.preventDefault()}
-            className="mr-2"
-          >
-            {getBrandText()}
-          </Navbar.Brand>
-        </div>
         <div className="navbar-wrapper">
           <div className="navbar-minimize">
             <Button
@@ -78,7 +64,7 @@ function Header({ users, onlineStatus }) {
             onClick={(e) => e.preventDefault()}
           ></Navbar.Brand> */}
         </div>
-        <Navbar.Collapse id="basic-navbar-nav">
+        {/* <Navbar.Collapse id="basic-navbar-nav" in={collapseOpen}> */}
           <Nav className={lang !== "ar" ? "ml-auto" : "mr-auto"} navbar>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
@@ -165,7 +151,7 @@ function Header({ users, onlineStatus }) {
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
-        </Navbar.Collapse>
+        {/* </Navbar.Collapse> */}
       </Container>
     </Navbar>
   );

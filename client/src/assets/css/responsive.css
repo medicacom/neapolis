@@ -1,16 +1,47 @@
 @media (max-width: 1200px) {
+    #root .navbar-nav {
+        flex-direction: revert;
+    }
+
     .declaration {
-        width: 700px;
+        width: 650px;
     }
+
     .pop-up-extra {
-        overflow-y: scroll!important;
-        padding: 0!important;
-        width: calc(100% - 50px)!important;
+        overflow-y: scroll !important;
+        padding: 0 !important;
+        width: calc(100% - 50px) !important;
     }
+
     .card-header {
         overflow: initial;
     }
+
+    .inscription input {
+        margin-top: 10px;
+    }
+
+    .inscription .react-select {
+        margin-top: 10px;
+    }
+
+    .inscription .form-check {
+        margin-top: 10px;
+        margin-left: -4px !important;
+    }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+    .declaration {
+        width: 100%;
+        border-radius: 30px;
+    }
+
+    .flag {
+        margin-right: 0;
+    }
+
+    .css-h2cmlr {
+        display: none;
+    }
 }

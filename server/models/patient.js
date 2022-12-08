@@ -92,9 +92,24 @@ var patient = sequelize.define(
         key: "id",
       },
     },
+    poid: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    taille: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    allergie: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
   },
   { charset: "utf8", collate: "utf8_general_ci" }
-);
+); 
 
 patient.belongsTo(user, { as: "users", foreignKey: "id_user" });
 
@@ -109,7 +124,7 @@ patient.belongsTo(passager, { as: "passagers", foreignKey: "id_passager" });
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync()
+  .sync({alter:true})
   .then(() => {
     console.log(
       "patients table has been successfully created, if one doesn't exist"

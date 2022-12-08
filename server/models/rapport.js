@@ -127,6 +127,71 @@ var rapport = sequelize.define(
         key: "id",
       },
     },
+    description_eff: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    grave: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    hospitalisation: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    pronostic: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    incapacite: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    deces: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    anomalie: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    autre: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    traites: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    evolution: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    survenus: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+    },
+    date_admin: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    therapeutique: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
   },
   { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );

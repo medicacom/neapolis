@@ -87,6 +87,9 @@ function Declaration({ obj }) {
   const [sexe, setSexe] = React.useState("");
   const [dateNaissance, setDateNaissance] = React.useState("");
   const [agePatient, setAgePatient] = React.useState("");
+  const [poid, setPoid] = React.useState("");
+  const [taille, setTaille] = React.useState("");
+  const [allergie, setAllergie] = React.useState("");
   const [ageCategorie, setAgeCategorie] = React.useState({
     value: 0,
     label: t("select"),
@@ -113,22 +116,21 @@ function Declaration({ obj }) {
   ]);
 
   //Effets
-  const [effet, setEffet] = React.useState({
-    value: 0,
-    label: t("select"),
-    isDisabled: true,
-  });
-  const [optionsEffet, setOptionsEffet] = React.useState([
-    {
-      value: 0,
-      label: t("select"),
-      isDisabled: true,
-    },
-  ]);
   const [dateDebut, setDateDebut] = React.useState("");
   const [dateFin, setDateFin] = React.useState("");
   const [information, setInformation] = React.useState("");
   const [complementaires, setComplementaires] = React.useState("");
+  const [description_eff, setDescription_eff] = React.useState("");
+  const [grave, setGrave] = React.useState(0);
+  const [hospitalisation, setHospitalisation] = React.useState(0);
+  const [pronostic, setPronostic] = React.useState(0);
+  const [incapacite, setIncapacite] = React.useState(0);
+  const [anomalie, setAnomalie] = React.useState(0);
+  const [deces, setDeces] = React.useState(0);
+  const [autre, setAutre] = React.useState(0);
+  const [evolution, setEvolution] = React.useState(0);
+  const [traites, setTraites] = React.useState(0);
+  const [survenus, setSurvenus] = React.useState(0);
   //Medicament
   const [medicament, setMedicament] = React.useState({
     value: 0,
@@ -146,12 +148,26 @@ function Declaration({ obj }) {
   const [dateFinAdmin, setDateFinAdmin] = React.useState("");
   const [numero, setNumero] = React.useState("");
   const [posologie, setPosologie] = React.useState("");
+  const [date_admin, setDate_admin] = React.useState("");
+  const [therapeutique, setTherapeutique] = React.useState("");
   const [voix, setVoix] = React.useState({
     value: 0,
     label: t("select"),
     isDisabled: true,
   });
   const [optionsVoix, setOptionsVoix] = React.useState([
+    {
+      value: 0,
+      label: t("select"),
+      isDisabled: true,
+    },
+  ]);
+  const [effet, setEffet] = React.useState({
+    value: 0,
+    label: t("select"),
+    isDisabled: true,
+  });
+  const [optionsEffet, setOptionsEffet] = React.useState([
     {
       value: 0,
       label: t("select"),
@@ -165,8 +181,6 @@ function Declaration({ obj }) {
     var res = await dispatch(fetchAge());
     var entities = res.payload;
     var arrayOption = [];
-    /* var label = lang === "fr" ? "Age" : lang === "en" ? "Age" : "عمر";
-    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -185,9 +199,6 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveIndication());
     var entities = res.payload;
     var arrayOption = [];
-    /* var label =
-      lang === "fr" ? "Indication" : lang === "en" ? "Indication" : "دلالة";
-    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -206,13 +217,6 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveEffet());
     var entities = res.payload;
     var arrayOption = [];
-    /* var label =
-      lang === "fr"
-        ? "Effet indesirables"
-        : lang === "en"
-        ? "Side effects"
-        : "الآثار السلبية";
-    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -231,9 +235,6 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveMedicament());
     var entities = res.payload;
     var arrayOption = [];
-    /* var label =
-      lang === "fr" ? "Médicament" : lang === "en" ? "medicine" : "الدواء"; 
-    arrayOption.push({ value: 0, label: label });*/
     entities.forEach((e) => {
       var nomMed =
         lang === "fr" ? e.nom : lang === e.nom_en ? "Speciality" : e.nom_ar;
@@ -248,13 +249,6 @@ function Declaration({ obj }) {
     var res = await dispatch(getActiveVoix());
     var entities = res.payload;
     var arrayOption = [];
-    /* var label =
-      lang === "fr"
-        ? "Administré"
-        : lang === "en"
-        ? "Drug administration"
-        : "طريق تعاطي الدواء";
-    arrayOption.push({ value: 0, label: label }); */
     entities.forEach((e) => {
       var description =
         lang === "fr"
@@ -376,7 +370,7 @@ function Declaration({ obj }) {
           })
         ).then((data) => {
           notify(1, t("add_txt"));
-          setTimeout(async () => {            
+          setTimeout(async () => {
             if (token === null) {
               navigate.push("/login");
             } else {
@@ -430,10 +424,10 @@ function Declaration({ obj }) {
       <ToastContainer />
       <div className={lang === "ar" ? "dec-ar declaration" : "declaration"}>
         <Row>
-          <Col md="6">
+          <Col md="6" sm="6" xs="6">
             <img src={require("../../assets/img/logo.png")} alt="medicacom" />
           </Col>
-          <Col md="6">
+          <Col md="6" sm="6" xs="6">
             <div className="flag">
               <img
                 src={require("../../assets/img/en.png")}
@@ -524,6 +518,12 @@ function Declaration({ obj }) {
                     optionsIndication={optionsIndication}
                     indication={indication}
                     setIndication={setIndication}
+                    poid={poid}
+                    setPoid={setPoid}
+                    taille={taille}
+                    setTaille={setTaille}
+                    allergie={allergie}
+                    setAllergie={setAllergie}
                   ></Patient>
                 ) : activeStep === 2 ? (
                   <Medicament
@@ -541,6 +541,10 @@ function Declaration({ obj }) {
                     setNumero={setNumero}
                     posologie={posologie}
                     setPosologie={setPosologie}
+                    date_admin={date_admin}
+                    setDate_admin={setDate_admin}
+                    therapeutique={therapeutique}
+                    setTherapeutique={setTherapeutique}
                   ></Medicament>
                 ) : (
                   <Effets
@@ -555,6 +559,28 @@ function Declaration({ obj }) {
                     setInformation={setInformation}
                     complementaires={complementaires}
                     setComplementaires={setComplementaires}
+                    grave={grave}
+                    description_eff={description_eff}
+                    setDescription_eff={setDescription_eff}
+                    setGrave={setGrave}
+                    hospitalisation={hospitalisation}
+                    setHospitalisation={setHospitalisation}
+                    pronostic={pronostic}
+                    setPronostic={setPronostic}
+                    incapacite={incapacite}
+                    setIncapacite={setIncapacite}
+                    anomalie={anomalie}
+                    setAnomalie={setAnomalie}
+                    autre={autre}
+                    setAutre={setAutre}
+                    evolution={evolution}
+                    setEvolution={setEvolution}
+                    traites={traites}
+                    setTraites={setTraites}
+                    survenus={survenus}
+                    setSurvenus={setSurvenus}
+                    deces={deces}
+                    setDeces={setDeces}
                   ></Effets>
                 )}
               </Typography>
@@ -562,7 +588,7 @@ function Declaration({ obj }) {
           </div>
         </Box>
         <Row>
-          <Col md="6">
+          <Col md="6" sm="6" xs="6">
             <div className="handleBack">
               <Button
                 disabled={
@@ -580,7 +606,7 @@ function Declaration({ obj }) {
               </Button>
             </div>
           </Col>
-          <Col md="6">
+          <Col md="6" sm="6" xs="6">
             <div className="submit-dec">
               <Button
                 className="btn-fill"

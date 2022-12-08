@@ -510,7 +510,7 @@ a.dropdown-item {
   margin: 0;
 }
 
-@media (max-width: 1000px) {
+/* @media (max-width: 1000px) {
   .nav-tabs .nav-item {
     font-size: 14px;
   }
@@ -574,7 +574,7 @@ a.dropdown-item {
     padding-left: 10px !important;
     padding-right: 10px !important;
   }
-}
+} */
 
 /* new css */
 .sweet-alert ul {
@@ -1200,4 +1200,8 @@ a.dropdown-item {
   width: 26px;
   margin: 5px auto;
   padding: 0;
+}
+
+.dec-ar .flag img {
+  float: left;
 }
