@@ -3,6 +3,7 @@ import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback, useMemo } from "react";
 import {
   fetchNews,
+  getFileNews,
   newsChangeEtat,
   newsDeleted,
 } from "../../../Redux/newsReduce";
@@ -16,7 +17,7 @@ import { MRT_Localization_FR } from "material-react-table/locales/fr";
 import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_AR } from "../../utils/ar_table";
 // core components
-function ListNews({ onlineStatus }) {
+function ListNews({ onlineStatus, obj }) {
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   let db;
@@ -40,43 +41,29 @@ function ListNews({ onlineStatus }) {
         accessorKey: "date",
       },
       {
-        header: t("state"),
-        accessorKey: "etat",
-        Cell: ({ cell }) =>
-          cell.row.original.etat === 1 ? t("enabled") : t("disabled"),
-      },
-      {
         header: t("actions"),
         accessorKey: "id",
         Cell: ({ cell, row }) => (
           <div className="actions-right block_action">
             <Button
               onClick={() => {
-                navigate.push("/news/update/" + cell.row.original.id);
+                confirmDetail(cell.row.original);
               }}
-              variant="warning"
+              variant="info"
               size="sm"
-              className="text-warning btn-link edit"
+              className={"text-info btn-link"}
             >
-              <i className="fa fa-edit" />
+              <i className={"fa fa-eye"} />
             </Button>
             <Button
-              onClick={(event) => {
-                changeEtat(cell.row.original.id, cell.row.original.etat);
+              onClick={() => {
+                confirmDelete(cell.row.original.id);
               }}
               variant="danger"
               size="sm"
-              className={
-                cell.row.original.etat === 1
-                  ? "text-success btn-link"
-                  : "text-danger btn-link"
-              }
+              className={"text-danger btn-link"}
             >
-              <i
-                className={
-                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
-                }
-              />
+              <i className={"fa fa-trash-alt"} />
             </Button>
           </div>
         ),
@@ -101,6 +88,119 @@ function ListNews({ onlineStatus }) {
         </strong>
       );
   };
+
+  const confirmDelete = (id) => {
+    setAlert(
+      <SweetAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Vous éte sure de supprime cette ligne?"
+        onConfirm={() => deleteNews(id)}
+        onCancel={() => hideAlert()}
+        confirmBtnBsStyle="info"
+        cancelBtnBsStyle="danger"
+        confirmBtnText="Oui"
+        cancelBtnText="Non"
+        showCancel
+      ></SweetAlert>
+    );
+  };
+
+  /* const getFile = React.useCallback(
+    async (id) => {
+      dispatch(getFileNews(id)).then(async (e1) => {
+        var ff = null;
+        ff = new Blob([e1.payload], {
+          type: "application/*",
+        });
+
+        const f = await URL.createObjectURL(ff);
+        console.log("await",f);
+        return f;
+      });
+    },
+    [dispatch]
+  ); */
+  const confirmDetail = React.useCallback(
+    async (ligne) => {
+      dispatch(getFileNews(ligne.id)).then(async (e1) => {
+        var ff = null;
+        ff = new Blob([e1.payload], {
+          type: "application/*",
+        });
+        const fileURL = await URL.createObjectURL(ff);
+        setAlert(
+          <SweetAlert
+            style={{ display: "block", marginTop: "-100px" }}
+            title="Détail"
+            onConfirm={() => hideAlert()}
+            onCancel={() => hideAlert()}
+            confirmBtnBsStyle="info"
+            cancelBtnBsStyle="danger"
+            confirmBtnText={t("close")}
+            customClass="news-pop-up"
+          >
+            <Row>
+              <Col md="12">Titre: {ligne.titre}</Col>
+              <Col md="12">Description: {ligne.description}</Col>
+              <Col md="12">Date: {ligne.date}</Col>
+            </Row>
+            <a
+              download={ligne.file}
+              rel="noreferrer"
+              href={fileURL}
+              target="_blank"
+              className="fileUrl"
+            >
+              <i className="fas fa-file"></i>
+              <br></br> Télécharger
+            </a>
+            {/* <ul>
+              <li>Titre: {ligne.titre}</li>
+              <li>Description: {ligne.description}</li>
+              <li>Date: {ligne.date}</li>
+            </ul> */}
+          </SweetAlert>
+        );
+      });
+    },
+    [dispatch]
+  );
+  /* const confirmDetail = async (ligne) => {
+    var fileURL = await getFile(ligne.id);
+    console.log(fileURL)
+    setAlert(
+      <SweetAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Vous éte sure de supprime cette ligne?"
+        onCancel={() => hideAlert()}
+        confirmBtnBsStyle="info"
+        cancelBtnBsStyle="danger"
+        confirmBtnText="Oui"
+        cancelBtnText="Non"
+        showCancel
+      >
+        <a
+          download={ligne.file}
+          rel="noreferrer"
+          href={fileURL}
+          target="_blank"
+          className="btn btn-info"
+        >
+          <i className="fas fa-download"></i> Télécharger
+        </a>
+        :
+      </SweetAlert>
+    );
+  }; */
+
+  function deleteNews(id) {
+    dispatch(newsDeleted({ id })).then((val) => {
+      notify(1, "Supprimer avec succes");
+      getNews();
+      hideAlert();
+    });
+  }
+
   const hideAlert = () => {
     setAlert(null);
   };
@@ -178,51 +278,6 @@ function ListNews({ onlineStatus }) {
         }
       />
     );
-  }
-
-  async function updateNews(id, etat) {
-    const tx = db.transaction("news", "readwrite");
-    const index = tx.store.index("id");
-    for await (const cursor of index.iterate(parseInt(id))) {
-      var obj = { ...cursor.value };
-      switch (etat) {
-        case 0:
-          obj.etat = 1;
-          notify(1, t("enable"));
-          break;
-        case 1:
-          obj.etat = 0;
-          notify(1, t("disable"));
-          break;
-        default:
-          break;
-      }
-
-      obj.updated = 1;
-      cursor.update(obj);
-    }
-    await tx.done;
-    initNews();
-  }
-  function changeEtat(id, e) {
-    /* setEntities([]); */
-    if (onlineStatus === 1) {
-      dispatch(newsChangeEtat(id)).then((e1) => {
-        getNews();
-        switch (e) {
-          case 0:
-            notify(1, t("enable"));
-            break;
-          case 1:
-            notify(1, t("disable"));
-            break;
-          default:
-            break;
-        }
-      });
-    } else {
-      updateNews(id, e);
-    }
   }
 
   return (

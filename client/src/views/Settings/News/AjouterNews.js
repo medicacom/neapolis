@@ -88,7 +88,12 @@ function AjouterNews({ onlineStatus }) {
     const dataArray = new FormData();
     dataArray.append("file", file);
     if (onlineStatus === 1) {
-      if (date !== "" && description !== "" && titre !== "" && userSelect.length !== 0) {
+      if (
+        date !== "" &&
+        description !== "" &&
+        titre !== "" &&
+        userSelect.length !== 0
+      ) {
         dispatch(saveFile({ dataArray })).then((value) => {
           var filename = value.payload.filename;
           if (filename !== "") {
@@ -114,9 +119,9 @@ function AjouterNews({ onlineStatus }) {
         notify(2, t("erreur"));
       }
 
-      /* setTimeout(async () => {
+      setTimeout(async () => {
         listeNews();
-      }, 1500); */
+      }, 1500);
     } else {
       if (date !== "" && description !== "" && titre !== "") {
         saveNewsIndex();
@@ -136,8 +141,6 @@ function AjouterNews({ onlineStatus }) {
       setDescription(objNews.description);
       setTitre(objNews.titre);
       setId(objNews);
-      /* objNews.description = 55;
-      cursor.update(objNews); */
     }
     await tx.done;
   }
@@ -147,9 +150,12 @@ function AjouterNews({ onlineStatus }) {
     var user = await dispatch(getPersonnel());
     var entities = user.payload.findValider;
     var arrayOption = [];
-    /* arrayOption.push({ value: 0, label: "Personnel" }); */
     entities.forEach((e) => {
-      arrayOption.push({ value: e.id, label: e.nom });
+      arrayOption.push({
+        value: e.id,
+        label: e.nom + " " + e.prenom,
+        email: e.email,
+      });
     });
     setOptions(arrayOption);
   }, [dispatch]);

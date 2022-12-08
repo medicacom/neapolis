@@ -92,6 +92,22 @@ router.post("/addUser", (req, res) => {
               autre_sp: autre_sp,
             })
             .then((u) => {
+              if(valide == 0)
+                user.findAll({ where: { id_role: 1 } }).then((u) => {
+                  msg = ` <tr><td style="padding-top:5px;"> Sujet: Incription </td></tr>`;
+                  msg += ` <tr><td style="padding-top:5px;"> Nom: ${nom} </td></tr>`;
+                  msg += ` <tr><td style="padding-top:5px;"> Prenom: ${prenom} </td></tr>`;
+                  msg += ` <tr><td style="padding-top:5px;"> E-mail: ${email} </td></tr>`;
+                  u.forEach(element => {
+                    sendMail(
+                      "Incription",
+                      msg,
+                      element.dataValues.email,
+                      element.dataValues.nom + " " + element.dataValues.prenom
+                    );
+                    
+                  });
+                });
               return res.status(200).send({ error: [], data: u, msg: 1 });
             })
             .catch((error) => {
@@ -195,7 +211,7 @@ router.put("/validation/:id", auth, (req, res) => {
             { where: { id: id } }
           )
           .then(() => {
-            sendMail("Inscription", msg, email, nom);
+            sendMail(txt, msg, email, nom);
             return res.status(200).send(true);
           })
           .catch(() => {
@@ -355,24 +371,15 @@ router.get("/getDetailUser/:id", auth, async (req, res) => {
   }
 });
 
-router.get("/verification", auth, (req, res) => {
-  var token = req.headers["x-access-token"];
-  const decoded = jwt.verify(token, privateKey);
-  user
-    .findOne({ where: { token: token, id: decoded.id, code: decoded.random } })
-    .then((e) => {
-      if (e) {
-        return res.status(200).send(e);
-      } else {
-        user.update(
-          {
-            token: null,
-          },
-          { where: { id: decoded.id } }
-        );
-        return res.status(200).send(false);
-      }
-    });
+router.post("/verificationEmail", (req, res) => {
+  var email = req.body.email;
+  user.findOne({ where: { email: email } }).then((e) => {
+    if (e) {
+      return res.status(200).send(true);
+    } else {
+      return res.status(200).send(false);
+    }
+  });
 });
 
 module.exports = router;

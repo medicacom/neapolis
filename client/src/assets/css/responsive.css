@@ -1,0 +1,16 @@
+@media (max-width: 1200px) {
+    .declaration {
+        width: 700px;
+    }
+    .pop-up-extra {
+        overflow-y: scroll!important;
+        padding: 0!important;
+        width: calc(100% - 50px)!important;
+    }
+    .card-header {
+        overflow: initial;
+    }
+}
+
+@media (max-width: 500px) {
+}

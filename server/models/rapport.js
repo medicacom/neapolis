@@ -4,8 +4,8 @@ var patient = require("./patient");
 var user = require("./user");
 var medicament = require("./medicament");
 var effet_indesirable = require("./effet_indesirable");
-var indication = require("./indication");
 var voix = require("./voix_administration");
+var passager = require("./passager");
 var config = configuration.connection;
 
 // create a sequelize instance with our local postgres database information.
@@ -118,6 +118,15 @@ var rapport = sequelize.define(
         key: "id",
       },
     },
+    id_passager: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+      references: {
+        model: passager,
+        key: "id",
+      },
+    },
   },
   { timestamps: false, charset: "utf8", collate: "utf8_general_ci" }
 );
@@ -138,9 +147,11 @@ rapport.belongsTo(effet_indesirable, {
 
 rapport.belongsTo(voix, { as: "voix_administrations", foreignKey: "id_voix" });
 
+rapport.belongsTo(passager, { as: "passagers", foreignKey: "id_passager" });
+
 // create all the defined tables in the specified database.
 sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     console.log(
       "rapports table has been successfully created, if one doesn't exist"

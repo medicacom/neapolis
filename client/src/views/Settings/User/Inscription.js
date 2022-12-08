@@ -4,7 +4,7 @@ import validator from "validator";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
-import { userAdded } from "../../../Redux/usersReduce";
+import { userAdded, verificationEmail } from "../../../Redux/usersReduce";
 import { fetchGouvernorat } from "../../../Redux/gouvernoratReduce";
 import { fetchSpecialite } from "../../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
@@ -48,7 +48,7 @@ function Inscription() {
   const [valide] = React.useState(0);
   //required
 
-  const [emailRequired] = React.useState(true);
+  const [emailRequired, setEmailRequired] = React.useState(true);
   const [passwordRequired] = React.useState(true);
 
   const [optionsGouvernorat, setOptionsGouvernorat] = React.useState([
@@ -95,7 +95,8 @@ function Inscription() {
           !validator.isEmail(required[i].value)
         ) {
           notify(2, t("invalide_email"));
-          document.getElementsByClassName("error")[i].innerHTML = t("invalide_email");
+          document.getElementsByClassName("error")[i].innerHTML =
+            t("invalide_email");
         }
         //condition password
         else if (
@@ -107,7 +108,8 @@ function Inscription() {
           if (!validator.isLength(required[i].value, { min: 6, max: 20 })) {
             testPassword = false;
             notify(2, t("password_err"));
-            document.getElementsByClassName("error")[i].innerHTML = t("password_err");
+            document.getElementsByClassName("error")[i].innerHTML =
+              t("password_err");
           }
         }
       }
@@ -124,7 +126,7 @@ function Inscription() {
     var id_sp = specialite;
     var autre_sp = autreSp;
     var testSP = true;
-    if(id_sp === 120 && validator.isEmpty(autre_sp)){
+    if (id_sp === 120 && validator.isEmpty(autre_sp)) {
       testSP = false;
     }
     if (
@@ -132,7 +134,7 @@ function Inscription() {
       !validator.isEmpty(prenom) &&
       validator.isEmail(email) &&
       testPassword === true &&
-      id_sp !== 0 && 
+      id_sp !== 0 &&
       testSP
     ) {
       dispatch(
@@ -173,7 +175,8 @@ function Inscription() {
     var arrayOption = [];
     arrayOption.push({ value: 0, label: t("User.gouvernorat") });
     entities.forEach((e) => {
-      var label = lang === "fr" ? e.libelle : lang === "en" ? e.libelle_en : e.libelle_ar;
+      var label =
+        lang === "fr" ? e.libelle : lang === "en" ? e.libelle_en : e.libelle_ar;
       arrayOption.push({ value: e.id, label: label });
     });
     setOptionsGouvernorat(arrayOption);
@@ -189,12 +192,13 @@ function Inscription() {
     arrayOption.push({ value: 0, label: t("User.specialite") });
     entities.forEach((e) => {
       var label = lang === "fr" ? e.nom : lang === "en" ? e.nom_en : e.nom_ar;
-      arrayOption.push({ value: e.id, label: label });
+      if (e.id !== 102 && e.id !== 120 && e.id !== 121)
+        arrayOption.push({ value: e.id, label: label });
     });
     setOptionsSpecialite(arrayOption);
   }, [dispatch]);
 
-  /** end Gouvernorat **/
+  /** end Specialite **/
 
   useEffect(() => {
     getGouvernorat();
@@ -204,6 +208,20 @@ function Inscription() {
   function listeUser() {
     navigate.push("/utilisateurListe");
   }
+  const verifEmail = useCallback(
+    async (email) => {
+      var verif = await dispatch(verificationEmail({ email }));
+      var res = verif.payload;
+      if (res === true) {
+        setEmailRequired(false);
+        /* notify(2, t("exist")); */
+      } else {
+        setEmailRequired(true);
+      }
+    },
+    [dispatch]
+  );
+
   return (
     <>
       <Container fluid>
@@ -280,14 +298,15 @@ function Inscription() {
                               type="text"
                               onChange={(value) => {
                                 setEmail(value.target.value);
+                                verifEmail(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
                           <div className="error"></div>
-                          {emailRequired ? null : (
-                            <label className="error">
-                              Email est obligatoire.
-                            </label>
+                          {emailRequired ? (
+                            ""
+                          ) : (
+                            <label className="error">{t("exist")}</label>
                           )}
                         </Col>
                         <Col md="12">
@@ -327,8 +346,8 @@ function Inscription() {
                                 type="radio"
                                 onClick={() => {
                                   setSpecialite(0);
-                                  setTypeSpecialite(1)}
-                                }
+                                  setTypeSpecialite(1);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("doctor")}

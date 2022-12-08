@@ -13,6 +13,8 @@ var configuration = require("../config");
 const user = require("../models/user");
 var config = configuration.connection;
 var Sequelize = require("sequelize");
+const sendMail = require("./sendMailController");
+var fs = require("fs");
 const sequelize = new Sequelize(config.base, config.root, config.password, {
   host: config.host,
   port: config.port,
@@ -45,8 +47,14 @@ const upload = multer({ storage: storage });
 // Desplay all lignes of client ...
 router.post("/saveFile", auth, upload.single("file"), (req, res) => {
   var filename = "";
-  if (typeof req.file != "undefined") filename = req.file.filename;
-  res.send({ filename: filename });
+  try {
+    if (typeof req.file != "undefined") filename = req.file.filename;
+    res.send({ filename: filename });
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
 });
 router.post("/addNews", auth, (req, res) => {
   var id = req.body.id;
@@ -61,6 +69,8 @@ router.post("/addNews", auth, (req, res) => {
       .then((r) => {
         var arrayInsert = [];
         req.body.userSelect.forEach((element) => {
+          msg = ` <tr><td style="padding-top:5px;"> Sujet: Incription </td></tr>`;
+          sendMail("Nouveauté", msg, element.email, element.label);
           arrayInsert.push({
             id_news: r.dataValues.id,
             id_user: element.value,
@@ -71,6 +81,7 @@ router.post("/addNews", auth, (req, res) => {
         });
       })
       .catch((error) => {
+        console.log("first", error);
         return res.status(403).send({ error: error, msg: false });
       });
   } else {
@@ -84,13 +95,26 @@ router.post("/addNews", auth, (req, res) => {
               titre: req.body.titre,
               description: req.body.description,
               date: req.body.date,
+              file: req.body.filename,
             },
             { where: { id: id } }
           )
           .then(() => {
-            return res.status(200).send({ data: r1, msg: true });
+            var arrayInsert = [];
+            req.body.userSelect.forEach((element) => {
+              msg = ` <tr><td style="padding-top:5px;"> Sujet: Incription </td></tr>`;
+              sendMail("Nouveauté", msg, element.email, element.label);
+              arrayInsert.push({
+                id_news: id,
+                id_user: element.value,
+              });
+            });
+            news_user.bulkCreate(arrayInsert).then(() => {
+              return res.status(200).send({ data: r1, msg: true });
+            });
           })
           .catch((error) => {
+            console.log(error);
             return res.status(403).send({ error: error, msg: false });
           });
       }
@@ -112,14 +136,38 @@ router.delete("/deleteNews/:id", auth, (req, res) => {
     } else {
       news
         .destroy({ where: { id: id } })
-        .then((r2) => {
+        .then(() => {
+          var file = r1.dataValues.file;
+          if (fs.existsSync("./new/" + file)) fs.unlinkSync("./new/" + file);
           return res.status(200).send(true);
         })
         .catch((error) => {
-          return res.status(403).send(false);
+          console.log(error)
+          return res.status(403).send(error);
         });
     }
   });
+});
+router.get("/getFile/:id", async (req, res) => {
+  var id = req.params.id;
+  var newsFind = await news.findOne({ where: { id: id } });
+  try {
+    if (newsFind != null) {
+      var file = newsFind.dataValues.file; 
+      if (file) {
+        if (fs.existsSync("./new/" + file)) {
+          console.log(file)
+          var file = fs.createReadStream("./new/" + file);
+          file.pipe(res);
+        } else return res.status(403).json({ message: false });
+      } else {
+        return res.status(403).json({ message: false });
+      }
+    }
+    
+  } catch (error) {
+    console.log(error)
+  } 
 });
 router.post("/getNews", auth, (req, res) => {
   var id = req.headers["id"];

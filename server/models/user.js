@@ -134,7 +134,7 @@ User.prototype.validPassword = function (password) {
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync({alter:true})
+  .sync()
   .then(() => {
     User.findAll().then(function (u) {
       if (u.length == 0) {

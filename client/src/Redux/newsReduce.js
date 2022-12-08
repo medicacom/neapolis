@@ -4,68 +4,72 @@ var token = localStorage.getItem("x-access-token");
 
 export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
   const response = await fetch(Configuration.BACK_BASEURL + "news/allNews", {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-access-token':token
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-access-token": token,
     },
-
   });
   const news = await response.json();
   return news;
 });
 
 export const newsGetById = createAsyncThunk("news/newsGetById", async (id1) => {
-  const  id  = id1;
+  const id = id1;
   const response = await fetch(Configuration.BACK_BASEURL + "news/getNews", {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'id':id,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-access-token':token
+      id: id,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-access-token": token,
     },
-  
   });
   const news = await response.json();
   return news;
 });
 
-export const newsDeleted = createAsyncThunk("news/deleteNews", async (action) => {
-  const response = await fetch(Configuration.BACK_BASEURL + "news/deleteNews/"+action.id, {
-    method: 'DELETE',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-access-token':token
-    },
-  });
-  const news = await response.json();
-  return news;
-});
+export const newsDeleted = createAsyncThunk(
+  "news/deleteNews",
+  async (action) => {
+    const response = await fetch(
+      Configuration.BACK_BASEURL + "news/deleteNews/" + action.id,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      }
+    );
+    const news = await response.json();
+    return news;
+  }
+);
 
 export const saveFile = createAsyncThunk("news/saveFile", async (action) => {
   const response = await fetch(Configuration.BACK_BASEURL + "news/saveFile", {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Accept': 'application/*',
-      'x-access-token':token,
+      Accept: "application/*",
+      "x-access-token": token,
     },
-    body:action.dataArray
+    body: action.dataArray,
   });
   const news = await response.json();
   return news;
 });
 export const newsAdded = createAsyncThunk("news/addNews", async (action) => {
   const response = await fetch(Configuration.BACK_BASEURL + "news/addNews", {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-access-token':token
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-access-token": token,
     },
-    body: JSON.stringify(action)
+    body: JSON.stringify(action),
   });
   const news = await response.json();
   return news;
@@ -94,7 +98,25 @@ export const newsChangeEtat = createAsyncThunk(
     return news;
   }
 );
-
+//getFile
+export const getFileNews = createAsyncThunk("news/getFile", async (id) => {
+  const response = await fetch(
+    Configuration.BACK_BASEURL + "news/getFile/" + id,
+    {
+      method: "GET",
+      responseType: "blob",
+    }
+  )
+    .then((response) => response.blob())
+    .then(function (myBlob) {
+      return myBlob;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  const files = await response;
+  return files;
+});
 const newsReduce = createSlice({
   name: "news",
   initialState: {
@@ -102,7 +124,7 @@ const newsReduce = createSlice({
     loading: false,
   },
   reducers: {
-   /*  newsAdded(state, action) {
+    /*  newsAdded(state, action) {
       fetch(Configuration.BACK_BASEURL + "news/addNews", {
         method: 'POST',
         headers: {
@@ -112,10 +134,8 @@ const newsReduce = createSlice({
         body:action.payload.dataArray
       });
     }, */
-
   },
   extraReducers: {
-
     [fetchNews.pending]: (state, action) => {
       state.loading = true;
     },

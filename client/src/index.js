@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/scss/style.scss?v=2.0.0";
 import "./assets/css/style.css";
+import "./assets/css/responsive.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import store from "./store";
@@ -37,7 +38,7 @@ var dir = lang !== "ar" ? "ltr" : "rtl";
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("email");
+console.log("important");
 
 openDB("medis", 1, {
   upgrade(db) {

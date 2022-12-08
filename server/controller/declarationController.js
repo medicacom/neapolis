@@ -99,6 +99,7 @@ router.post("/addDeclaration", (req, res) => {
           .then((p) => {
             rapport
               .create({
+                id_passager: pa.id,
                 id_patient: p.id,
                 id_eff: id_eff,
                 dateDebut: dateDebut,
