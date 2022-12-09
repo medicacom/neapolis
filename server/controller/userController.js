@@ -235,7 +235,7 @@ router.put("/validation/:id", auth, (req, res) => {
 router.post("/allUser", auth, (req, res) => {
   user
     .findAll({
-      include: ["roles"],
+      include: ["roles","gouvernorats","specialites"],
       order: [["id", "desc"]],
       where: { id_role: { [Op.ne]: 2 } },
     })
@@ -246,12 +246,12 @@ router.post("/allUser", auth, (req, res) => {
 
 router.get("/getPersonnel", auth, async (req, res) => {
   var findValider = await user.findAll({
-    include: ["roles"],
+    include: ["roles","gouvernorats","specialites"],
     order: [["id", "desc"]],
     where: { id_role: 2, valider: 1 },
   });
   var findNonValider = await user.findAll({
-    include: ["roles"],
+    include: ["roles","gouvernorats","specialites"],
     order: [["id", "desc"]],
     where: { id_role: 2, valider: 0 },
   });

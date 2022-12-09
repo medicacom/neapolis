@@ -73,7 +73,7 @@ passager.belongsTo(specialite, { as: "specialites", foreignKey: "id_sp" });
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync({alter:true})
+  .sync()
   .then(() => {
     console.log(
       "passagers table has been successfully created, if one doesn't exist"

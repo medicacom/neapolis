@@ -17,10 +17,10 @@ import { MRT_Localization_AR } from "../utils/ar_table";
 import { openDB } from "idb";
 
 // core components
-function ListDeclaration({ obj }) {
+function ListDeclaration({ obj, onlineStatus }) {
   let db;
-  var id_role = obj.user.id_role;
-  var id = obj.user.id;
+  var id_role = onlineStatus === 1 ? obj.user.id_role : obj.id_role;
+  var id = onlineStatus === 1 ? obj.user.id : obj.id;
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   const dispatch = useDispatch();
@@ -115,10 +115,123 @@ function ListDeclaration({ obj }) {
     navigate.push("/declaration");
   }
 
+  //storeDeclaration
+  /*  const storeRapports = useCallback(
+    async (res) => {
+      const tx1 = db.transaction("rapports", "readwrite");
+      await tx1.objectStore("rapports").add({
+        id: res.id,
+        hospitalisation: res.hospitalisation,
+      });
+    },
+    [dispatch]
+  ); */
+
+  //storeDeclaration
+  const storeDeclaration = useCallback(
+    async (res) => {
+      const tx = db.transaction("declarations", "readwrite");
+      for (let index = 0; index < res.length; index++) {
+        var nomAge = "";
+        if (res[index].patients.ages) {
+          nomAge =
+            lang === "fr"
+              ? res[index].patients.ages.description
+              : lang === "en"
+              ? res[index].patients.ages.description_en
+              : res[index].patients.ages.description_ar;
+        }
+        var nomMed =
+          lang === "fr"
+            ? res[index].medicaments.nom
+            : lang === "en"
+            ? res[index].medicaments.nom_en
+            : res[index].medicaments.nom_ar;
+        var nomInd =
+          lang === "fr"
+            ? res[index].patients.indications.description
+            : lang === "en"
+            ? res[index].patients.indications.description_en
+            : res[index].patients.indications.description_ar;
+        var nomVoix =
+          lang === "fr"
+            ? res[index].voix_administrations.description
+            : lang === "en"
+            ? res[index].voix_administrations.description_en
+            : res[index].voix_administrations.description_ar;
+        var nomEff =
+          lang === "fr"
+            ? res[index].voix_administrations.description
+            : lang === "en"
+            ? res[index].effet_indesirables.description_en
+            : res[index].effet_indesirables.description_ar;
+        await tx.objectStore("declarations").add({
+          id_patient: res[index].patients.id,
+          initiales: res[index].patients.initiales,
+          age: res[index].patients.age,
+          sexe: res[index].patients.sexe,
+          dateNaissance: res[index].patients.dateNaissance,
+          agePatient: res[index].patients.agePatient,
+          ageCategorie: res[index].patients.ageCategorie,
+          id_indication: res[index].patients.id_indication,
+          id_passager: res[index].patients.id_passager,
+          poid: res[index].patients.poid,
+          taille: res[index].patients.taille,
+          allergie: res[index].patients.allergie,
+          dateDebut: res[index].dateDebut,
+          dateFin: res[index].dateFin,
+          information: res[index].information,
+          complementaires: res[index].complementaires,
+          posologie: res[index].posologie,
+          numero: res[index].numero,
+          dateDebutAdmin: res[index].dateDebutAdmin,
+          dateFinAdmin: res[index].dateFinAdmin,
+          id_medicament: res[index].id_medicament,
+          id: res[index].id,
+          id_user: res[index].id_user,
+          nom_user: res[index].nom + " " + res[index].prenom,
+          id_eff: res[index].id_eff,
+          id_voix: res[index].id_voix,
+          id_patient: res[index].id_patient,
+          id_passager: res[index].id_passager,
+          description_eff: res[index].description_eff,
+          grave: res[index].grave,
+          hospitalisation: res[index].hospitalisation,
+          pronostic: res[index].pronostic,
+          incapacite: res[index].incapacite,
+          deces: res[index].deces,
+          anomalie: res[index].anomalie,
+          autre: res[index].autre,
+          traites: res[index].traites,
+          evolution: res[index].evolution,
+          survenus: res[index].survenus,
+          date_admin: res[index].date_admin,
+          therapeutique: res[index].therapeutique,
+          nomMed: nomMed,
+          nomInd: nomInd,
+          nomVoix: nomVoix,
+          nomEff: nomEff,
+          nomAge: nomAge,
+        });
+        /* storeRapports(res[index]); */
+      }
+    },
+    [dispatch]
+  );
+
+  async function clearDeclaration(resUsers) {
+    let tx1 = db.transaction("declarations", "readwrite");
+    await tx1.objectStore("declarations").clear();
+    storeDeclaration(resUsers);
+  }
+
   const getDeclaration = useCallback(async () => {
-    var dec = await dispatch(getDeclarations({ id_role, id }));
-    setEntities(dec.payload);
+    var response = await dispatch(getDeclarations({ id_role, id }));
+    var dec = response.payload;
+    setEntities(dec);
+    clearDeclaration(dec);
   }, [dispatch]);
+
   const confirmMessage = async (id, e) => {
     var dec = await dispatch(getDeclarationsById(id));
     var data = await dec.payload;
@@ -281,24 +394,26 @@ function ListDeclaration({ obj }) {
               <li>
                 <strong>{t("Declaration.gravite")}: </strong>
                 <br></br>
-                { t("Declaration.grave")} {data.grave === 1 ? "Yes" : "Non"}
+                {t("Declaration.grave") + ": "}
+                {data.grave === 1 ? "Yes" : "Non"}
                 <br></br>
-                {data.hospitalisation === 1
-                  ? t("Declaration.hospitalisation")
-                  : ""}
+                {t("Declaration.hospitalisation") + ": "}
+                {data.hospitalisation === 1 ? "Yes" : "No"}
                 <br></br>
-                {t("Declaration.pronostic")}
+                {t("Declaration.pronostic") + ": "}
                 {data.pronostic === 1 ? "Yes" : "Non"}
                 <br></br>
-                {t("Declaration.deces")}
+                {t("Declaration.deces") + ": "}
                 {data.deces === 1 ? "Yes" : "Non"}
                 <br></br>
-                {t("Declaration.incapacite")}
+                {t("Declaration.incapacite") + ": "}
                 {data.incapacite === 1 ? "Yes" : "Non"}
                 <br></br>
-                {t("Declaration.anomalie")} {data.anomalie === 1 ? "Yes" : "Non"}
+                {t("Declaration.anomalie" + ": ")}
+                {data.anomalie === 1 ? ":Yes" : "Non"}
                 <br></br>
-                {t("Declaration.autre")} {data.autre === 1 ? "Yes" : "Non"}
+                {t("Declaration.autre") + ": "}
+                {data.autre === 1 ? "Yes" : "Non"}
               </li>
               <li>
                 <strong>{t("Declaration.traites")}: </strong>
@@ -352,9 +467,17 @@ function ListDeclaration({ obj }) {
     setAlert(null);
   };
 
+  async function init() {
+    db = await openDB("medis", 1, {});
+    if (onlineStatus === 1) getDeclaration();
+    else {
+      /* initDeclaration(); */
+    }
+  }
   useEffect(() => {
-    getDeclaration();
-  }, [getDeclaration]); //now shut up eslint
+    /* getDeclaration(); */
+    init();
+  }, []); //now shut up eslint
 
   function ListTable({ list }) {
     return (

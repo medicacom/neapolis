@@ -54,7 +54,7 @@ var age = sequelize.define(
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync({alter:true})
+  .sync()
   .then(() => {
     console.log(
       "Ages table has been successfully created, if one doesn't exist"

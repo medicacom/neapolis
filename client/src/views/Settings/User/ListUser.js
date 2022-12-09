@@ -169,6 +169,12 @@ function ListUser({ onlineStatus }) {
           saved: 1,
           type_table: 3,
           updated: 0,
+          valider: resUsers[index].valider,
+          id_gouvernorat: resUsers[index].id_role,
+          nom_gouvernorat: resUsers[index].gouvernorats.libelle+"@@"+resUsers[index].gouvernorats.libelle_en+"@@"+resUsers[index].gouvernorats.libelle_ar,
+          id_sp: resUsers[index].id_role,
+          nom_sp: resUsers[index].specialites.nom+"@@"+resUsers[index].specialites.nom_en+"@@"+resUsers[index].specialites.nom_ar,
+          autre_sp: resUsers[index].autre_sp
         });
       }
     },

@@ -91,6 +91,7 @@ var User = sequelize.define(
       type: Sequelize.INTEGER,
       unique: false,
       allowNull: true,
+      defaultValue: 23,
       references: {
         model: gouvernorat,
         key: "id",
@@ -100,6 +101,7 @@ var User = sequelize.define(
       type: Sequelize.INTEGER,
       unique: false,
       allowNull: true,
+      defaultValue: 120,
       references: {
         model: specialite,
         key: "id",
@@ -132,7 +134,7 @@ User.prototype.validPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-// create all the defined tables in the specified database.
+// create all the defined tables in the specified database. 
 sequelize
   .sync()
   .then(() => {

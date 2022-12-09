@@ -6,24 +6,26 @@ var app = express();
 app.use(express.json());
 
 //desplay all bl
-const sendMail = function (sujet, msg,mail,nom) {
+const sendMail = function (sujet, msg, mail, nom) {
   try {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "opaliablextraction@gmail.com",
-        pass: "xloparxehgbdwcvl",
+        user: "medicacomm@gmail.com",
+        pass: "fyxezohogioxhgdh",
+        /* user: "opaliablextraction@gmail.com",
+        pass: "xloparxehgbdwcvl", */
         /* pass: "op123654", */
       },
       starttls: {
-        enable: true 
-    },
-    secureConnection: true,
+        enable: true,
+      },
+      secureConnection: true,
       rejectUnauthorized: false,
     });
 
     message = {
-      from: "opaliablextraction@gmail.com",
+      from: "medicacomm@gmail.com",
       to: mail,
       subject: sujet,
       html: `
@@ -31,7 +33,7 @@ const sendMail = function (sujet, msg,mail,nom) {
         border:1px solid rgb(0, 165, 231);">
           <tr>
               <td colspan="4" style="text-align:center;">
-                  <h1>Bl Extractions</h1>
+                  <h1>I declare</h1>
               </td>
           </tr>
           <tr>
@@ -56,6 +58,6 @@ const sendMail = function (sujet, msg,mail,nom) {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 module.exports = sendMail;

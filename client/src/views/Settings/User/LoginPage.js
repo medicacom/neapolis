@@ -63,11 +63,10 @@ function LoginPage() {
     await tx.objectStore("detailUser").clear();
     await tx.objectStore("detailUser").add({
       id: 0,
-      login: login,
+      email: login,
       password: password,
       nom: "",
       prenom: "",
-      email: "",
       id_role: "",
       etat: "",
       token: "",

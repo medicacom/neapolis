@@ -14,6 +14,7 @@ import { useTranslation } from "react-multi-lang";
 import { MRT_Localization_FR } from "material-react-table/locales/fr";
 import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_AR } from "../../utils/ar_table";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 // core components
 function ListPersonel({ onlineStatus }) {
@@ -38,6 +39,7 @@ function ListPersonel({ onlineStatus }) {
   };
   const navigate = useHistory();
   const dispatch = useDispatch();
+  const [alert, setAlert] = React.useState(null);
   const [entities, setEntities] = React.useState([]);
   const [entitiesNo, setEntitiesNo] = React.useState([]);
   const [columns] = React.useState([
@@ -112,7 +114,7 @@ function ListPersonel({ onlineStatus }) {
           <div className="actions-right block_action">
             <Button
               onClick={(event) => {
-                valideEtat(cell.row.original, 1);
+                confirmMessage(cell.row.original, 1);
               }}
               variant="success"
               size="sm"
@@ -122,7 +124,7 @@ function ListPersonel({ onlineStatus }) {
             <br></br>
             <Button
               onClick={(event) => {
-                valideEtat(cell.row.original, 2);
+                confirmMessage(cell.row.original, 2);
               }}
               variant="danger"
               size="sm"
@@ -166,34 +168,33 @@ function ListPersonel({ onlineStatus }) {
     },
     //end
   ]);
+
+  const confirmMessage = (ligne, e) => {
+    setAlert(
+      <SweetAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title={
+          e === 1
+            ? "Vous éte sure de valider ce utilisateur?"
+            : "Vous éte sure de refuser ce utilisateur?"
+        }
+        onConfirm={() => valideEtat(ligne, e)}
+        onCancel={() => hideAlert()}
+        confirmBtnBsStyle="info"
+        cancelBtnBsStyle="danger"
+        confirmBtnText="Oui"
+        cancelBtnText="Non"
+        showCancel
+      ></SweetAlert>
+    );
+  };
   function ajouter() {
     navigate.push("/ajouterUtilisateur");
   }
 
-  async function updateUser(id, etat) {
-    const tx = db.transaction("users", "readwrite");
-    const index = tx.store.index("id");
-    for await (const cursor of index.iterate(parseInt(id))) {
-      var obj = { ...cursor.value };
-      switch (etat) {
-        case 0:
-          obj.etat = 1;
-          notify(1, t("enable"));
-          break;
-        case 1:
-          obj.etat = 0;
-          notify(1, t("disable"));
-          break;
-        default:
-          break;
-      }
-
-      obj.updated = 1;
-      cursor.update(obj);
-    }
-    await tx.done;
-    initUser();
-  }
+  const hideAlert = () => {
+    setAlert(null);
+  };
 
   function changeEtat(id, e) {
     /* setEntities([]); */
@@ -211,8 +212,6 @@ function ListPersonel({ onlineStatus }) {
             break;
         }
       });
-    } else {
-      updateUser(id, e);
     }
   }
 
@@ -242,9 +241,9 @@ function ListPersonel({ onlineStatus }) {
   //storeUsers
   const storeUsers = useCallback(
     async (resUsers) => {
-      const tx = db.transaction("users", "readwrite");
+      const tx = db.transaction("personels", "readwrite");
       for (let index = 0; index < resUsers.length; index++) {
-        await tx.objectStore("users").add({
+        await tx.objectStore("personels").add({
           id: resUsers[index].id,
           nom: resUsers[index].nom,
           prenom: resUsers[index].prenom,
@@ -259,6 +258,12 @@ function ListPersonel({ onlineStatus }) {
           saved: 1,
           type_table: 3,
           updated: 0,
+          valider: resUsers[index].valider,
+          id_gouvernorat: resUsers[index].id_role,
+          nom_gouvernorat: resUsers[index].gouvernorats.libelle+"@@"+resUsers[index].gouvernorats.libelle_en+"@@"+resUsers[index].gouvernorats.libelle_ar,
+          id_sp: resUsers[index].id_role,
+          nom_sp: resUsers[index].specialites.nom+"@@"+resUsers[index].specialites.nom_en+"@@"+resUsers[index].specialites.nom_ar,
+          autre_sp: resUsers[index].autre_sp
         });
       }
     },
@@ -266,8 +271,8 @@ function ListPersonel({ onlineStatus }) {
   );
 
   async function clearUsers(resUsers) {
-    let tx = db.transaction("users", "readwrite");
-    await tx.objectStore("users").clear();
+    let tx = db.transaction("personels", "readwrite");
+    await tx.objectStore("personels").clear();
     storeUsers(resUsers);
   }
 
@@ -277,14 +282,24 @@ function ListPersonel({ onlineStatus }) {
     var findNonValider = await response.payload.findNonValider;
     setEntities(resUsers);
     setEntitiesNo(findNonValider);
-    clearUsers(resUsers);
+    let merged_arr = resUsers.concat(findNonValider)
+    clearUsers(merged_arr);
   }, [dispatch]);
 
   async function initUser() {
-    const tx = db.transaction("users", "readwrite");
-    let store = tx.objectStore("users");
+    const tx = db.transaction("personels", "readwrite");
+    let store = tx.objectStore("personels");
     let users = await store.getAll();
-    setEntities(users);
+    var array = [];
+    var arrayV = [];
+    users.forEach((val) => {
+      if (val.id_role === 2) {
+        val.valider === 1 ? array.push(val) : arrayV.push(val);
+      }
+    });
+    setEntities(array);
+    setEntitiesNo(arrayV);
+    /* setEntities(users); */
   }
 
   async function init() {
@@ -324,6 +339,7 @@ function ListPersonel({ onlineStatus }) {
   }
   return (
     <>
+      {alert}
       <Container fluid>
         <ToastContainer />
         <Row>

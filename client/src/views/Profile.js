@@ -180,7 +180,7 @@ function Profile({ obj,onlineStatus }) {
       objDetail.id = obj.user.id;
       objDetail.nom = obj.user.nom;
       objDetail.prenom = obj.user.prenom;
-      objDetail.email = obj.user.email;
+      /* objDetail.email = obj.user.email; */
       objDetail.id_role = obj.user.id_role;
       objDetail.etat = obj.user.etat;
       objDetail.token = obj.user.token;
