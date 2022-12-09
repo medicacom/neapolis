@@ -51,7 +51,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
-const PORT = 4000 || 5000 || 6000;
+const PORT = 4005 || 5000 || 6000;
 app.listen(PORT, (err) =>
   err ? console.log(err) : console.log(`app listening on port ${PORT}!`)
 );
