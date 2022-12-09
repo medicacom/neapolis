@@ -5,7 +5,8 @@ var app = express();
 const path = require("path");
 app.use("/new", express.static("./new"));
 
-var cors = require("cors");
+/* var cors = require("cors");
+app.use(cors()); */
 /* const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
@@ -24,7 +25,7 @@ db.serialize(() => {
 
 db.close(); */
 
-app.use(cors());
+
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 // Used for sending the Json Data to Node API
