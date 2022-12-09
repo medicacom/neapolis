@@ -87,6 +87,8 @@
     "listV": "Liste des demandes acceptées"
   },
   "Declaration": {
+    "yes": "Oui",
+    "no": "Non",
     "personal": "Nom personnel",
     "list": "Liste des déclarations",
     "add": "Ajouter une declaration",
@@ -149,8 +151,10 @@
     "survenus_txt4": "Surbosage médicamenteux ",
     "survenus_txt5": "Exposition professionnelle au médicament",
     "survenus_txt6": "Aucune de ces options",
-    "poid": "Poid",
-    "taille": "Taille",
+    "poid": "Poids (en kg)",
+    "poid_place": "p. ex. 60",
+    "taille": "Taille (en cm)",
+    "taille_place": "ex. 170",
     "allergie": "Affections médicales,allergies,grossesse (durée), historique médical et autres informations telles que tabagisme et consommation d’alcool.",
     "date_admin": "Si vous ne connaissez pas la date exacte de début et/ou de fin du traitement, vous pouvez donner plus d’informations sur le lien temporel ici .",
     "therapeutique": "Quelle est l’indication thérapeutique du médicament ?"

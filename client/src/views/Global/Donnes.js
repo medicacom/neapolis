@@ -7,7 +7,7 @@ import { fetchSpecialite } from "../../Redux/specialiteReduce";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-multi-lang";
 
-function Step1(props) {
+function Donnes(props) {
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   const dispatch = useDispatch();
@@ -146,6 +146,7 @@ function Step1(props) {
                                 name="ageRadio"
                                 type="radio"
                                 onClick={() => {
+                                  props.setIdSpecialite(0);
                                   props.setTypeSpecialite(1);
                                 }}
                               ></Form.Check.Input>
@@ -161,8 +162,8 @@ function Step1(props) {
                                 name="ageRadio"
                                 type="radio"
                                 onClick={() => {
-                                  props.setTypeSpecialite(2);
                                   props.setIdSpecialite(102);
+                                  props.setTypeSpecialite(2);
                                 }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
@@ -243,4 +244,4 @@ function Step1(props) {
   );
 }
 
-export default Step1;
+export default Donnes;

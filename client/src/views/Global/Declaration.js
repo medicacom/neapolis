@@ -290,7 +290,7 @@ function Declaration({ obj }) {
 
   const handleComplete = () => {
     var test = true;
-    var id_sp = specialite.value;
+    var id_sp = idSpecialite;
     var id_indication = indication.value;
     var id_eff = effet.value;
     var id_medicament = medicament.value;
@@ -367,8 +367,24 @@ function Declaration({ obj }) {
             id_voix: id_voix,
             numero: numero,
             posologie: posologie,
+            grave: grave,
+            hospitalisation: hospitalisation,
+            pronostic: pronostic,
+            incapacite: incapacite,
+            anomalie: anomalie,
+            autre: autre,
+            evolution: evolution,
+            traites: traites,
+            survenus: survenus,
+            deces: deces,
+            date_admin: date_admin,
+            therapeutique: therapeutique,
+            description_eff: description_eff,
+            poid: poid,
+            taille: taille,
+            allergie: allergie,
           })
-        ).then((data) => {
+        ).then(() => {
           notify(1, t("add_txt"));
           setTimeout(async () => {
             if (token === null) {
@@ -545,12 +561,14 @@ function Declaration({ obj }) {
                     setDate_admin={setDate_admin}
                     therapeutique={therapeutique}
                     setTherapeutique={setTherapeutique}
-                  ></Medicament>
-                ) : (
-                  <Effets
                     optionsEffet={optionsEffet}
                     effet={effet}
                     setEffet={setEffet}
+                  ></Medicament>
+                ) : (
+                  <Effets
+                    description_eff={description_eff}
+                    setDescription_eff={setDescription_eff}
                     dateDebut={dateDebut}
                     setDateDebut={setDateDebut}
                     dateFin={dateFin}
@@ -560,8 +578,6 @@ function Declaration({ obj }) {
                     complementaires={complementaires}
                     setComplementaires={setComplementaires}
                     grave={grave}
-                    description_eff={description_eff}
-                    setDescription_eff={setDescription_eff}
                     setGrave={setGrave}
                     hospitalisation={hospitalisation}
                     setHospitalisation={setHospitalisation}

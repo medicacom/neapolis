@@ -87,6 +87,8 @@
     "listV": "Validate list"
   },
   "Declaration": {
+    "yes": "Yes",
+    "no": "No",
     "personal": "personal name",
     "list": "List of declarations",
     "add": "Add a declaration",
@@ -124,7 +126,7 @@
     "text2": "Additional examinations If tests have been carried out done, also mention the results. He can be blood tests, imaging medical, a biopsy ...",
     "description_eff": "Description of side effects",
     "gravite": "How serious are (was) the side effects?",
-    "grave":"Not serious",
+    "grave": "Not serious",
     "hospitalisation": "Hospitialisation ou prolongation de l’hospitalisation",
     "pronostic": "Mise en jeu du pronostic",
     "deces": "Décès",

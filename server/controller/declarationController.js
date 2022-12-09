@@ -32,6 +32,23 @@ router.post("/addDeclaration", (req, res) => {
   var id_user = req.body.id_user;
   var posologie = req.body.posologie;
   var numero = req.body.numero;
+  var grave = req.body.grave;
+  var nom = req.body.nom;
+  var hospitalisation = req.body.hospitalisation;
+  var pronostic = req.body.pronostic;
+  var incapacite = req.body.incapacite;
+  var anomalie = req.body.anomalie;
+  var autre = req.body.autre;
+  var evolution = req.body.evolution;
+  var traites = req.body.traites;
+  var survenus = req.body.survenus;
+  var deces = req.body.deces;
+  var date_admin = req.body.date_admin;
+  var therapeutique = req.body.therapeutique;
+  var description_eff = req.body.description_eff;
+  var poid = req.body.poid;
+  var taille = req.body.taille;
+  var allergie = req.body.allergie;
 
   if (id_user != 0) {
     patient
@@ -44,6 +61,9 @@ router.post("/addDeclaration", (req, res) => {
         agePatient: agePatient,
         ageCategorie: ageCategorie != 0 ? ageCategorie : null,
         id_indication: id_indication,
+        poid: poid,
+        taille: taille,
+        allergie: allergie,
       })
       .then((p) => {
         rapport
@@ -61,6 +81,22 @@ router.post("/addDeclaration", (req, res) => {
             id_voix: id_voix,
             posologie: posologie,
             numero: numero,
+            grave: grave,
+            hospitalisation: hospitalisation,
+            pronostic: pronostic,
+            incapacite: incapacite,
+            anomalie: anomalie,
+            autre: autre,
+            evolution: evolution,
+            traites: traites,
+            survenus: survenus,
+            deces: deces,
+            date_admin: date_admin,
+            therapeutique: therapeutique,
+            description_eff: description_eff,
+            poid: poid,
+            taille: taille,
+            allergie: allergie,
           })
           .then((r) => {
             user.findOne({ where: { id_role: 1 } }).then(function (u) {
@@ -95,6 +131,9 @@ router.post("/addDeclaration", (req, res) => {
             agePatient: agePatient,
             ageCategorie: ageCategorie != 0 ? ageCategorie : null,
             id_indication: id_indication,
+            poid: poid,
+            taille: taille,
+            allergie: allergie,
           })
           .then((p) => {
             rapport
@@ -112,6 +151,22 @@ router.post("/addDeclaration", (req, res) => {
                 id_voix: id_voix,
                 posologie: posologie,
                 numero: numero,
+                grave: grave,
+                hospitalisation: hospitalisation,
+                pronostic: pronostic,
+                incapacite: incapacite,
+                anomalie: anomalie,
+                autre: autre,
+                evolution: evolution,
+                traites: traites,
+                survenus: survenus,
+                deces: deces,
+                date_admin: date_admin,
+                therapeutique: therapeutique,
+                description_eff: description_eff,
+                poid: poid,
+                taille: taille,
+                allergie: allergie,
               })
               .then((r) => {
                 user.findOne({ where: { id_role: 1 } }).then(function (u) {
@@ -146,7 +201,7 @@ router.get("/getDeclarations/:id_role/:id", auth, (req, res) => {
         {
           model: user,
           as: "users",
-          where:where,
+          where: where,
           include: ["specialites"],
         },
         {

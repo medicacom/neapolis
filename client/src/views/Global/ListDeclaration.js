@@ -14,9 +14,11 @@ import { useTranslation } from "react-multi-lang";
 import { MRT_Localization_FR } from "material-react-table/locales/fr";
 import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_AR } from "../utils/ar_table";
+import { openDB } from "idb";
 
 // core components
 function ListDeclaration({ obj }) {
+  let db;
   var id_role = obj.user.id_role;
   var id = obj.user.id;
   let lang = window.localStorage.getItem("lang");
@@ -175,20 +177,7 @@ function ListDeclaration({ obj }) {
                   : data.patients.passagers.nom +
                     " " +
                     data.patients.passagers.prenom}
-                {/* {data.users.nom + " " + data.users.prenom} */}
               </li>
-              {/* <li>
-                <strong>Adresse email: </strong>
-                {data.users.email}
-              </li>
-              <li>
-                <strong>Numéro téléphone: </strong>
-                {data.users.tel}
-              </li>
-              <li>
-                <strong>Specialite: </strong>
-                {data.users.specialites.nom}
-              </li> */}
               <li>
                 <strong>{t("Declaration.date")}: </strong>
                 {new Date(
@@ -222,6 +211,18 @@ function ListDeclaration({ obj }) {
               <li>
                 <strong>{t("Declaration.indication")}: </strong>
                 {nomInd}
+              </li>
+              <li>
+                <strong>{t("Declaration.poid")}: </strong>
+                {data.patients.poid}
+              </li>
+              <li>
+                <strong>{t("Declaration.taille")}: </strong>
+                {data.patients.taille}
+              </li>
+              <li>
+                <strong>{t("Declaration.allergie")}: </strong>
+                {data.patients.allergie}
               </li>
             </ul>
           </Col>
@@ -276,6 +277,70 @@ function ListDeclaration({ obj }) {
               <li>
                 <strong>{t("Declaration.complementary")}: </strong>
                 {data.complementaires}
+              </li>
+              <li>
+                <strong>{t("Declaration.gravite")}: </strong>
+                <br></br>
+                { t("Declaration.grave")} {data.grave === 1 ? "Yes" : "Non"}
+                <br></br>
+                {data.hospitalisation === 1
+                  ? t("Declaration.hospitalisation")
+                  : ""}
+                <br></br>
+                {t("Declaration.pronostic")}
+                {data.pronostic === 1 ? "Yes" : "Non"}
+                <br></br>
+                {t("Declaration.deces")}
+                {data.deces === 1 ? "Yes" : "Non"}
+                <br></br>
+                {t("Declaration.incapacite")}
+                {data.incapacite === 1 ? "Yes" : "Non"}
+                <br></br>
+                {t("Declaration.anomalie")} {data.anomalie === 1 ? "Yes" : "Non"}
+                <br></br>
+                {t("Declaration.autre")} {data.autre === 1 ? "Yes" : "Non"}
+              </li>
+              <li>
+                <strong>{t("Declaration.traites")}: </strong>
+                {data.traites === 1
+                  ? t("Declaration.traites_yes")
+                  : data.traites === 2
+                  ? t("Declaration.traites_no")
+                  : t("Declaration.traites_inc")}
+              </li>
+              <li>
+                <strong>{t("Declaration.evolution")}: </strong>
+                <br></br>
+                {data.evolution === 1
+                  ? t("Declaration.evolution_txt1")
+                  : data.evolution === 2
+                  ? t("Declaration.evolution_txt2")
+                  : data.evolution === 3
+                  ? t("Declaration.evolution_txt3")
+                  : data.evolution === 4
+                  ? t("Declaration.evolution_txt4")
+                  : data.evolution === 5
+                  ? t("Declaration.evolution_txt5")
+                  : data.evolution === 6
+                  ? t("Declaration.evolution_txt6")
+                  : ""}
+              </li>
+              <li>
+                <strong>{t("Declaration.survenus")}: </strong>
+                <br></br>
+                {data.survenus === 1
+                  ? t("Declaration.survenus_txt1")
+                  : data.survenus === 2
+                  ? t("Declaration.survenus_txt2")
+                  : data.survenus === 3
+                  ? t("Declaration.survenus_txt3")
+                  : data.survenus === 4
+                  ? t("Declaration.survenus_txt4")
+                  : data.survenus === 5
+                  ? t("Declaration.survenus_txt5")
+                  : data.survenus === 6
+                  ? t("Declaration.survenus_txt6")
+                  : ""}
               </li>
             </ul>
           </Col>

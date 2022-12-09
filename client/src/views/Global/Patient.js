@@ -1,11 +1,11 @@
-import React, {  } from "react";
+import React from "react";
 // react-bootstrap components
 import { Card, Form, Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
-import { useTranslation } from 'react-multi-lang'
+import { useTranslation } from "react-multi-lang";
 
-function Step2(props) {
-  const t = useTranslation()
+function Patient(props) {
+  const t = useTranslation();
   return (
     <>
       <Container fluid>
@@ -19,10 +19,10 @@ function Step2(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>{t('Declaration.initials')}* </label>
+                            <label>{t("Declaration.initials")}* </label>
                             <Form.Control
                               defaultValue={props.initiales}
-                              placeholder={t('Declaration.initials_place')}
+                              placeholder={t("Declaration.initials_place")}
                               name="Nom"
                               className="required"
                               type="text"
@@ -34,68 +34,68 @@ function Step2(props) {
                           <div className="error"></div>
                         </Col>
                         <Col md="12">
-                          <label>{t('Declaration.gendre')}* </label>
+                          <label>{t("Declaration.gendre")}* </label>
                           <Form.Check className="form-check-radio">
                             <Form.Check.Label>
                               <Form.Check.Input
-                                checked={props.sexe ===1?true:false}
+                                checked={props.sexe === 1 ? true : false}
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={()=>props.setSexe(1)}
+                                onClick={() => props.setSexe(1)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              {t('Declaration.man')}
+                              {t("Declaration.man")}
                             </Form.Check.Label>
                           </Form.Check>
                           <Form.Check className="form-check-radio">
                             <Form.Check.Label>
                               <Form.Check.Input
-                                checked={props.sexe ===2?true:false}
+                                checked={props.sexe === 2 ? true : false}
                                 defaultValue="option2"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={()=>props.setSexe(2)}
+                                onClick={() => props.setSexe(2)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              {t('Declaration.woman')}
+                              {t("Declaration.woman")}
                             </Form.Check.Label>
                           </Form.Check>
                           <Form.Check className="form-check-radio">
                             <Form.Check.Label>
                               <Form.Check.Input
-                                checked={props.sexe ===3?true:false}
+                                checked={props.sexe === 3 ? true : false}
                                 defaultValue="option2"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={()=>props.setSexe(3)}
+                                onClick={() => props.setSexe(3)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              {t('Declaration.other')}
+                              {t("Declaration.other")}
                             </Form.Check.Label>
                           </Form.Check>
                         </Col>
                       </Row>
                       <Row>
                         <Col md="12">
-                          <label>{t('Declaration.age')}* </label>
+                          <label>{t("Declaration.age")}* </label>
                         </Col>
                         <Col md="12">
                           <Form.Check className="form-check-radio">
                             <Form.Check.Label>
                               <Form.Check.Input
-                                checked={props.age ===1?true:false}
+                                checked={props.age === 1 ? true : false}
                                 defaultValue="1"
                                 name="ageRadio"
                                 type="radio"
-                                onClick={()=>props.setAge(1)}
+                                onClick={() => props.setAge(1)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                                {t('Declaration.date')}
+                              {t("Declaration.date")}
                             </Form.Check.Label>
                           </Form.Check>
                         </Col>
-                        {props.age ===1?
+                        {props.age === 1 ? (
                           <Col md="12">
                             <Form.Group>
                               <Form.Control
@@ -111,23 +111,25 @@ function Step2(props) {
                             </Form.Group>
                             <div className="error"></div>
                           </Col>
-                        :""}
+                        ) : (
+                          ""
+                        )}
                         <Col md="12">
                           <Form.Check className="form-check-radio">
                             <Form.Check.Label>
                               <Form.Check.Input
-                                checked={props.age ===2?true:false}
+                                checked={props.age === 2 ? true : false}
                                 defaultValue="2"
                                 name="ageRadio"
                                 type="radio"
-                                onClick={()=>props.setAge(2)}
+                                onClick={() => props.setAge(2)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               Age
                             </Form.Check.Label>
                           </Form.Check>
                         </Col>
-                        {props.age ===2?
+                        {props.age === 2 ? (
                           <Col md="12">
                             <Form.Group>
                               <Form.Control
@@ -142,26 +144,28 @@ function Step2(props) {
                             </Form.Group>
                             <div className="error"></div>
                           </Col>
-                        :""}
+                        ) : (
+                          ""
+                        )}
                         <Col md="12">
                           <Form.Check className="form-check-radio">
                             <Form.Check.Label>
                               <Form.Check.Input
-                                checked={props.age ===3?true:false}
+                                checked={props.age === 3 ? true : false}
                                 defaultValue="3"
                                 name="ageRadio"
                                 type="radio"
-                                onClick={()=>props.setAge(3)}
+                                onClick={() => props.setAge(3)}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
-                              {t('Declaration.category')}
+                              {t("Declaration.category")}
                             </Form.Check.Label>
                           </Form.Check>
                         </Col>
-                        {props.age ===3?
+                        {props.age === 3 ? (
                           <Col md="12">
                             <Select
-                              placeholder={t('Declaration.category')}
+                              placeholder={t("Declaration.category")}
                               className="react-select primary"
                               classNamePrefix="react-select"
                               defaultValue={props.ageCategorie}
@@ -171,12 +175,13 @@ function Step2(props) {
                               options={props.optionsAge}
                             />
                           </Col>
-                        :""}
-
+                        ) : (
+                          ""
+                        )}
                       </Row>
                       <Row>
                         <Col md="12">
-                          <label>{t('Declaration.txt_indication')} </label>
+                          <label>{t("Declaration.txt_indication")} </label>
                           <Select
                             placeholder={t("select")}
                             className="react-select primary"
@@ -187,6 +192,60 @@ function Step2(props) {
                             }}
                             options={props.optionsIndication}
                           />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md="12">
+                          <label>{t("Declaration.poid")} </label>
+                          <Form.Group>
+                            <Form.Control
+                              placeholder={t("Declaration.poid_place")}
+                              defaultValue={props.poid}
+                              name="agePatient"
+                              className="required"
+                              type="text"
+                              onBlur={(value) => {
+                                props.setPoid(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                          <div className="error"></div>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md="12">
+                          <label>{t("Declaration.taille")} </label>
+                          <Form.Group>
+                            <Form.Control
+                              placeholder={t("Declaration.taille_place")}
+                              defaultValue={props.taille}
+                              name="agePatient"
+                              className="required"
+                              type="text"
+                              onBlur={(value) => {
+                                props.setTaille(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                          <div className="error"></div>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md="12">
+                          <Form.Group>
+                            <label>{t("Declaration.allergie")}</label>
+                            <Form.Control
+                              defaultValue={props.allergie}
+                              name="complementaires"
+                              as="textarea"
+                              rows="3"
+                              onChange={(value) => {
+                                props.setAllergie(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
                         </Col>
                       </Row>
                       <div className="clearfix"></div>
@@ -202,4 +261,4 @@ function Step2(props) {
   );
 }
 
-export default Step2;
+export default Patient;

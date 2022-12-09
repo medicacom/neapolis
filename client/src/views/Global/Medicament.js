@@ -4,7 +4,7 @@ import { Card, Form, Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import { useTranslation } from "react-multi-lang";
 
-function Step4(props) {
+function Medicament(props) {
   const t = useTranslation();
   return (
     <>
@@ -34,6 +34,7 @@ function Step4(props) {
                           <div className="error"></div>
                         </Col>
                       </Row>
+
                       <Row>
                         <Col md="12">
                           <Form.Group>
@@ -52,13 +53,14 @@ function Step4(props) {
                           <div className="error"></div>
                         </Col>
                       </Row>
+
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>{t('Declaration.dosage')}* </label>
+                            <label>{t("Declaration.dosage")}* </label>
                             <Form.Control
                               defaultValue={props.posologie}
-                              placeholder={t('Declaration.dosage')}
+                              placeholder={t("Declaration.dosage")}
                               name="Posologie"
                               className="required"
                               type="text"
@@ -70,12 +72,11 @@ function Step4(props) {
                           <div className="error"></div>
                         </Col>
                       </Row>
+
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>
-                              {t('Declaration.voice_txt')} ? *
-                            </label>
+                            <label>{t("Declaration.voice_txt")} ? *</label>
                             <Select
                               placeholder="--Choissisez dans cette liste --"
                               className="react-select primary"
@@ -90,13 +91,14 @@ function Step4(props) {
                           <div className="error"></div>
                         </Col>
                       </Row>
+
                       <Row>
                         <Col md="12">
-                          <label>{t('Declaration.txt_date')} </label>
+                          <label>{t("Declaration.txt_date")} </label>
                         </Col>
                         <Col md="6">
                           <Form.Group>
-                            <label>{t('Declaration.start')} </label>
+                            <label>{t("Declaration.start")} </label>
                             <Form.Control
                               defaultValue={props.dateDebutAdmin}
                               className="required"
@@ -109,7 +111,7 @@ function Step4(props) {
                         </Col>
                         <Col md="6">
                           <Form.Group>
-                            <label>{t('Declaration.end')} </label>
+                            <label>{t("Declaration.end")} </label>
                             <Form.Control
                               defaultValue={props.dateFinAdmin}
                               type="date"
@@ -118,6 +120,59 @@ function Step4(props) {
                               }}
                             ></Form.Control>
                           </Form.Group>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md="12">
+                          <Form.Group>
+                            <label>{t("Declaration.date_admin")}</label>
+                            <Form.Control
+                              defaultValue={props.date_admin}
+                              name="date_admin"
+                              as="textarea"
+                              rows="3"
+                              onChange={(value) => {
+                                props.setDate_admin(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md="12">
+                          <Form.Group>
+                            <label>{t("Declaration.therapeutique")}</label>
+                            <Form.Control
+                              defaultValue={props.therapeutique}
+                              name="therapeutique"
+                              as="textarea"
+                              rows="3"
+                              onChange={(value) => {
+                                props.setTherapeutique(value.target.value);
+                              }}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      
+                      <Row>
+                        <Col md="12">
+                          <Form.Group>
+                            <label>{t("Declaration.name_drug")} *</label>
+                            <Select
+                              placeholder={t("select")}
+                              className="react-select primary"
+                              classNamePrefix="react-select"
+                              defaultValue={props.effet}
+                              onChange={(value) => {
+                                props.setEffet(value);
+                              }}
+                              options={props.optionsEffet}
+                            />
+                          </Form.Group>
+                          <div className="error"></div>
                         </Col>
                       </Row>
                       <div className="clearfix"></div>
@@ -133,4 +188,4 @@ function Step4(props) {
   );
 }
 
-export default Step4;
+export default Medicament;
