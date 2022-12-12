@@ -35,13 +35,15 @@ function ListDeclaration({ obj, onlineStatus }) {
         accessorKey: "users.nom",
         Cell: ({ cell, row }) => (
           <div>
-            {cell.row.original.users
-              ? cell.row.original.users.nom +
-                " " +
-                cell.row.original.users.prenom
-              : cell.row.original.patients.passagers.nom +
-                " " +
-                cell.row.original.patients.passagers.prenom}
+            {onlineStatus === 1
+              ? cell.row.original.users
+                ? cell.row.original.users.nom +
+                  " " +
+                  cell.row.original.users.prenom
+                : cell.row.original.patients.passagers.nom +
+                  " " +
+                  cell.row.original.patients.passagers.prenom
+              : "test"}
             {/* {cell.row.original.users.nom} {cell.row.original.users.prenom} */}
           </div>
         ),
@@ -51,9 +53,11 @@ function ListDeclaration({ obj, onlineStatus }) {
         accessorKey: "users.specialites",
         Cell: ({ cell, row }) => (
           <div>
-            {cell.row.original.users
-              ? cell.row.original.users.specialites.nom
-              : cell.row.original.patients.passagers.specialites.nom}
+            {onlineStatus === 1
+              ? cell.row.original.users
+                ? cell.row.original.users.specialites.nom
+                : cell.row.original.patients.passagers.specialites.nom
+              : "eeee"}
             {/* {cell.row.original.users.specialites.nom} */}
           </div>
         ),
@@ -63,11 +67,13 @@ function ListDeclaration({ obj, onlineStatus }) {
         accessorKey: "medicaments.nom",
         Cell: ({ cell, row }) => (
           <div>
-            {lang === "fr"
-              ? cell.row.original.medicaments.nom
-              : lang === "en"
-              ? cell.row.original.medicaments.nom_en
-              : cell.row.original.medicaments.nom_ar}
+            {onlineStatus === 1
+              ? lang === "fr"
+                ? cell.row.original.medicaments.nom
+                : lang === "en"
+                ? cell.row.original.medicaments.nom_en
+                : cell.row.original.medicaments.nom_ar
+              : getMedName(cell.row.original.nomMed)}
           </div>
         ),
       },
@@ -77,7 +83,7 @@ function ListDeclaration({ obj, onlineStatus }) {
         Cell: ({ cell, row }) => (
           <div>
             {/* {new Date(cell.row.original.patients.createdAt).format('DD/MM/YYYY')} */}
-            {new Date(
+            {onlineStatus === 1?(new Date(
               new Date(cell.row.original.patients.createdAt).getTime() -
                 new Date(
                   cell.row.original.patients.createdAt
@@ -85,7 +91,7 @@ function ListDeclaration({ obj, onlineStatus }) {
                   60000
             )
               .toISOString()
-              .slice(0, 10)}
+              .slice(0, 10)):"sedfs"}
           </div>
         ),
       },
@@ -111,22 +117,15 @@ function ListDeclaration({ obj, onlineStatus }) {
     ],
     []
   );
+
   function ajouter() {
     navigate.push("/declaration");
   }
-
-  //storeDeclaration
-  /*  const storeRapports = useCallback(
-    async (res) => {
-      const tx1 = db.transaction("rapports", "readwrite");
-      await tx1.objectStore("rapports").add({
-        id: res.id,
-        hospitalisation: res.hospitalisation,
-      });
-    },
-    [dispatch]
-  ); */
-
+  function getMedName(ligne) {
+    var spliteName = ligne.split("@@");
+    var i = lang === "fr" ? 0 : lang === "fr" ? 1 : 2;
+    return spliteName[i];
+  }
   //storeDeclaration
   const storeDeclaration = useCallback(
     async (res) => {
@@ -135,36 +134,40 @@ function ListDeclaration({ obj, onlineStatus }) {
         var nomAge = "";
         if (res[index].patients.ages) {
           nomAge =
-            lang === "fr"
-              ? res[index].patients.ages.description
-              : lang === "en"
-              ? res[index].patients.ages.description_en
-              : res[index].patients.ages.description_ar;
+            res[index].patients.ages.description +
+            "@@" +
+            res[index].patients.ages.description_en +
+            "@@" +
+            res[index].patients.ages.description_ar;
         }
         var nomMed =
-          lang === "fr"
-            ? res[index].medicaments.nom
-            : lang === "en"
-            ? res[index].medicaments.nom_en
-            : res[index].medicaments.nom_ar;
+          res[index].medicaments.nom +
+          "@@" +
+          res[index].medicaments.nom_en +
+          "@@" +
+          res[index].medicaments.nom_ar;
+
         var nomInd =
-          lang === "fr"
-            ? res[index].patients.indications.description
-            : lang === "en"
-            ? res[index].patients.indications.description_en
-            : res[index].patients.indications.description_ar;
+          res[index].patients.indications.description +
+          "@@" +
+          res[index].patients.indications.description_en +
+          "@@" +
+          res[index].patients.indications.description_ar;
+
         var nomVoix =
-          lang === "fr"
-            ? res[index].voix_administrations.description
-            : lang === "en"
-            ? res[index].voix_administrations.description_en
-            : res[index].voix_administrations.description_ar;
+          res[index].voix_administrations.description +
+          "@@" +
+          res[index].voix_administrations.description_en +
+          "@@" +
+          res[index].voix_administrations.description_ar;
+
         var nomEff =
-          lang === "fr"
-            ? res[index].voix_administrations.description
-            : lang === "en"
-            ? res[index].effet_indesirables.description_en
-            : res[index].effet_indesirables.description_ar;
+          res[index].effet_indesirables.description +
+          "@@" +
+          res[index].effet_indesirables.description_en +
+          "@@" +
+          res[index].effet_indesirables.description_ar;
+
         await tx.objectStore("declarations").add({
           id_patient: res[index].patients.id,
           initiales: res[index].patients.initiales,
@@ -212,6 +215,10 @@ function ListDeclaration({ obj, onlineStatus }) {
           nomVoix: nomVoix,
           nomEff: nomEff,
           nomAge: nomAge,
+          createdAt: res[index].patients.createdAt,
+          createdAt: res[index].patients.updatedAt,
+          id_passager: res[index].patients.id_passager,
+          passagers: res[index].patients.passagers,
         });
         /* storeRapports(res[index]); */
       }
@@ -268,6 +275,7 @@ function ListDeclaration({ obj, onlineStatus }) {
         : lang === "en"
         ? data.effet_indesirables.description_en
         : data.effet_indesirables.description_ar;
+
     setAlert(
       <SweetAlert
         customClass="pop-up-extra"
@@ -467,11 +475,18 @@ function ListDeclaration({ obj, onlineStatus }) {
     setAlert(null);
   };
 
+  async function initDeclaration() {
+    const tx = db.transaction("declarations", "readwrite");
+    let store = tx.objectStore("declarations");
+    let dec = await store.getAll();
+    setEntities(dec);
+  }
+
   async function init() {
     db = await openDB("medis", 1, {});
     if (onlineStatus === 1) getDeclaration();
     else {
-      /* initDeclaration(); */
+      initDeclaration();
     }
   }
   useEffect(() => {

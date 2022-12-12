@@ -160,7 +160,7 @@ function Medicament(props) {
                       <Row>
                         <Col md="12">
                           <Form.Group>
-                            <label>{t("Declaration.name_drug")} *</label>
+                            <label>{t("Declaration.effects")} *</label>
                             <Select
                               placeholder={t("select")}
                               className="react-select primary"

@@ -33,9 +33,10 @@
   "disabled": "Disabled",
   "validate": "Validate",
   "refuse": "Refuse",
-  "envoyer": "send",
+  "envoyer": "Send",
   "close": "Close",
   "demande_insciption": "Your request has been sent successfully",
+  "declaration_send": "Your request has been sent successfully",
   "age": {
     "list": "List of ages",
     "add": "Add a age",

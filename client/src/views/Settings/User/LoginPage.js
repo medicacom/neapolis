@@ -180,7 +180,7 @@ function LoginPage() {
                               <Form.Group>
                                 <Form.Control
                                   onKeyPress={enterKeyPressed}
-                                  placeholder="Login"
+                                  placeholder={t("User.email")}
                                   type="text"
                                   onChange={loginChange}
                                 ></Form.Control>

@@ -236,8 +236,7 @@ function Declaration({ obj }) {
     var entities = res.payload;
     var arrayOption = [];
     entities.forEach((e) => {
-      var nomMed =
-        lang === "fr" ? e.nom : lang === e.nom_en ? "Speciality" : e.nom_ar;
+      var nomMed = lang === "fr" ? e.nom : lang === "en" ? e.nom_en : e.nom_ar;
       arrayOption.push({ value: e.id, label: nomMed });
     });
     setOptionsMedicament(arrayOption);
@@ -385,7 +384,7 @@ function Declaration({ obj }) {
             allergie: allergie,
           })
         ).then(() => {
-          notify(1, t("add_txt"));
+          notify(1, t("declaration_send"));
           setTimeout(async () => {
             if (token === null) {
               navigate.push("/login");
@@ -606,20 +605,20 @@ function Declaration({ obj }) {
         <Row>
           <Col md="6" sm="6" xs="6">
             <div className="handleBack">
-              <Button
-                disabled={
-                  activeStep === 0 || (activeStep === 1 && token !== null)
-                    ? true
-                    : false
-                }
-                className="btn-fill"
-                type="button"
-                variant="success"
-                onClick={handleBack}
-              >
-                <i class={icon2}></i>
-                {t("back")}
-              </Button>
+              {activeStep !== 0 ? (
+                <Button
+                  disabled={activeStep === 1 && token !== null ? true : false}
+                  className="btn-fill"
+                  type="button"
+                  variant="success"
+                  onClick={handleBack}
+                >
+                  <i class={icon2}></i>
+                  {t("back")}
+                </Button>
+              ) : (
+                ""
+              )}
             </div>
           </Col>
           <Col md="6" sm="6" xs="6">
@@ -631,7 +630,7 @@ function Declaration({ obj }) {
                 onClick={handleComplete}
               >
                 {activeStep === 3 ? t("envoyer") : t("next")}
-                <i class={activeStep < 3 ? icon1 : "fas fa-save"}></i>
+                <i class={activeStep < 3 ? icon1 : ""}></i>
               </Button>
             </div>
           </Col>

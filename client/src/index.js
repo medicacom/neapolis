@@ -38,7 +38,7 @@ var dir = lang !== "ar" ? "ltr" : "rtl";
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("personels");
+console.log("verificationEmail");
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -134,23 +134,7 @@ openDB("medis", 1, {
     });
     storeSpecialites.createIndex("id", "id");
     storeSpecialites.createIndex("saved", "saved");
-
-    //create rapports store
-    /* var storeRapports = db.createObjectStore("rapports", {
-      keyPath: "id",
-      autoIncrement: true,
-    });
-    storeRapports.createIndex("id", "id");
-    storeRapports.createIndex("saved", "saved");
-
-    //create patients store
-    var storePatients = db.createObjectStore("patients", {
-      keyPath: "id",
-      autoIncrement: true,
-    });
-    storePatients.createIndex("id", "id");
-    storePatients.createIndex("saved", "saved"); */
-
+    
     //create declaration store
     var storeDeclaration = db.createObjectStore("declarations", {
       keyPath: "id",
@@ -158,7 +142,6 @@ openDB("medis", 1, {
     });
     storeDeclaration.createIndex("id", "id");
     storeDeclaration.createIndex("saved", "saved");
-
 
     //create personels store
     var storePersonel = db.createObjectStore("personels", {

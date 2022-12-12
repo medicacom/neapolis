@@ -4,7 +4,7 @@ import validator from "validator";
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
-import { userAdded, userGetById } from "../../../Redux/usersReduce";
+import { userAdded, userGetById, verificationEmail } from "../../../Redux/usersReduce";
 import { fetchRole } from "../../../Redux/roleReduce";
 import { fetchGouvernorat } from "../../../Redux/gouvernoratReduce";
 import { useDispatch } from "react-redux";
@@ -45,6 +45,7 @@ function AjouterUser({ onlineStatus }) {
   const [valide] = React.useState(1);
   //required
   const [roleRequired, setRoleRequired] = React.useState(true);
+  const [emailRequired, setEmailRequired] = React.useState(true);
   const etat = 1;
 
   const [options, setOptions] = React.useState([
@@ -71,7 +72,7 @@ function AjouterUser({ onlineStatus }) {
     label: "Gouvernorat",
   });
 
- /*  const [optionsSpecialite, setOptionsSpecialite] = React.useState([
+  /*  const [optionsSpecialite, setOptionsSpecialite] = React.useState([
     {
       value: "",
       label: "Specialite",
@@ -150,7 +151,8 @@ function AjouterUser({ onlineStatus }) {
           !validator.isEmail(required[i].value)
         ) {
           notify(2, t("invalide_email"));
-          document.getElementsByClassName("error")[i].innerHTML = t("invalide_email");
+          document.getElementsByClassName("error")[i].innerHTML =
+            t("invalide_email");
         }
         //condition password
         else if (
@@ -162,7 +164,8 @@ function AjouterUser({ onlineStatus }) {
           if (!validator.isLength(required[i].value, { min: 6, max: 20 })) {
             testPassword = false;
             notify(2, t("password_err"));
-            document.getElementsByClassName("error")[i].innerHTML = t("password_err");
+            document.getElementsByClassName("error")[i].innerHTML =
+              t("password_err");
           }
         }
       }
@@ -173,7 +176,7 @@ function AjouterUser({ onlineStatus }) {
     roleClass.style.borderColor = "#ccc";
     if (role === 0) {
       roleClass.style.borderColor = "red";
-      setRoleRequired(false)
+      setRoleRequired(false);
       notify(2, t("role_err"));
     }
     var id_gouvernorat = gouvernoratSelect.value;
@@ -201,7 +204,7 @@ function AjouterUser({ onlineStatus }) {
             id_sp,
             id_gouvernorat,
             valide,
-            autre_sp
+            autre_sp,
           })
         ).then((data) => {
           if (data.payload.msg === 1) {
@@ -210,9 +213,9 @@ function AjouterUser({ onlineStatus }) {
             setTimeout(async () => {
               listeUser();
             }, 1500);
-          } else if (data.payload.msg === 2){
+          } else if (data.payload.msg === 2) {
             notify(2, t("problem"));
-          } else if (data.payload.msg === 3){
+          } else if (data.payload.msg === 3) {
             notify(2, t("exist"));
           }
         });
@@ -251,8 +254,7 @@ function AjouterUser({ onlineStatus }) {
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Role" });
     entities.forEach((e) => {
-      if(e.id !== 2)
-        arrayOption.push({ value: e.id, label: e.nom });
+      if (e.id !== 2) arrayOption.push({ value: e.id, label: e.nom });
     });
     setOptions(arrayOption);
   }, [dispatch]);
@@ -265,8 +267,7 @@ function AjouterUser({ onlineStatus }) {
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Role" });
     entities.forEach((e) => {
-      if(e.id !== 2)
-        arrayOption.push({ value: e.id, label: e.nom });
+      if (e.id !== 2) arrayOption.push({ value: e.id, label: e.nom });
     });
     setOptions(arrayOption);
   }
@@ -332,6 +333,20 @@ function AjouterUser({ onlineStatus }) {
   function listeUser() {
     navigate.push("/utilisateurListe");
   }
+
+  const verifEmail = useCallback(
+    async (email) => {
+      var verif = await dispatch(verificationEmail({ email }));
+      var res = verif.payload;
+      if (res === true) {
+        setEmailRequired(false);
+      } else {
+        setEmailRequired(true);
+      }
+    },
+    [dispatch]
+  );
+
   return (
     <>
       <Container fluid>
@@ -432,10 +447,16 @@ function AjouterUser({ onlineStatus }) {
                               type="text"
                               onChange={(value) => {
                                 setEmail(value.target.value);
+                                verifEmail(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
                           <div className="error"></div>
+                          {emailRequired ? (
+                            ""
+                          ) : (
+                            <label className="error">{t("exist")}</label>
+                          )}
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group id="roleClass">
@@ -487,8 +508,7 @@ function AjouterUser({ onlineStatus }) {
                           </Form.Group>
                         </Col>
                       </Row>
-                      <Row>
-                      </Row>
+                      <Row></Row>
                       <Button
                         className="btn-fill pull-right"
                         type="button"

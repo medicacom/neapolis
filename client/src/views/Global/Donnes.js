@@ -27,9 +27,6 @@ function Donnes(props) {
     var role = await dispatch(fetchSpecialite());
     var entities = role.payload;
     var arrayOption = [];
-    var label =
-      lang === "fr" ? "Specialite" : lang === "en" ? "Speciality" : "تخصص";
-    arrayOption.push({ value: 0, label: label });
     entities.forEach((e) => {
       var nomSp =
         lang === "fr" ? e.nom : lang === e.nom_en ? "Speciality" : e.nom_ar;

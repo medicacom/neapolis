@@ -210,7 +210,6 @@ router.get("/getDeclarations/:id_role/:id", auth, async (req, res) => {
       },
     ],
   });
-  
   var rapportPassager = await rapport.findAll({
     where: { id_user: null },
     include: [
