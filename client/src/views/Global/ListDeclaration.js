@@ -83,15 +83,17 @@ function ListDeclaration({ obj, onlineStatus }) {
         Cell: ({ cell, row }) => (
           <div>
             {/* {new Date(cell.row.original.patients.createdAt).format('DD/MM/YYYY')} */}
-            {onlineStatus === 1?(new Date(
-              new Date(cell.row.original.patients.createdAt).getTime() -
-                new Date(
-                  cell.row.original.patients.createdAt
-                ).getTimezoneOffset() *
-                  60000
-            )
-              .toISOString()
-              .slice(0, 10)):"sedfs"}
+            {onlineStatus === 1
+              ? new Date(
+                  new Date(cell.row.original.patients.createdAt).getTime() -
+                    new Date(
+                      cell.row.original.patients.createdAt
+                    ).getTimezoneOffset() *
+                      60000
+                )
+                  .toISOString()
+                  .slice(0, 10)
+              : "sedfs"}
           </div>
         ),
       },
@@ -169,6 +171,7 @@ function ListDeclaration({ obj, onlineStatus }) {
           res[index].effet_indesirables.description_ar;
 
         await tx.objectStore("declarations").add({
+          patients: res[index].patients,
           id_patient: res[index].patients.id,
           initiales: res[index].patients.initiales,
           age: res[index].patients.age,
@@ -218,7 +221,9 @@ function ListDeclaration({ obj, onlineStatus }) {
           createdAt: res[index].patients.createdAt,
           createdAt: res[index].patients.updatedAt,
           id_passager: res[index].patients.id_passager,
-          passagers: res[index].patients.passagers,
+          medicaments: res[index].medicaments,
+          effet_indesirables: res[index].effet_indesirables,
+          voix_administrations: res[index].voix_administrations,
         });
         /* storeRapports(res[index]); */
       }
@@ -278,8 +283,9 @@ function ListDeclaration({ obj, onlineStatus }) {
 
     setAlert(
       <SweetAlert
+        
         customClass="pop-up-extra"
-        style={{ display: "block", marginTop: "-100px" }}
+        style={{ display: "block", marginTop: "100px" }}
         title={t("Declaration.details_dec")}
         onConfirm={() => hideAlert()}
         confirmBtnBsStyle="info"
@@ -479,6 +485,7 @@ function ListDeclaration({ obj, onlineStatus }) {
     const tx = db.transaction("declarations", "readwrite");
     let store = tx.objectStore("declarations");
     let dec = await store.getAll();
+    console.log(dec);
     setEntities(dec);
   }
 

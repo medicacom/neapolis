@@ -237,7 +237,7 @@ function Declaration({ obj }) {
     var arrayOption = [];
     entities.forEach((e) => {
       var nomMed = lang === "fr" ? e.nom : lang === "en" ? e.nom_en : e.nom_ar;
-      arrayOption.push({ value: e.id, label: nomMed });
+      arrayOption.push({ value: e.id, label: nomMed+"( "+e.dosage+")" });
     });
     setOptionsMedicament(arrayOption);
   }, [dispatch]);

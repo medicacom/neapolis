@@ -4,8 +4,6 @@ import { useHistory } from "react-router";
 import { useTranslation } from "react-multi-lang";
 
 function Header({ users, onlineStatus }) {
-  const [collapseOpen, setCollapseOpen] = React.useState(false);
-  console.log("collapseOpen",collapseOpen)
   var lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   var navigate = useHistory();

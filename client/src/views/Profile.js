@@ -150,6 +150,8 @@ function Profile({ obj,onlineStatus }) {
       await tx.objectStore('rootBase').add({
         id: resRoots[index].id,
         name: resRoots[index].name,
+        name_en: resRoots[index].name_en,
+        name_ar: resRoots[index].name_ar,
         className: resRoots[index].className,
         path: resRoots[index].path,
         component: resRoots[index].component,

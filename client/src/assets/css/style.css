@@ -4,7 +4,7 @@
 }
 
 .bglogo img {
-  width: 130px;
+  width: calc(100% - 50px);
   text-align: center;
   margin: 0 auto;
   /* filter: brightness(0) invert(1);
@@ -901,6 +901,8 @@ a.dropdown-item {
   width: calc(100% - 350px) !important;
   overflow-y: scroll !important;
   padding: 0 !important;
+  position: initial !important;
+
 }
 
 .pop-up-extra .table-info, .pop-up-extra .table-info>td, .pop-up-extra .table-info>th {
@@ -1204,4 +1206,16 @@ a.dropdown-item {
 
 .dec-ar .flag img {
   float: left;
+}
+
+/* .sidebar-mini .sidebar {
+  width: 80px;
+  display: block;
+  font-weight: 200;
+  z-index: 3;
+  position: fixed;
+} */
+.sidebar-mini .main-panel-ar {
+  margin-left: 0;
+  margin-right: 80px;
 }

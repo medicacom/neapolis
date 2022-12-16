@@ -35,6 +35,8 @@ function Sidebar({ background, users, onlineStatus }) {
         arrayView.push({
           path: "/" + e.path,
           name: e.name,
+          name_en: e.name_en,
+          name_ar: e.name_ar,
           icon: e.icon,
           role: arrayRoleFils,
           componentStr: e.component,
@@ -59,6 +61,8 @@ function Sidebar({ background, users, onlineStatus }) {
         var obj = {
           path: "/" + objRole.path,
           name: objRole.name,
+          name_en: objRole.name_en,
+          name_ar: objRole.name_ar,
           icon: objRole.icon,
           role: arrayRole,
           componentStr: objRole.component,
@@ -71,6 +75,8 @@ function Sidebar({ background, users, onlineStatus }) {
           collapse: true,
           path: "/" + objRole.path,
           name: objRole.name,
+          name_en: objRole.name_en,
+          name_ar: objRole.name_ar,
           state: "pere" + objRole.id,
           icon: objRole.icon,
           role: arrayRole,

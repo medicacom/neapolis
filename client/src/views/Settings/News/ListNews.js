@@ -19,6 +19,8 @@ import { MRT_Localization_AR } from "../../utils/ar_table";
 // core components
 function ListNews({ onlineStatus, obj }) {
   let lang = window.localStorage.getItem("lang");
+  var idRole = obj.user.id_role;
+  console.log(idRole);
   const t = useTranslation();
   let db;
   const dispatch = useDispatch();
@@ -55,16 +57,20 @@ function ListNews({ onlineStatus, obj }) {
             >
               <i className={"fa fa-eye"} />
             </Button>
-            <Button
-              onClick={() => {
-                confirmDelete(cell.row.original.id);
-              }}
-              variant="danger"
-              size="sm"
-              className={"text-danger btn-link"}
-            >
-              <i className={"fa fa-trash-alt"} />
-            </Button>
+            {idRole != 2 ? (
+              <Button
+                onClick={() => {
+                  confirmDelete(cell.row.original.id);
+                }}
+                variant="danger"
+                size="sm"
+                className={"text-danger btn-link"}
+              >
+                <i className={"fa fa-trash-alt"} />
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         ),
       },
@@ -287,17 +293,21 @@ function ListNews({ onlineStatus, obj }) {
         <ToastContainer />
         <Row>
           <Col md="12">
-            <Button
-              className="btn-wd  mr-1 float-left"
-              type="button"
-              variant="success"
-              onClick={ajouter}
-            >
-              <span className="btn-label">
-                <i className="fas fa-plus"></i>
-              </span>
-              {t("news.add")}
-            </Button>
+            {idRole != 2 ? (
+              <Button
+                className="btn-wd  mr-1 float-left"
+                type="button"
+                variant="success"
+                onClick={ajouter}
+              >
+                <span className="btn-label">
+                  <i className="fas fa-plus"></i>
+                </span>
+                {t("news.add")}
+              </Button>
+            ) : (
+              ""
+            )}
           </Col>
 
           <Col md="12">

@@ -30,7 +30,6 @@ function RootBase({ id }) {
   const getRoutes = (routes) => {
     var id_role = onlineStatus === 1 ? users.user.id_role : usersOff.id_role;
     var obj = onlineStatus === 1 ? users : usersOff;
-    console.log(users, usersOff, routes);
     return routes.map((prop, key) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
@@ -53,7 +52,6 @@ function RootBase({ id }) {
     const index = tx.store.index("parent");
     let store = tx.objectStore("rootBase");
     let rootArray = await store.getAll();
-    console.log("rootArray", rootArray);
     var arrayView = [];
     for (const key in rootArray) {
       var e = rootArray[key];
@@ -112,7 +110,6 @@ function RootBase({ id }) {
         arrayParent.push(obj);
       }
     }
-    console.log("arrayParent", arrayParent);
     setEntitiesOff(arrayParent);
   }
 
@@ -221,13 +218,11 @@ function RootBase({ id }) {
   const getUser = useCallback(async () => {
     dispatch(getDetailUser(id)).then((val) => {
       if (val.payload.status) {
-        console.log("getDetailUser");
         setOnlineStatus(0);
         initRoot();
         initUser();
         setLoaderTable(false);
       } else {
-        console.log("eee");
         setOnlineStatus(1);
         var res = val.payload.data;
         setUsers(res);
@@ -296,15 +291,14 @@ function RootBase({ id }) {
       ) : (
         ""
       )}
-      {console.log(entitiesOff)}
-      {console.log(entities)}
+      
       {usersOff &&
       entitiesOff.length > 0 &&
       onlineStatus === 0 &&
       !loaderTable ? (
-        <div className="wrapper">
+        <div className="wrapper" dir={dir}>
           <Sidebar users={usersOff} onlineStatus={onlineStatus} />
-          <div className="main-panel">
+          <div className={location.pathname !== "/declaration" ? styleM : ""}>
             <AdminNavbar users={usersOff} onlineStatus={onlineStatus} />
             <div className="content">
               <Switch>

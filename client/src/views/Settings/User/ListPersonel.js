@@ -224,6 +224,7 @@ function ListPersonel({ onlineStatus }) {
         nom: ligne.nom + " " + ligne.prenom,
       })
     ).then((e1) => {
+      hideAlert();
       getUser();
       switch (etat) {
         case 1:

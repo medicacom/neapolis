@@ -45,3 +45,13 @@
         display: none;
     }
 }
+
+@media (min-width: 992px) {
+    .sidebar-mini .sidebar {
+        width: 80px;
+        display: block;
+        font-weight: 200;
+        z-index: 3;
+        position: fixed;
+    }
+}

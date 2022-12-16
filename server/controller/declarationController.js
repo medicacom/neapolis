@@ -211,28 +211,31 @@ router.get("/getDeclarations/:id_role/:id", auth, async (req, res) => {
     ],
   });
   
-  var rapportPassager = await rapport.findAll({
-    where: { id_user: null },
-    include: [
-      "medicaments",
-      "effet_indesirables",
-      "voix_administrations",
-      {
-        model: patient,
-        as: "patients",
-        include: [
-          "ages",
-          "indications",
-          {
-            model: passager,
-            as: "passagers",
-            include: ["specialites"],
-          },
-        ],
-      },
-    ],
-  });
-  let merged_arr = rapportUser.concat(rapportPassager);
+  var merged_arr = rapportUser;
+  if(id_role != 2){
+    var rapportPassager = await rapport.findAll({
+      where: { id_user: null },
+      include: [
+        "medicaments",
+        "effet_indesirables",
+        "voix_administrations",
+        {
+          model: patient,
+          as: "patients",
+          include: [
+            "ages",
+            "indications",
+            {
+              model: passager,
+              as: "passagers",
+              include: ["specialites"],
+            },
+          ],
+        },
+      ],
+    });
+    merged_arr = rapportUser.concat(rapportPassager);
+  }
   return res.status(200).send(merged_arr);
   /* rapport
     .findAll({
