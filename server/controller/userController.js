@@ -92,20 +92,19 @@ router.post("/addUser", (req, res) => {
               autre_sp: autre_sp,
             })
             .then((u) => {
-              if(valide == 0)
+              if (valide == 0)
                 user.findAll({ where: { id_role: 1 } }).then((u) => {
                   msg = ` <tr><td style="padding-top:5px;"> Sujet: Incription </td></tr>`;
                   msg += ` <tr><td style="padding-top:5px;"> Nom: ${nom} </td></tr>`;
                   msg += ` <tr><td style="padding-top:5px;"> Prenom: ${prenom} </td></tr>`;
                   msg += ` <tr><td style="padding-top:5px;"> E-mail: ${email} </td></tr>`;
-                  u.forEach(element => {
+                  u.forEach((element) => {
                     sendMail(
                       "Incription",
                       msg,
                       element.dataValues.email,
                       element.dataValues.nom + " " + element.dataValues.prenom
                     );
-                    
                   });
                 });
               return res.status(200).send({ error: [], data: u, msg: 1 });
@@ -192,11 +191,33 @@ router.put("/validation/:id", auth, (req, res) => {
   var valider = req.body.valider;
   var email = req.body.email;
   var nom = req.body.nom;
+  var lang = req.body.lang;
+  var hi =
+    lang == "fr"
+      ? `Bonjour ${nom} ,`
+      : lang == "en"
+      ? `Hello ${nom} ,`
+      : ` ${nom} مرحبا`;
   var msg = "";
-  var txt =
-    valider == 1
-      ? "Sujet :Valider d'inscription"
-      : "Sujet : Refuser d'inscription";
+  var txt = "";
+  if (lang == "fr"){
+    txt =
+      valider == 1
+        ? "Sujet : Inscription accepté"
+        : "Sujet : Refuser d'inscription";
+  } else if (lang == "en"){
+    txt =
+      valider == 1
+        ? "Subject: Registration refused"
+        : "Subject: Rejection of registration";
+
+  } else if (lang == "ar"){ 
+    txt =
+      valider == 1
+        ? "الموضوع: تم قبول التسجيل"
+        : "الموضوع:تم رفض التسجيل";
+
+  }
   msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
   user.findOne({ where: { id: id } }).then(function (u) {
     if (!u) {
@@ -221,7 +242,7 @@ router.put("/validation/:id", auth, (req, res) => {
         user
           .destroy({ where: { id: id } })
           .then(() => {
-            sendMail("Inscription", msg, email, nom);
+            sendMail("Inscription", msg, email, hi);
             return res.status(200).send(true);
           })
           .catch(() => {
@@ -235,7 +256,7 @@ router.put("/validation/:id", auth, (req, res) => {
 router.post("/allUser", auth, (req, res) => {
   user
     .findAll({
-      include: ["roles","gouvernorats","specialites"],
+      include: ["roles", "gouvernorats", "specialites"],
       order: [["id", "desc"]],
       where: { id_role: { [Op.ne]: 2 } },
     })
@@ -246,12 +267,12 @@ router.post("/allUser", auth, (req, res) => {
 
 router.get("/getPersonnel", auth, async (req, res) => {
   var findValider = await user.findAll({
-    include: ["roles","gouvernorats","specialites"],
+    include: ["roles", "gouvernorats", "specialites"],
     order: [["id", "desc"]],
     where: { id_role: 2, valider: 1 },
   });
   var findNonValider = await user.findAll({
-    include: ["roles","gouvernorats","specialites"],
+    include: ["roles", "gouvernorats", "specialites"],
     order: [["id", "desc"]],
     where: { id_role: 2, valider: 0 },
   });

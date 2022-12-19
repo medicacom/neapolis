@@ -256,9 +256,25 @@ function RootBase({ id }) {
 
   return (
     <>
-      {loaderTable ? (
-        <div class="loader-container">
+      {/* <div class="loader-container">
           <div class="loader"></div>
+        </div> */}
+      {loaderTable ? (
+        <div className="loader-parent">
+          <div className="lds-default">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       ) : (
         ""
@@ -291,7 +307,7 @@ function RootBase({ id }) {
       ) : (
         ""
       )}
-      
+
       {usersOff &&
       entitiesOff.length > 0 &&
       onlineStatus === 0 &&

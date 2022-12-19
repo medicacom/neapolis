@@ -20,7 +20,8 @@ router.post("/addDeclaration", (req, res) => {
   var agePatient = req.body.agePatient;
   var ageCategorie = req.body.ageCategorie;
   var id_indication = req.body.id_indication;
-  var id_eff = req.body.id_eff;
+  /* var id_eff = req.body.id_eff; */
+  var effet = req.body.effet;
   var dateDebut = req.body.dateDebut;
   var dateFin = req.body.dateFin;
   var information = req.body.information;
@@ -70,7 +71,7 @@ router.post("/addDeclaration", (req, res) => {
           .create({
             id_user: id_user,
             id_patient: p.id,
-            id_eff: id_eff,
+            effet: effet,
             dateDebut: dateDebut,
             dateFin: dateFin,
             information: information,
@@ -94,16 +95,27 @@ router.post("/addDeclaration", (req, res) => {
             date_admin: date_admin,
             therapeutique: therapeutique,
             description_eff: description_eff,
-            poid: poid,
-            taille: taille,
+            poid: poid !== 0 ? poid : null,
+            taille: taille !== 0 ? taille : null,
             allergie: allergie,
           })
           .then((r) => {
             user.findOne({ where: { id_role: 1 } }).then(function (u) {
+              /* var hi =
+                lang == "fr"
+                  ? `Bonjour ${u.nom} ,`
+                  : lang == "en"
+                  ? `Hello ${u.nom} ,`
+                  : ` ${u.nom} مرحبا`; */
+              var hi = `Bonjour ${u.nom} ,`;
               var msg = "";
+              /* var txt =
+                lang == "fr"
+                  ? "Il y a une nouvelle déclaration"
+                  : "Il y a une nouvelle déclaration"; */
               var txt = "Il y a une nouvelle déclaration";
               msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
-              sendMail("Déclaration", msg, u.email, u.nom);
+              sendMail("Déclaration", msg, u.email, hi);
               return res.status(200).send(true);
             });
           });
@@ -193,9 +205,9 @@ router.get("/getDeclarations/:id_role/:id", auth, async (req, res) => {
   var id = req.params.id;
   var where = id_role == 2 ? { id: id } : {};
   var rapportUser = await rapport.findAll({
+    where: { id_passager: null },
     include: [
       "medicaments",
-      "effet_indesirables",
       "voix_administrations",
       {
         model: user,
@@ -210,15 +222,19 @@ router.get("/getDeclarations/:id_role/:id", auth, async (req, res) => {
       },
     ],
   });
-  
+
   var merged_arr = rapportUser;
-  if(id_role != 2){
+  if (id_role != 2) {
     var rapportPassager = await rapport.findAll({
       where: { id_user: null },
       include: [
         "medicaments",
-        "effet_indesirables",
         "voix_administrations",
+        {
+          model: passager,
+          as: "passagers",
+          include: ["specialites"],
+        },
         {
           model: patient,
           as: "patients",
@@ -279,7 +295,6 @@ router.get("/getDeclarationsById/:id", auth, (req, res) => {
       where: { id: id },
       include: [
         "medicaments",
-        "effet_indesirables",
         "voix_administrations",
         {
           model: user,

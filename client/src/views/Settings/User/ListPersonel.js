@@ -218,6 +218,7 @@ function ListPersonel({ onlineStatus }) {
   function valideEtat(ligne, etat) {
     dispatch(
       validationUser({
+        lang:lang,
         id: ligne.id,
         valider: etat,
         email: ligne.email,

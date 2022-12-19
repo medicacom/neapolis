@@ -203,7 +203,7 @@ function Patient(props) {
                               defaultValue={props.poid}
                               name="agePatient"
                               className="required"
-                              type="text"
+                              type="number"
                               onBlur={(value) => {
                                 props.setPoid(value.target.value);
                               }}
@@ -222,7 +222,7 @@ function Patient(props) {
                               defaultValue={props.taille}
                               name="agePatient"
                               className="required"
-                              type="text"
+                              type="number"
                               onBlur={(value) => {
                                 props.setTaille(value.target.value);
                               }}

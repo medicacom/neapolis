@@ -27,6 +27,46 @@ import jwt_decode from "jwt-decode";
 import { useTranslation } from "react-multi-lang";
 
 function Declaration({ obj }) {
+  /** start init local storage **/
+  let initialesStorage = window.localStorage.getItem("initiales");
+  let ageStorage = window.localStorage.getItem("age");
+  let sexeStorage = window.localStorage.getItem("sexe");
+  let dateNaissanceStorage = window.localStorage.getItem("dateNaissance");
+  let agePatientStorage = window.localStorage.getItem("agePatient");
+  let poidStorage = window.localStorage.getItem("poid");
+  let tailleStorage = window.localStorage.getItem("taille");
+  let allergieStorage = window.localStorage.getItem("allergie");
+  let ageCatStorage = window.localStorage.getItem("ageCat");
+  let idAgeCatStorage = window.localStorage.getItem("idAgeCat");
+  let indicationStorage = window.localStorage.getItem("indication");
+  let idIndicationStorage = window.localStorage.getItem("idIndication");
+  let dateDebutStorage = window.localStorage.getItem("dateDebut");
+  let dateFinStorage = window.localStorage.getItem("dateFin");
+  let informationStorage = window.localStorage.getItem("information");
+  let complementairesStorage = window.localStorage.getItem("complementaires");
+  let description_effStorage = window.localStorage.getItem("description_eff");
+  let graveStorage = window.localStorage.getItem("grave");
+  let hospitalisationStorage = window.localStorage.getItem("hospitalisation");
+  let pronosticStorage = window.localStorage.getItem("pronostic");
+  let incapaciteStorage = window.localStorage.getItem("incapacite");
+  let anomalieStorage = window.localStorage.getItem("anomalie");
+  let decesStorage = window.localStorage.getItem("deces");
+  let autreStorage = window.localStorage.getItem("autre");
+  let evolutionStorage = window.localStorage.getItem("evolution");
+  let traitesStorage = window.localStorage.getItem("traites");
+  let survenusStorage = window.localStorage.getItem("survenus");
+  let medicamentStorage = window.localStorage.getItem("medicament");
+  let idMedicamentStorage = window.localStorage.getItem("idMedicament");
+  let dateDebutAdminStorage = window.localStorage.getItem("dateDebutAdmin");
+  let dateFinAdminStorage = window.localStorage.getItem("dateFinAdmin");
+  let numeroStorage = window.localStorage.getItem("numero");
+  let posologieStorage = window.localStorage.getItem("posologie");
+  let date_adminStorage = window.localStorage.getItem("date_admin");
+  let therapeutiqueStorage = window.localStorage.getItem("therapeutique");
+  let voixStorage = window.localStorage.getItem("voix");
+  let idVoixStorage = window.localStorage.getItem("idVoix");
+  let effetStorage = window.localStorage.getItem("effet");
+  /** end init local storage **/
   const t = useTranslation();
   var lang = localStorage.getItem("lang");
   var icon1 =
@@ -82,14 +122,14 @@ function Declaration({ obj }) {
   const [idSpecialite, setIdSpecialite] = React.useState(0);
   const [autreSp, setAutreSp] = React.useState("");
   //Patient
-  const [initiales, setInitiales] = React.useState("");
-  const [age, setAge] = React.useState("");
-  const [sexe, setSexe] = React.useState("");
-  const [dateNaissance, setDateNaissance] = React.useState("");
-  const [agePatient, setAgePatient] = React.useState("");
-  const [poid, setPoid] = React.useState("");
-  const [taille, setTaille] = React.useState("");
-  const [allergie, setAllergie] = React.useState("");
+  const [initiales, setInitiales] = React.useState(initialesStorage?initialesStorage:"");
+  const [age, setAge] = React.useState(ageStorage?ageStorage:"");
+  const [sexe, setSexe] = React.useState(sexeStorage?sexeStorage:"");
+  const [dateNaissance, setDateNaissance] = React.useState(dateNaissanceStorage?dateNaissanceStorage:"");
+  const [agePatient, setAgePatient] = React.useState(agePatientStorage?agePatientStorage:"");
+  const [poid, setPoid] = React.useState(poidStorage?poidStorage:"");
+  const [taille, setTaille] = React.useState(tailleStorage?tailleStorage:"");
+  const [allergie, setAllergie] = React.useState(allergieStorage?allergieStorage:"");
   const [ageCategorie, setAgeCategorie] = React.useState({
     value: 0,
     label: t("select"),
@@ -116,21 +156,21 @@ function Declaration({ obj }) {
   ]);
 
   //Effets
-  const [dateDebut, setDateDebut] = React.useState("");
-  const [dateFin, setDateFin] = React.useState("");
-  const [information, setInformation] = React.useState("");
-  const [complementaires, setComplementaires] = React.useState("");
-  const [description_eff, setDescription_eff] = React.useState("");
-  const [grave, setGrave] = React.useState(0);
-  const [hospitalisation, setHospitalisation] = React.useState(0);
-  const [pronostic, setPronostic] = React.useState(0);
-  const [incapacite, setIncapacite] = React.useState(0);
-  const [anomalie, setAnomalie] = React.useState(0);
-  const [deces, setDeces] = React.useState(0);
-  const [autre, setAutre] = React.useState(0);
-  const [evolution, setEvolution] = React.useState(0);
-  const [traites, setTraites] = React.useState(0);
-  const [survenus, setSurvenus] = React.useState(0);
+  const [dateDebut, setDateDebut] = React.useState(dateDebutStorage?dateDebutStorage:"");
+  const [dateFin, setDateFin] = React.useState(dateFinStorage?dateFinStorage:"");
+  const [information, setInformation] = React.useState(informationStorage?informationStorage:"");
+  const [complementaires, setComplementaires] = React.useState(complementairesStorage?complementairesStorage:"");
+  const [description_eff, setDescription_eff] = React.useState(description_effStorage?description_effStorage:"");
+  const [grave, setGrave] = React.useState(graveStorage?graveStorage:0);
+  const [hospitalisation, setHospitalisation] = React.useState(hospitalisationStorage?hospitalisationStorage:0);
+  const [pronostic, setPronostic] = React.useState(pronosticStorage?pronosticStorage:0);
+  const [incapacite, setIncapacite] = React.useState(incapaciteStorage?incapaciteStorage:0);
+  const [anomalie, setAnomalie] = React.useState(anomalieStorage?anomalieStorage:0);
+  const [deces, setDeces] = React.useState(decesStorage?decesStorage:0);
+  const [autre, setAutre] = React.useState(autreStorage?autreStorage:0);
+  const [evolution, setEvolution] = React.useState(evolutionStorage?evolutionStorage:0);
+  const [traites, setTraites] = React.useState(traitesStorage?traitesStorage:0);
+  const [survenus, setSurvenus] = React.useState(survenusStorage?survenusStorage:"");
   //Medicament
   const [medicament, setMedicament] = React.useState({
     value: 0,
@@ -144,12 +184,12 @@ function Declaration({ obj }) {
       isDisabled: true,
     },
   ]);
-  const [dateDebutAdmin, setDateDebutAdmin] = React.useState("");
-  const [dateFinAdmin, setDateFinAdmin] = React.useState("");
-  const [numero, setNumero] = React.useState("");
-  const [posologie, setPosologie] = React.useState("");
-  const [date_admin, setDate_admin] = React.useState("");
-  const [therapeutique, setTherapeutique] = React.useState("");
+  const [dateDebutAdmin, setDateDebutAdmin] = React.useState(dateDebutAdminStorage?dateDebutAdminStorage:"");
+  const [dateFinAdmin, setDateFinAdmin] = React.useState(dateFinAdminStorage?dateFinAdminStorage:"");
+  const [numero, setNumero] = React.useState(numeroStorage?numeroStorage:"");
+  const [posologie, setPosologie] = React.useState(posologieStorage?posologieStorage:"");
+  const [date_admin, setDate_admin] = React.useState(date_adminStorage?date_adminStorage:"");
+  const [therapeutique, setTherapeutique] = React.useState(therapeutiqueStorage?therapeutiqueStorage:"");
   const [voix, setVoix] = React.useState({
     value: 0,
     label: t("select"),
@@ -162,11 +202,6 @@ function Declaration({ obj }) {
       isDisabled: true,
     },
   ]);
-  const [effet, setEffet] = React.useState({
-    value: 0,
-    label: t("select"),
-    isDisabled: true,
-  });
   const [optionsEffet, setOptionsEffet] = React.useState([
     {
       value: 0,
@@ -174,6 +209,12 @@ function Declaration({ obj }) {
       isDisabled: true,
     },
   ]);
+  const [effet, setEffet] = React.useState(effetStorage?effetStorage:"");
+  /* const [effet, setEffet] = React.useState({
+    value: 0,
+    label: t("select"),
+    isDisabled: true,
+  }); */
   var token = localStorage.getItem("x-access-token");
 
   /** start Age **/
@@ -237,7 +278,7 @@ function Declaration({ obj }) {
     var arrayOption = [];
     entities.forEach((e) => {
       var nomMed = lang === "fr" ? e.nom : lang === "en" ? e.nom_en : e.nom_ar;
-      arrayOption.push({ value: e.id, label: nomMed+"( "+e.dosage+")" });
+      arrayOption.push({ value: e.id, label: nomMed + "( " + e.dosage + ")" });
     });
     setOptionsMedicament(arrayOption);
   }, [dispatch]);
@@ -291,7 +332,7 @@ function Declaration({ obj }) {
     var test = true;
     var id_sp = idSpecialite;
     var id_indication = indication.value;
-    var id_eff = effet.value;
+    /* var id_eff = effet.value; */
     var id_medicament = medicament.value;
     var id_voix = voix.value;
     if (activeStep == 0) {
@@ -319,8 +360,6 @@ function Declaration({ obj }) {
       }
     } else if (activeStep == 2) {
       if (
-        validator.isEmpty(dateDebutAdmin) ||
-        validator.isEmpty(dateFinAdmin) ||
         validator.isEmpty(numero) ||
         validator.isEmpty(posologie) ||
         id_voix === 0 ||
@@ -331,11 +370,10 @@ function Declaration({ obj }) {
       }
     } else if (activeStep == 3) {
       if (
-        validator.isEmpty(dateDebut) ||
-        validator.isEmpty(dateFin) ||
-        validator.isEmpty(information) ||
-        validator.isEmpty(complementaires) ||
-        id_eff === 0
+        validator.isEmpty(description_eff) ||
+        traites === 0 ||
+        evolution === 0 ||
+        survenus === 0
       ) {
         notify(2, t("erreur"));
         test = false;
@@ -355,7 +393,8 @@ function Declaration({ obj }) {
             agePatient: agePatient,
             ageCategorie: ageCategorie.value,
             id_indication: id_indication,
-            id_eff: id_eff,
+            /* id_eff: id_eff, */
+            effet: effet,
             dateDebut: dateDebut,
             dateFin: dateFin,
             information: information,
@@ -382,6 +421,7 @@ function Declaration({ obj }) {
             poid: poid,
             taille: taille,
             allergie: allergie,
+            lang: lang,
           })
         ).then(() => {
           notify(1, t("declaration_send"));

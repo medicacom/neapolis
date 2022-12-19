@@ -54,7 +54,7 @@ var rapport = sequelize.define(
       allowNull: true,
     },
     posologie: {
-      type: Sequelize.STRING,
+      type: Sequelize.FLOAT,
       unique: false,
       allowNull: true,
     },
@@ -91,7 +91,12 @@ var rapport = sequelize.define(
         key: "id",
       },
     },
-    id_eff: {
+    effet: {
+      type: Sequelize.STRING,
+      unique: false,
+      allowNull: true,
+    },
+    /* id_eff: {
       type: Sequelize.INTEGER,
       unique: false,
       allowNull: true,
@@ -99,7 +104,7 @@ var rapport = sequelize.define(
         model: effet_indesirable,
         key: "id",
       },
-    },
+    }, */
     id_voix: {
       type: Sequelize.INTEGER,
       unique: false,
@@ -205,10 +210,10 @@ rapport.belongsTo(medicament, {
   foreignKey: "id_medicament",
 });
 
-rapport.belongsTo(effet_indesirable, {
+/* rapport.belongsTo(effet_indesirable, {
   as: "effet_indesirables",
   foreignKey: "id_eff",
-});
+}); */
 
 rapport.belongsTo(voix, { as: "voix_administrations", foreignKey: "id_voix" });
 

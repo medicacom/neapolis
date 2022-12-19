@@ -63,7 +63,7 @@ function Medicament(props) {
                               placeholder={t("Declaration.dosage")}
                               name="Posologie"
                               className="required"
-                              type="text"
+                              type="number"
                               onChange={(value) => {
                                 props.setPosologie(value.target.value);
                               }}
@@ -161,7 +161,16 @@ function Medicament(props) {
                         <Col md="12">
                           <Form.Group>
                             <label>{t("Declaration.effects")} *</label>
-                            <Select
+                            <Form.Control
+                              defaultValue={props.effet}
+                              name="effet"
+                              className="required"
+                              type="text"
+                              onChange={(value) => {
+                                props.setEffet(value.target.value);
+                              }}
+                            ></Form.Control>
+                            {/* <Select
                               placeholder={t("select")}
                               className="react-select primary"
                               classNamePrefix="react-select"
@@ -170,7 +179,7 @@ function Medicament(props) {
                                 props.setEffet(value);
                               }}
                               options={props.optionsEffet}
-                            />
+                            /> */}
                           </Form.Group>
                           <div className="error"></div>
                         </Col>

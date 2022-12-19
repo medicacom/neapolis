@@ -156,6 +156,7 @@
     "poid_place": "p. ex. 60",
     "taille": "Taille (en cm)",
     "taille_place": "ex. 170",
+    "allergie_pop": "allergie",
     "allergie": "Affections médicales,allergies,grossesse (durée), historique médical et autres informations telles que tabagisme et consommation d’alcool.",
     "date_admin": "Si vous ne connaissez pas la date exacte de début et/ou de fin du traitement, vous pouvez donner plus d’informations sur le lien temporel ici .",
     "therapeutique": "Quelle est l’indication thérapeutique du médicament ?"

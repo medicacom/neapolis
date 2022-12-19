@@ -46,7 +46,7 @@ function ListUser({ onlineStatus }) {
     },
     {
       header: t("User.role"),
-      accessorKey: "role",
+      accessorKey: "roles.nom",
       Cell: ({ cell }) =>
         onlineStatus === 1
           ? cell.row.original.roles.nom

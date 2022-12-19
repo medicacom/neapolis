@@ -42,7 +42,7 @@ const sendMail = function (sujet, msg, mail, nom) {
               </td>
           </tr>
           <tr>
-              <td><strong>Bonjour ${nom} , </strong></td>
+              <td><strong>${nom} </strong></td>
 
           </tr>
          ${msg}

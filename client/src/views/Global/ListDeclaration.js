@@ -15,6 +15,7 @@ import { MRT_Localization_FR } from "material-react-table/locales/fr";
 import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_AR } from "../utils/ar_table";
 import { openDB } from "idb";
+import ExcelJs from "exceljs";
 
 // core components
 function ListDeclaration({ obj, onlineStatus }) {
@@ -27,75 +28,25 @@ function ListDeclaration({ obj, onlineStatus }) {
   const navigate = useHistory();
   const [alert, setAlert] = React.useState(null);
   const [entities, setEntities] = React.useState([]);
+  const [entitiesExcel, setEntitiesExcel] = React.useState([]);
   const columns = useMemo(
     () => [
       //column definitions...
       {
         header: t("Declaration.data"),
-        accessorKey: "users.nom",
-        Cell: ({ cell, row }) => (
-          <div>
-            {onlineStatus === 1
-              ? cell.row.original.users
-                ? cell.row.original.users.nom +
-                  " " +
-                  cell.row.original.users.prenom
-                : cell.row.original.patients.passagers.nom +
-                  " " +
-                  cell.row.original.patients.passagers.prenom
-              : "test"}
-            {/* {cell.row.original.users.nom} {cell.row.original.users.prenom} */}
-          </div>
-        ),
+        accessorKey: "nomNot",
       },
       {
         header: t("User.specialite"),
-        accessorKey: "users.specialites",
-        Cell: ({ cell, row }) => (
-          <div>
-            {onlineStatus === 1
-              ? cell.row.original.users
-                ? cell.row.original.users.specialites.nom
-                : cell.row.original.patients.passagers.specialites.nom
-              : "eeee"}
-            {/* {cell.row.original.users.specialites.nom} */}
-          </div>
-        ),
+        accessorKey: "specialite",
       },
       {
         header: t("Declaration.drugs"),
-        accessorKey: "medicaments.nom",
-        Cell: ({ cell, row }) => (
-          <div>
-            {onlineStatus === 1
-              ? lang === "fr"
-                ? cell.row.original.medicaments.nom
-                : lang === "en"
-                ? cell.row.original.medicaments.nom_en
-                : cell.row.original.medicaments.nom_ar
-              : getMedName(cell.row.original.nomMed)}
-          </div>
-        ),
+        accessorKey: "medicaments",
       },
       {
         header: t("Declaration.date"),
         accessorKey: "createdAt",
-        Cell: ({ cell, row }) => (
-          <div>
-            {/* {new Date(cell.row.original.patients.createdAt).format('DD/MM/YYYY')} */}
-            {onlineStatus === 1
-              ? new Date(
-                  new Date(cell.row.original.patients.createdAt).getTime() -
-                    new Date(
-                      cell.row.original.patients.createdAt
-                    ).getTimezoneOffset() *
-                      60000
-                )
-                  .toISOString()
-                  .slice(0, 10)
-              : "sedfs"}
-          </div>
-        ),
       },
       {
         header: t("Declaration.detail"),
@@ -163,12 +114,13 @@ function ListDeclaration({ obj, onlineStatus }) {
           "@@" +
           res[index].voix_administrations.description_ar;
 
-        var nomEff =
+        /* var nomEff =
           res[index].effet_indesirables.description +
           "@@" +
           res[index].effet_indesirables.description_en +
           "@@" +
-          res[index].effet_indesirables.description_ar;
+          res[index].effet_indesirables.description_ar; */
+        var nomEff = res[index].effet;
 
         await tx.objectStore("declarations").add({
           patients: res[index].patients,
@@ -240,7 +192,39 @@ function ListDeclaration({ obj, onlineStatus }) {
   const getDeclaration = useCallback(async () => {
     var response = await dispatch(getDeclarations({ id_role, id }));
     var dec = response.payload;
-    setEntities(dec);
+    var array = [];
+    dec.forEach((element) => {
+      var nom = "";
+      nom = element.users
+        ? element.users.nom + " " + element.users.prenom
+        : element.passagers.nom + " " + element.passagers.prenom;
+      var sp = "";
+      sp = element.users
+        ? element.users.specialites.nom
+        : element.passagers.specialites.nom;
+      var med =
+        lang === "fr"
+          ? element.medicaments.nom
+          : lang === "en"
+          ? element.medicaments.nom_en
+          : element.medicaments.nom_ar;
+      var date = new Date(
+        new Date(element.patients.createdAt).getTime() -
+          new Date(element.patients.createdAt).getTimezoneOffset() * 60000
+      )
+        .toISOString()
+        .slice(0, 10);
+      var id = element.id;
+      array.push({
+        id: id,
+        nomNot: nom,
+        medicaments: med,
+        specialite: sp,
+        createdAt: date,
+      });
+    });
+    setEntities(array);
+    setEntitiesExcel(dec);
     clearDeclaration(dec);
   }, [dispatch]);
 
@@ -274,16 +258,17 @@ function ListDeclaration({ obj, onlineStatus }) {
         : lang === "en"
         ? data.voix_administrations.description_en
         : data.voix_administrations.description_ar;
-    var nomEff =
+
+    var nomEff = data.effet;
+    /*  var nomEff =
       lang === "fr"
         ? data.voix_administrations.description
         : lang === "en"
         ? data.effet_indesirables.description_en
         : data.effet_indesirables.description_ar;
-
+    */
     setAlert(
       <SweetAlert
-        
         customClass="pop-up-extra"
         style={{ display: "block", marginTop: "100px" }}
         title={t("Declaration.details_dec")}
@@ -291,7 +276,6 @@ function ListDeclaration({ obj, onlineStatus }) {
         confirmBtnBsStyle="info"
         cancelBtnBsStyle="danger"
         confirmBtnText={t("Declaration.fermer")}
-        cancelBtnText="Non"
       >
         <Row>
           <Col md="4">
@@ -316,7 +300,7 @@ function ListDeclaration({ obj, onlineStatus }) {
                   .slice(0, 10)}
               </li>
               <li>
-                <strong>{t("Declaration.list")}: </strong>
+                <strong>{t("Declaration.initials")}: </strong>
                 {data.patients.initiales}
               </li>
               <li>
@@ -348,7 +332,7 @@ function ListDeclaration({ obj, onlineStatus }) {
                 {data.patients.taille}
               </li>
               <li>
-                <strong>{t("Declaration.allergie")}: </strong>
+                <strong>{t("Declaration.allergie_pop")}: </strong>
                 {data.patients.allergie}
               </li>
             </ul>
@@ -409,25 +393,33 @@ function ListDeclaration({ obj, onlineStatus }) {
                 <strong>{t("Declaration.gravite")}: </strong>
                 <br></br>
                 {t("Declaration.grave") + ": "}
-                {data.grave === 1 ? "Yes" : "Non"}
+                {data.grave === 1 ? t("Declaration.yes") : t("Declaration.no")}
                 <br></br>
                 {t("Declaration.hospitalisation") + ": "}
-                {data.hospitalisation === 1 ? "Yes" : "No"}
+                {data.hospitalisation === 1
+                  ? t("Declaration.yes")
+                  : t("Declaration.no")}
                 <br></br>
                 {t("Declaration.pronostic") + ": "}
-                {data.pronostic === 1 ? "Yes" : "Non"}
+                {data.pronostic === 1
+                  ? t("Declaration.yes")
+                  : t("Declaration.no")}
                 <br></br>
                 {t("Declaration.deces") + ": "}
-                {data.deces === 1 ? "Yes" : "Non"}
+                {data.deces === 1 ? t("Declaration.yes") : t("Declaration.no")}
                 <br></br>
                 {t("Declaration.incapacite") + ": "}
-                {data.incapacite === 1 ? "Yes" : "Non"}
+                {data.incapacite === 1
+                  ? t("Declaration.yes")
+                  : t("Declaration.no")}
                 <br></br>
-                {t("Declaration.anomalie" + ": ")}
-                {data.anomalie === 1 ? ":Yes" : "Non"}
+                {t("Declaration.anomalie") + ": "}
+                {data.anomalie === 1
+                  ? t("Declaration.yes")
+                  : t("Declaration.no")}
                 <br></br>
                 {t("Declaration.autre") + ": "}
-                {data.autre === 1 ? "Yes" : "Non"}
+                {data.autre === 1 ? t("Declaration.yes") : t("Declaration.no")}
               </li>
               <li>
                 <strong>{t("Declaration.traites")}: </strong>
@@ -485,7 +477,6 @@ function ListDeclaration({ obj, onlineStatus }) {
     const tx = db.transaction("declarations", "readwrite");
     let store = tx.objectStore("declarations");
     let dec = await store.getAll();
-    console.log(dec);
     setEntities(dec);
   }
 
@@ -523,15 +514,336 @@ function ListDeclaration({ obj, onlineStatus }) {
       />
     );
   }
+  //exportEcel
+  const exportToExcel = useCallback(async (data) => {
+    /* var first = Object.keys(res)[0] */
+
+    let sheetName = `Déclaration.xlsx`;
+    let headerName = "RequestsList";
+
+    // showGridLines: false
+    let workbook = new ExcelJs.Workbook();
+    let sheet = workbook.addWorksheet(sheetName, {
+      views: [{ showGridLines: true }],
+    });
+    // let sheet2 = workbook.addWorksheet("Second sheet", { views: [{ showGridLines: false }] });
+
+    // header
+    let columnArr = [
+      { name: t("Declaration.personal") },
+      { name: t("Declaration.date") },
+      { name: t("Declaration.initials") },
+      { name: t("Declaration.gendre") },
+      { name: t("Declaration.age") },
+      { name: t("Declaration.indication") },
+      { name: t("Declaration.poid") },
+      { name: t("Declaration.taille") },
+      { name: t("Declaration.allergie_pop") },
+      { name: t("Declaration.name_drug") },
+      { name: t("Declaration.numero") },
+      { name: t("Declaration.dosage") },
+      { name: t("Declaration.voice") },
+      { name: t("Declaration.start") },
+      { name: t("Declaration.end") },
+      { name: t("Declaration.effects") },
+      { name: t("Declaration.start") },
+      { name: t("Declaration.end") },
+      { name: t("Declaration.information") },
+      { name: t("Declaration.grave") },
+      { name: t("Declaration.complementary") },
+      { name: t("Declaration.hospitalisation") },
+      { name: t("Declaration.pronostic") },
+      { name: t("Declaration.deces") },
+      { name: t("Declaration.incapacite") },
+      { name: t("Declaration.anomalie") },
+      { name: t("Declaration.autre") },
+      { name: t("Declaration.traites") },
+      { name: t("Declaration.evolution") },
+      { name: t("Declaration.survenus") },
+    ];
+    /* for (let i in res[first][0]) {
+      if(i !=="sujet" && i !== "titre"){
+        let tempObj = { name: "" };
+        tempObj.name = i;
+        columnArr.push(tempObj);
+      }
+    } */
+    sheet.addTable({
+      name: `Header`,
+      ref: "F1",
+      headerRow: true,
+      totalsRow: false,
+      style: {
+        theme: "",
+        showRowStripes: false,
+        showFirstColumn: true,
+        width: 200,
+      },
+      columns: [{ name: "Déclaration : " }],
+      rows: [[``]],
+    });
+    sheet.addTable({
+      name: `Header`,
+      ref: "A1",
+      headerRow: true,
+      totalsRow: false,
+      style: {
+        theme: "",
+        showRowStripes: false,
+        showFirstColumn: true,
+        width: 200,
+      },
+      columns: [{ name: "Déclaration" }],
+      rows: [[``]],
+    });
+    console.log(columnArr, data);
+    sheet.addTable({
+      name: headerName,
+      ref: "A3",
+      headerRow: true,
+      totalsRow: false,
+      style: {
+        theme: "TableStyleMedium2",
+        showRowStripes: true,
+        width: 200,
+      },
+      columns: columnArr ? columnArr : [{ name: "" }],
+      rows: data.map((e, k) => {
+        let arr = [];
+        for (let i in e) {
+          arr.push(e[i]);
+        }
+        return arr;
+      }),
+    });
+
+    sheet.getCell("F1").font = { size: 25, bold: true };
+    sheet.getCell("A1").font = { size: 25, bold: true };
+
+    /* const table = sheet.getTable(headerName);
+    for (let i = 0; i < table.table.columns.length; i++) {
+      for (let j = 0; j <= table.table.rows.length; j++) {
+        console.log(`${String.fromCharCode(65 + i)}3`)
+        sheet.getCell(`${String.fromCharCode(65 + i)}${j + 3}`).border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      }
+    } */
+
+    const writeFile = (fileName, content) => {
+      const link = document.createElement("a");
+      const blob = new Blob([content], {
+        type: "application/vnd.ms-excel;charset=utf-8;",
+      });
+      link.download = fileName;
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    };
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      writeFile(sheetName, buffer);
+    });
+  }, []);
+  const getDetail = useCallback(
+    async (res) => {
+      var array = [];
+      console.log(res);
+      res.forEach((data) => {
+        var nomAge = "";
+
+        //ages patients
+        if (data.patients.ages) {
+          nomAge =
+            lang === "fr"
+              ? data.patients.ages.description
+              : lang === "en"
+              ? data.patients.ages.description_en
+              : data.patients.ages.description_ar;
+        }
+
+        //medicaments
+        var nomMed =
+          lang === "fr"
+            ? data.medicaments.nom
+            : lang === "en"
+            ? data.medicaments.nom_en
+            : data.medicaments.nom_ar;
+
+        //indications
+        var nomInd =
+          lang === "fr"
+            ? data.patients.indications.description
+            : lang === "en"
+            ? data.patients.indications.description_en
+            : data.patients.indications.description_ar;
+
+        //voix_administrations
+        var nomVoix =
+          lang === "fr"
+            ? data.voix_administrations.description
+            : lang === "en"
+            ? data.voix_administrations.description_en
+            : data.voix_administrations.description_ar;
+
+        //notificateur
+        var nomNotificateur = data.users
+          ? data.users.nom + " " + data.users.prenom
+          : data.passagers.nom + " " + data.passagers.prenom;
+
+        //date
+        var date = new Date(
+          new Date(data.patients.createdAt).getTime() -
+            new Date(data.patients.createdAt).getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, 10);
+
+        var sexe =
+          data.patients.sexe === 1
+            ? t("Declaration.man")
+            : data.patients.sexe === 2
+            ? t("Declaration.woman")
+            : t("Declaration.other");
+
+        var age =
+          data.patients.age === 1
+            ? data.patients.dateNaissance
+            : data.patients.age === 2
+            ? data.patients.agePatient
+            : nomAge;
+
+        var effet = data.effet;
+        var poid = data.patients.poid;
+        var taille = data.patients.taille;
+        var allergie = data.patients.allergie;
+        var numero = data.patients.numero;
+        var posologie = data.posologie;
+        var dateDebutAdmin = data.dateDebutAdmin;
+        var dateFinAdmin = data.dateFinAdmin;
+        var dateDebut = data.dateDebut;
+        var dateFin = data.dateFin;
+        var information = data.information;
+        var complementaires = data.complementaires;
+        var initiales = data.patients.initiales;
+        var grave =
+          data.grave === 1 ? t("Declaration.yes") : t("Declaration.no");
+        var hospitalisation =
+          data.hospitalisation === 1
+            ? t("Declaration.yes")
+            : t("Declaration.no");
+        var pronostic =
+          data.pronostic === 1 ? t("Declaration.yes") : t("Declaration.no");
+        var deces =
+          data.deces === 1 ? t("Declaration.yes") : t("Declaration.no");
+        var incapacite =
+          data.incapacite === 1 ? t("Declaration.yes") : t("Declaration.no");
+        var anomalie =
+          data.anomalie === 1 ? t("Declaration.yes") : t("Declaration.no");
+        var autre =
+          data.autre === 1 ? t("Declaration.yes") : t("Declaration.no");
+        var traites =
+          data.traites === 1
+            ? t("Declaration.traites_yes")
+            : data.traites === 2
+            ? t("Declaration.traites_no")
+            : t("Declaration.traites_inc");
+        var evolution =
+          data.evolution === 1
+            ? t("Declaration.evolution_txt1")
+            : data.evolution === 2
+            ? t("Declaration.evolution_txt2")
+            : data.evolution === 3
+            ? t("Declaration.evolution_txt3")
+            : data.evolution === 4
+            ? t("Declaration.evolution_txt4")
+            : data.evolution === 5
+            ? t("Declaration.evolution_txt5")
+            : data.evolution === 6
+            ? t("Declaration.evolution_txt6")
+            : "";
+        var survenus =
+          data.survenus === 1
+            ? t("Declaration.survenus_txt1")
+            : data.survenus === 2
+            ? t("Declaration.survenus_txt2")
+            : data.survenus === 3
+            ? t("Declaration.survenus_txt3")
+            : data.survenus === 4
+            ? t("Declaration.survenus_txt4")
+            : data.survenus === 5
+            ? t("Declaration.survenus_txt5")
+            : data.survenus === 6
+            ? t("Declaration.survenus_txt6")
+            : "";
+        var obj = {};
+        obj[0] = nomNotificateur;
+        obj[1] = date;
+        obj[2] = initiales;
+        obj[3] = sexe;
+        obj[4] = age;
+        obj[5] = nomInd;
+        obj[6] = poid;
+        obj[7] = taille;
+        obj[9] = allergie;
+        obj[10] = nomMed;
+        obj[11] = numero;
+        obj[12] = posologie;
+        obj[13] = nomVoix;
+        obj[14] = dateDebutAdmin;
+        obj[15] = dateFinAdmin;
+        obj[16] = effet;
+        obj[17] = dateDebut;
+        obj[18] = dateFin;
+        obj[19] = information;
+        obj[20] = complementaires;
+        obj[21] = grave;
+        obj[22] = hospitalisation;
+        obj[23] = pronostic;
+        obj[24] = deces;
+        obj[25] = incapacite;
+        obj[26] = anomalie;
+        obj[27] = autre;
+        obj[28] = traites;
+        obj[29] = evolution;
+        obj[30] = survenus;
+        array.push(obj);
+        /* var obj = {
+          nomMed: nomMed,
+          nomInd: nomInd,
+          nomVoix: nomVoix,
+          date: date,
+          sexe: sexe,
+          age: age,
+          effet: effet,
+          poid: poid,
+          taille: taille,
+          allergie: allergie,
+          posologie: posologie,
+          dateDebutAdmin: dateDebutAdmin,
+          dateFinAdmin: dateFinAdmin,
+          dateDebut: dateDebut,
+          dateFin: dateFin,
+          information: information,
+          complementaires: complementaires,
+          grave: grave,
+          initiales: initiales,
+        }; */
+      });
+      exportToExcel(array);
+    },
+    [dispatch, exportToExcel, id]
+  );
   return (
     <>
       {alert}
       <ToastContainer />
       <Container fluid>
         <Row>
-          <Col md="12">
+          <Col md="6">
             <Button
-              id="saveBL"
               className="btn-wd  mr-1 float-left"
               type="button"
               variant="success"
@@ -543,6 +855,23 @@ function ListDeclaration({ obj, onlineStatus }) {
               {t("Declaration.add")}
             </Button>
           </Col>
+          <Col md="6">
+            <Button
+              className="btn-wd  mr-1 float-right"
+              type="button"
+              variant="success"
+              onClick={() => {
+                getDetail(entitiesExcel);
+              }}
+            >
+              <span className="btn-label">
+                <i className="fas fa-plus"></i>
+              </span>
+              Excel
+            </Button>
+          </Col>
+        </Row>
+        <Row>
           <Col md="12">
             <h4 className="title">{t("Declaration.list")}</h4>
             <Card>
