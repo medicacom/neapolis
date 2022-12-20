@@ -865,9 +865,9 @@ function ListDeclaration({ obj, onlineStatus }) {
               }}
             >
               <span className="btn-label">
-                <i className="fas fa-plus"></i>
+                <i class="fas fa-download"></i>
               </span>
-              Excel
+              Export déclaration
             </Button>
           </Col>
         </Row>
