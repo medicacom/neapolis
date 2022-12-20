@@ -27,6 +27,10 @@ function Effets(props) {
                               rows="3"
                               onChange={(value) => {
                                 props.setDescription_eff(value.target.value);
+                                localStorage.setItem(
+                                  "description_eff",
+                                  value.target.value
+                                );
                               }}
                             ></Form.Control>
                             {/* <Select
@@ -57,6 +61,10 @@ function Effets(props) {
                               type="date"
                               onChange={(value) => {
                                 props.setDateDebut(value.target.value);
+                                localStorage.setItem(
+                                  "dateDebut",
+                                  value.target.value
+                                );
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -69,6 +77,10 @@ function Effets(props) {
                               type="date"
                               onChange={(value) => {
                                 props.setDateFin(value.target.value);
+                                localStorage.setItem(
+                                  "dateFin",
+                                  value.target.value
+                                );
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -85,6 +97,10 @@ function Effets(props) {
                               rows="3"
                               onChange={(value) => {
                                 props.setInformation(value.target.value);
+                                localStorage.setItem(
+                                  "information",
+                                  value.target.value
+                                );
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -101,6 +117,10 @@ function Effets(props) {
                               rows="3"
                               onChange={(value) => {
                                 props.setComplementaires(value.target.value);
+                                localStorage.setItem(
+                                  "complementaires",
+                                  value.target.value
+                                );
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -119,8 +139,13 @@ function Effets(props) {
                                   checked={props.grave === 1 ? true : false}
                                   type="checkbox"
                                   onClick={(value) => {
-                                    if (value.target.checked) props.setGrave(1);
-                                    else props.setGrave(0);
+                                    if (value.target.checked) {
+                                      props.setGrave(1);
+                                      localStorage.setItem("grave", 1);
+                                    } else {
+                                      props.setGrave(0);
+                                      localStorage.setItem("grave", 0);
+                                    }
                                   }}
                                 ></Form.Check.Input>
                                 <span className="form-check-sign"></span>
@@ -139,9 +164,19 @@ function Effets(props) {
                                   }
                                   type="checkbox"
                                   onClick={(value) => {
-                                    if (value.target.checked)
+                                    if (value.target.checked) {
                                       props.setHospitalisation(1);
-                                    else props.setHospitalisation(0);
+                                      localStorage.setItem(
+                                        "hospitalisation",
+                                        1
+                                      );
+                                    } else {
+                                      props.setHospitalisation(0);
+                                      localStorage.setItem(
+                                        "hospitalisation",
+                                        0
+                                      );
+                                    }
                                   }}
                                 ></Form.Check.Input>
                                 <span className="form-check-sign"></span>
@@ -158,9 +193,13 @@ function Effets(props) {
                                   checked={props.pronostic === 1 ? true : false}
                                   type="checkbox"
                                   onClick={(value) => {
-                                    if (value.target.checked)
+                                    if (value.target.checked) {
                                       props.setPronostic(1);
-                                    else props.setPronostic(0);
+                                      localStorage.setItem("pronostic", 1);
+                                    } else {
+                                      props.setPronostic(0);
+                                      localStorage.setItem("pronostic", 0);
+                                    }
                                   }}
                                 ></Form.Check.Input>
                                 <span className="form-check-sign"></span>
@@ -177,8 +216,13 @@ function Effets(props) {
                                   checked={props.deces === 1 ? true : false}
                                   type="checkbox"
                                   onClick={(value) => {
-                                    if (value.target.checked) props.setDeces(1);
-                                    else props.setDeces(0);
+                                    if (value.target.checked) {
+                                      props.setDeces(1);
+                                      localStorage.setItem("deces", 1);
+                                    } else {
+                                      props.setDeces(0);
+                                      localStorage.setItem("deces", 0);
+                                    }
                                   }}
                                 ></Form.Check.Input>
                                 <span className="form-check-sign"></span>
@@ -197,9 +241,13 @@ function Effets(props) {
                                   }
                                   type="checkbox"
                                   onClick={(value) => {
-                                    if (value.target.checked)
+                                    if (value.target.checked) {
                                       props.setIncapacite(1);
-                                    else props.setIncapacite(0);
+                                      localStorage.setItem("incapacite", 1);
+                                    } else {
+                                      props.setIncapacite(0);
+                                      localStorage.setItem("incapacite", 0);
+                                    }
                                   }}
                                 ></Form.Check.Input>
                                 <span className="form-check-sign"></span>
@@ -216,9 +264,13 @@ function Effets(props) {
                                   checked={props.anomalie === 1 ? true : false}
                                   type="checkbox"
                                   onClick={(value) => {
-                                    if (value.target.checked)
+                                    if (value.target.checked) {
                                       props.setAnomalie(1);
-                                    else props.setAnomalie(0);
+                                      localStorage.setItem("anomalie", 1);
+                                    } else {
+                                      props.setAnomalie(0);
+                                      localStorage.setItem("anomalie", 0);
+                                    }
                                   }}
                                 ></Form.Check.Input>
                                 <span className="form-check-sign"></span>
@@ -235,8 +287,13 @@ function Effets(props) {
                                   checked={props.autre === 1 ? true : false}
                                   type="checkbox"
                                   onClick={(value) => {
-                                    if (value.target.checked) props.setAutre(1);
-                                    else props.setAutre(0);
+                                    if (value.target.checked) {
+                                      props.setAutre(1);
+                                      localStorage.setItem("autre", 1);
+                                    } else {
+                                      props.setAutre(0);
+                                      localStorage.setItem("autre", 0);
+                                    }
                                   }}
                                 ></Form.Check.Input>
                                 <span className="form-check-sign"></span>
@@ -258,7 +315,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="traites"
                                 type="radio"
-                                onClick={() => props.setTraites(1)}
+                                onClick={() => {
+                                  props.setTraites(1);
+                                  localStorage.setItem("traites", 1);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.traites_yes")}
@@ -271,7 +331,10 @@ function Effets(props) {
                                 defaultValue="option2"
                                 name="traites"
                                 type="radio"
-                                onClick={() => props.setTraites(2)}
+                                onClick={() => {
+                                  props.setTraites(2);
+                                  localStorage.setItem("traites", 2);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.traites_no")}
@@ -284,7 +347,10 @@ function Effets(props) {
                                 defaultValue="option2"
                                 name="traites"
                                 type="radio"
-                                onClick={() => props.setTraites(3)}
+                                onClick={() => {
+                                  props.setTraites(3);
+                                  localStorage.setItem("traites", 3);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.traites_inc")}
@@ -292,7 +358,7 @@ function Effets(props) {
                           </Form.Check>
                         </Col>
                       </Row>
-                       {/* Évolution */}
+                      {/* Évolution */}
                       <Row>
                         <Col md="12">
                           <label>{t("Declaration.evolution")}* </label>
@@ -303,7 +369,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setEvolution(1)}
+                                onClick={() => {
+                                  props.setEvolution(1);
+                                  localStorage.setItem("evolution", 1);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.evolution_txt1")}
@@ -316,7 +385,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setEvolution(2)}
+                                onClick={() => {
+                                  props.setEvolution(2);
+                                  localStorage.setItem("evolution", 2);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.evolution_txt2")}
@@ -329,7 +401,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setEvolution(3)}
+                                onClick={() => {
+                                  props.setEvolution(3);
+                                  localStorage.setItem("evolution", 3);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.evolution_txt3")}
@@ -342,7 +417,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setEvolution(4)}
+                                onClick={() => {
+                                  props.setEvolution(4);
+                                  localStorage.setItem("evolution", 4);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.evolution_txt4")}
@@ -355,7 +433,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setEvolution(5)}
+                                onClick={() => {
+                                  props.setEvolution(5);
+                                  localStorage.setItem("evolution", 5);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.evolution_txt5")}
@@ -368,7 +449,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setEvolution(6)}
+                                onClick={() => {
+                                  props.setEvolution(6);
+                                  localStorage.setItem("evolution", 6);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.evolution_txt6")}
@@ -376,7 +460,7 @@ function Effets(props) {
                           </Form.Check>
                         </Col>
                       </Row>
-                       {/* Les effets indésirables sont-ils survenus, selon vous, dans l’une des situations suivantes ? */}
+                      {/* Les effets indésirables sont-ils survenus, selon vous, dans l’une des situations suivantes ? */}
                       <Row>
                         <Col md="12">
                           <label>{t("Declaration.survenus")}* </label>
@@ -387,7 +471,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="survenus"
                                 type="radio"
-                                onClick={() => props.setSurvenus(1)}
+                                onClick={() => {
+                                  props.setSurvenus(1);
+                                  localStorage.setItem("survenus", 1);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.survenus_txt1")}
@@ -400,7 +487,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="survenus"
                                 type="radio"
-                                onClick={() => props.setSurvenus(2)}
+                                onClick={() => {
+                                  props.setSurvenus(2);
+                                  localStorage.setItem("survenus", 2);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.survenus_txt2")}
@@ -413,7 +503,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="survenus"
                                 type="radio"
-                                onClick={() => props.setSurvenus(3)}
+                                onClick={() => {
+                                  props.setSurvenus(3);
+                                  localStorage.setItem("survenus", 3);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.survenus_txt3")}
@@ -426,7 +519,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="survenus"
                                 type="radio"
-                                onClick={() => props.setSurvenus(4)}
+                                onClick={() => {
+                                  props.setSurvenus(4);
+                                  localStorage.setItem("survenus", 4);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.survenus_txt4")}
@@ -439,7 +535,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="survenus"
                                 type="radio"
-                                onClick={() => props.setSurvenus(5)}
+                                onClick={() => {
+                                  props.setSurvenus(5);
+                                  localStorage.setItem("survenus", 5);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.survenus_txt5")}
@@ -452,7 +551,10 @@ function Effets(props) {
                                 defaultValue="option1"
                                 name="survenus"
                                 type="radio"
-                                onClick={() => props.setSurvenus(6)}
+                                onClick={() => {
+                                  props.setSurvenus(6);
+                                  localStorage.setItem("survenus", 6);
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.survenus_txt6")}

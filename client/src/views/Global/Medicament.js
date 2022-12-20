@@ -27,6 +27,8 @@ function Medicament(props) {
                               defaultValue={props.medicament}
                               onChange={(value) => {
                                 props.setMedicament(value);
+                                localStorage.setItem("idMedicament",value.value);
+                                localStorage.setItem("medicament",value.label);
                               }}
                               options={props.optionsMedicament}
                             />
@@ -47,6 +49,7 @@ function Medicament(props) {
                               type="text"
                               onChange={(value) => {
                                 props.setNumero(value.target.value);
+                                localStorage.setItem("numero",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -66,6 +69,7 @@ function Medicament(props) {
                               type="number"
                               onChange={(value) => {
                                 props.setPosologie(value.target.value);
+                                localStorage.setItem("posologie",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -84,6 +88,8 @@ function Medicament(props) {
                               defaultValue={props.voix}
                               onChange={(value) => {
                                 props.setVoix(value);
+                                localStorage.setItem("idVoix",value.value);
+                                localStorage.setItem("voix",value.label);
                               }}
                               options={props.optionsVoix}
                             />
@@ -105,6 +111,7 @@ function Medicament(props) {
                               type="date"
                               onChange={(value) => {
                                 props.setDateDebutAdmin(value.target.value);
+                                localStorage.setItem("dateDebutAdmin",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -117,6 +124,7 @@ function Medicament(props) {
                               type="date"
                               onChange={(value) => {
                                 props.setDateFinAdmin(value.target.value);
+                                localStorage.setItem("dateFinAdmin",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -134,6 +142,7 @@ function Medicament(props) {
                               rows="3"
                               onChange={(value) => {
                                 props.setDate_admin(value.target.value);
+                                localStorage.setItem("date_admin",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -151,6 +160,7 @@ function Medicament(props) {
                               rows="3"
                               onChange={(value) => {
                                 props.setTherapeutique(value.target.value);
+                                localStorage.setItem("therapeutique",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -168,6 +178,7 @@ function Medicament(props) {
                               type="text"
                               onChange={(value) => {
                                 props.setEffet(value.target.value);
+                                localStorage.setItem("effet",value.target.value);
                               }}
                             ></Form.Control>
                             {/* <Select

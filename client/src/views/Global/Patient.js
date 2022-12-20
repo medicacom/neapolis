@@ -28,6 +28,7 @@ function Patient(props) {
                               type="text"
                               onBlur={(value) => {
                                 props.setInitiales(value.target.value);
+                                localStorage.setItem("initiales",value.target.value)
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -42,7 +43,10 @@ function Patient(props) {
                                 defaultValue="option1"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setSexe(1)}
+                                onClick={() => {
+                                  props.setSexe(1)
+                                  localStorage.setItem("sexe",1)
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.man")}
@@ -55,7 +59,10 @@ function Patient(props) {
                                 defaultValue="option2"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setSexe(2)}
+                                onClick={() => {
+                                  props.setSexe(2)
+                                  localStorage.setItem("sexe",2)
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.woman")}
@@ -68,7 +75,10 @@ function Patient(props) {
                                 defaultValue="option2"
                                 name="sexeRadio"
                                 type="radio"
-                                onClick={() => props.setSexe(3)}
+                                onClick={() => {
+                                  props.setSexe(3)
+                                  localStorage.setItem("sexe",3)
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.other")}
@@ -88,7 +98,10 @@ function Patient(props) {
                                 defaultValue="1"
                                 name="ageRadio"
                                 type="radio"
-                                onClick={() => props.setAge(1)}
+                                onClick={() => {
+                                  props.setAge(1)
+                                  localStorage.setItem("age",1)
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.date")}
@@ -106,6 +119,7 @@ function Patient(props) {
                                 type="date"
                                 onChange={(value) => {
                                   props.setDateNaissance(value.target.value);
+                                  localStorage.setItem("dateNaissance",value.target.value);
                                 }}
                               ></Form.Control>
                             </Form.Group>
@@ -122,7 +136,10 @@ function Patient(props) {
                                 defaultValue="2"
                                 name="ageRadio"
                                 type="radio"
-                                onClick={() => props.setAge(2)}
+                                onClick={() => {
+                                  props.setAge(2)
+                                  localStorage.setItem("age",2)
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               Age
@@ -139,6 +156,7 @@ function Patient(props) {
                                 type="text"
                                 onBlur={(value) => {
                                   props.setAgePatient(value.target.value);
+                                  localStorage.setItem("agePatient",value.target.value);
                                 }}
                               ></Form.Control>
                             </Form.Group>
@@ -155,7 +173,10 @@ function Patient(props) {
                                 defaultValue="3"
                                 name="ageRadio"
                                 type="radio"
-                                onClick={() => props.setAge(3)}
+                                onClick={() => {
+                                  props.setAge(3)
+                                  localStorage.setItem("age",3)
+                                }}
                               ></Form.Check.Input>
                               <span className="form-check-sign"></span>
                               {t("Declaration.category")}
@@ -171,6 +192,8 @@ function Patient(props) {
                               defaultValue={props.ageCategorie}
                               onChange={(value) => {
                                 props.setAgeCategorie(value);
+                                localStorage.setItem("idAgeCat",value.value);
+                                localStorage.setItem("ageCat",value.label);
                               }}
                               options={props.optionsAge}
                             />
@@ -189,6 +212,8 @@ function Patient(props) {
                             defaultValue={props.indication}
                             onChange={(value) => {
                               props.setIndication(value);
+                              localStorage.setItem("idIndication",value.value);
+                              localStorage.setItem("indication",value.label);
                             }}
                             options={props.optionsIndication}
                           />
@@ -206,6 +231,7 @@ function Patient(props) {
                               type="number"
                               onBlur={(value) => {
                                 props.setPoid(value.target.value);
+                                localStorage.setItem("poid",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -225,6 +251,7 @@ function Patient(props) {
                               type="number"
                               onBlur={(value) => {
                                 props.setTaille(value.target.value);
+                                localStorage.setItem("taille",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
@@ -243,6 +270,7 @@ function Patient(props) {
                               rows="3"
                               onChange={(value) => {
                                 props.setAllergie(value.target.value);
+                                localStorage.setItem("allergie",value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>
