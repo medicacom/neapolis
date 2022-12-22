@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 var news = require("../models/news");
 var news_user = require("../models/news_user");
+var notification = require("../models/notification");
 const auth = require("../middlewares/passport");
 const multer = require("multer");
 const webpush = require("web-push");
@@ -50,76 +51,79 @@ router.post("/saveFile", auth, upload.single("file"), (req, res) => {
   try {
     if (typeof req.file != "undefined") filename = req.file.filename;
     res.send({ filename: filename });
-    
   } catch (error) {
-    console.log(error)
-    
+    console.log(error);
   }
 });
 router.post("/addNews", auth, (req, res) => {
   var id = req.body.id;
-  if (id == 0) {
-    news
-      .create({
-        titre: req.body.titre,
-        description: req.body.description,
-        date: req.body.date,
-        file: req.body.filename,
-      })
-      .then((r) => {
-        var arrayInsert = [];
-        req.body.userSelect.forEach((element) => {
-          msg = ` <tr><td style="padding-top:5px;"> Sujet: Incription </td></tr>`;
-          sendMail("Nouveauté", msg, element.email, element.label);
-          arrayInsert.push({
-            id_news: r.dataValues.id,
-            id_user: element.value,
-          });
+  var lang = req.body.lang;
+  var titre = req.body.titre;
+  var description = req.body.description;
+  var date = req.body.date;
+  var filename = req.body.filename;
+  news
+    .create({
+      titre: titre,
+      description: description,
+      date: date,
+      file: filename,
+    })
+    .then((r) => {
+      var arrayInsert = [];
+      var arrayNotif = [];
+      var msg1 =
+        lang == "fr"
+          ? `Sujet: ${titre}`
+          : lang == "en"
+          ? `Subject: ${titre}`
+          : `${titre} :الموضوع`;
+      var msg2 =
+        lang == "fr"
+          ? `Description: ${description}`
+          : lang == "en"
+          ? `Description: ${description}`
+          : `${description} :وصف`;
+      var subject =
+        lang == "fr" ? "Nouveauté" : lang == "en" ? "News" : "أخبار";
+      var url = config.path + filename;
+      var img = [
+        {
+          path: url,
+        },
+      ];
+      req.body.userSelect.forEach((element) => {
+        var hi =
+          lang == "fr"
+            ? `Bonjour ${element.label} ,`
+            : lang == "en"
+            ? `Hello ${element.label} ,`
+            : ` ${element.label} مرحبا`;
+        var msg = ` <tr><td style="padding-top:5px;"> ${msg1} </td></tr>`;
+        msg += ` <tr><td style="padding-top:5px;"> ${msg2} </td></tr>`;
+        sendMail(subject, msg, element.email, hi, img, lang);
+        arrayInsert.push({
+          id_news: r.dataValues.id,
+          id_user: element.value,
         });
-        news_user.bulkCreate(arrayInsert).then(() => {
+        arrayNotif.push({
+          id_user: element.value,
+          text: "Nouveauté",
+          text_ar: "أخبار",
+          text_en: "News",
+          etat: 2,
+        });
+      });
+      news_user.bulkCreate(arrayInsert).then(() => {
+        notification.bulkCreate(arrayNotif).then(() => {
           return res.status(200).send({ data: r, msg: true });
         });
-      })
-      .catch((error) => {
-        console.log("first", error);
-        return res.status(403).send({ error: error, msg: false });
       });
-  } else {
-    news.findOne({ where: { id: id } }).then(function (r1) {
-      if (!r1) {
-        return res.status(403).send(false);
-      } else {
-        news
-          .update(
-            {
-              titre: req.body.titre,
-              description: req.body.description,
-              date: req.body.date,
-              file: req.body.filename,
-            },
-            { where: { id: id } }
-          )
-          .then(() => {
-            var arrayInsert = [];
-            req.body.userSelect.forEach((element) => {
-              msg = ` <tr><td style="padding-top:5px;"> Sujet: Incription </td></tr>`;
-              sendMail("Nouveauté", msg, element.email, element.label);
-              arrayInsert.push({
-                id_news: id,
-                id_user: element.value,
-              });
-            });
-            news_user.bulkCreate(arrayInsert).then(() => {
-              return res.status(200).send({ data: r1, msg: true });
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-            return res.status(403).send({ error: error, msg: false });
-          });
-      }
+    })
+    .catch((error) => {
+      console.log("error", error);
+      return res.status(403).send({ error: error, msg: false });
     });
-  }
 });
 router.post("/allNews", auth, (req, res) => {
   news.findAll({ order: ["id"] }).then(function (r) {
@@ -142,7 +146,7 @@ router.delete("/deleteNews/:id", auth, (req, res) => {
           return res.status(200).send(true);
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           return res.status(403).send(error);
         });
     }
@@ -153,10 +157,10 @@ router.get("/getFile/:id", async (req, res) => {
   var newsFind = await news.findOne({ where: { id: id } });
   try {
     if (newsFind != null) {
-      var file = newsFind.dataValues.file; 
+      var file = newsFind.dataValues.file;
       if (file) {
         if (fs.existsSync("./new/" + file)) {
-          console.log(file)
+          console.log(file);
           var file = fs.createReadStream("./new/" + file);
           file.pipe(res);
         } else return res.status(403).json({ message: false });
@@ -164,10 +168,9 @@ router.get("/getFile/:id", async (req, res) => {
         return res.status(403).json({ message: false });
       }
     }
-    
   } catch (error) {
-    console.log(error)
-  } 
+    console.log(error);
+  }
 });
 router.post("/getNews", auth, (req, res) => {
   var id = req.headers["id"];

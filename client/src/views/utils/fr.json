@@ -1,4 +1,6 @@
 {
+  "produit":"Produit",
+  "contact":"Contact",
   "save": "Enregistrer",
   "add_txt": "Insertion avec succes",
   "update_txt": "Modifier avec succes",
@@ -38,8 +40,8 @@
   "demande_insciption": "Votre demande a été envoyé avec succes",
   "declaration_send": "Votre déclaration a été envoyé avec succes",
   "age": {
-    "list": "Liste des âges",
-    "add": "Ajouter un âge",
+    "list": "Liste des tranches d'âges",
+    "add": "Ajouter un tranche d'âge",
     "update": "Modifier âge"
   },
   "role": {
@@ -50,17 +52,17 @@
   },
   "speciality": {
     "list": "Liste des spécialités",
-    "add": "Ajouter un spécialité",
+    "add": "Ajouter une spécialité",
     "update": "Modifier spécialité"
   },
   "indication": {
     "list": "Liste des indications",
-    "add": "Ajouter un indication",
+    "add": "Ajouter une indication",
     "update": "Modifier indication"
   },
   "voice": {
-    "list": "Liste des voix",
-    "add_voice": "Ajouter un voix",
+    "list": "Liste des voix d'administration",
+    "add_voice": "Ajouter un voix d'administration",
     "update_voice": "Modifier voix"
   },
   "effect": {
@@ -162,11 +164,11 @@
     "therapeutique": "Quelle est l’indication thérapeutique du médicament ?"
   },
   "Drugs": {
-    "add": "Ajouter un médicaments",
+    "add": "Ajouter un médicament",
     "update": "Modifier médicaments",
     "list": "Liste des médicaments",
-    "voice": "voice",
-    "form": "form",
+    "voice": "Voix administrations",
+    "form": "Forme galénique",
     "dosage": "dosage",
     "indication": "Indication"
   },

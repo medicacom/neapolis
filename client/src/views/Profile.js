@@ -194,12 +194,14 @@ function Profile({ obj,onlineStatus }) {
 
   async function init() {
     db = await openDB("medis", 1, {});
-    clearRole();
-    clearRoots();
-    clearAnnee();
-    clearGouvernorats();
-    clearSpecialite();
-    storeDetailUser();
+    if(onlineStatus === 1){
+      clearRole();
+      clearRoots();
+      clearAnnee();
+      clearGouvernorats();
+      clearSpecialite();
+      storeDetailUser();
+    }
   }
 
   React.useEffect(() => {

@@ -38,7 +38,7 @@ var dir = lang !== "ar" ? "ltr" : "rtl";
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("Export");
+console.log("voice");
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -149,6 +149,14 @@ openDB("medis", 1, {
       autoIncrement: true,
     });
     storePersonel.createIndex("id", "id");
+
+    //create personels store
+    var storeNotifications = db.createObjectStore("notifications", {
+      keyPath: "id",
+      autoIncrement: true,
+    });
+    storeNotifications.createIndex("id", "id");
+    storeNotifications.createIndex("id_user", "id_user");
   },
 });
 var id = 0;
@@ -173,7 +181,7 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         {testLogin === 0 ? (
-          <div className="wrapper" dir={dir}>
+          <div id="declaration-id" className="wrapper wraper-login" dir={dir}>
             <Switch>
               <Route exact path="/login">
                 <LoginPage />

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { loginFetch } from "../../../Redux/usersReduce";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -85,9 +85,8 @@ function LoginPage() {
       localStorage.setItem("x-access-token", objDetail.token);
     }
     await tx.done;
-    window.location.replace("/roleList");
+    window.location.replace("/profile");
   }
-
   //submitForm
   const submitForm = (event) => {
     const promise = new Promise((resolve, reject) => {
@@ -119,10 +118,10 @@ function LoginPage() {
       <ToastContainer />
       <div className="full-gray section-image" data-color="black">
         <div className="content d-grid align-items-center p-0">
-          <Container>
+          <Container className="container-login">
             <Col className="mx-auto" lg="5" md="8">
               <Form action="" className="form" method="" onSubmit={submitForm}>
-                <Card className={"card-login " + cardClasses+ar}>
+                <Card className={"card-login " + cardClasses + ar}>
                   <div className="flag">
                     <img
                       src={require("../../../assets/img/en.png")}
@@ -154,27 +153,24 @@ function LoginPage() {
                     alt="medicacom"
                   />
                   <Card.Body>
-                    <Tab.Container
-                      id="icons-tabs-example"
-                      defaultActiveKey="settings-icons"
-                    >
+                    <Tab.Container id="login-tabs" defaultActiveKey="sign_in">
                       <Nav role="tablist" variant="tabs">
                         <Nav.Item>
-                          <Nav.Link eventKey="settings-icons">
-                            {t("sign_in")}
+                          <Nav.Link eventKey="sign_in">
+                            <span>{t("sign_in")}</span>
                           </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                          <Nav.Link eventKey="info-icons">
-                            {t("register")}
+                          <Nav.Link eventKey="register">
+                            <span>{t("register")}</span>
                           </Nav.Link>
                         </Nav.Item>
                       </Nav>
                       <Tab.Content>
-                        <Tab.Pane eventKey="info-icons">
+                        <Tab.Pane eventKey="register">
                           <Inscription></Inscription>
                         </Tab.Pane>
-                        <Tab.Pane eventKey="settings-icons">
+                        <Tab.Pane eventKey="sign_in">
                           <Row>
                             <Col md="12">
                               <Form.Group>
@@ -227,6 +223,54 @@ function LoginPage() {
             </Col>
           </Container>
         </div>
+        <footer className="footer position-absolute fixed-bottom">
+          <Container>
+            <nav>
+              <ul className="footer-menu d-flex justify-content-center">
+                <li>
+                  <a
+                    className="m-0"
+                    href="https://www.medis.com.tn/fr"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    Medis
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="m-0"
+                    href="https://www.medis.com.tn/fr/produits"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    {t("produit")}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="m-0"
+                    href="https://www.medis.com.tn/fr/contact"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    {t("contact")}
+                  </a>
+                </li>
+              </ul>
+              <p className="copyright text-center m-0">
+                ©
+                <a href="https://www.medicacom.tn/fr/">
+                  {new Date().getFullYear()} medicacom
+                </a>
+              </p>
+            </nav>
+          </Container>
+        </footer>
+        {/* <div
+          className="full-page-background"
+          style={{
+            backgroundImage:
+              "url(" + require("../../../assets/img/back.jpg") + ")",
+          }}
+        ></div> */}
       </div>
     </>
   );

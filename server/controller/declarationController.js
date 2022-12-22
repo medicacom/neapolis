@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 var patient = require("../models/patient");
+var notification = require("../models/notification");
 var rapport = require("../models/rapport");
 const auth = require("../middlewares/passport");
 const user = require("../models/user");
@@ -50,6 +51,7 @@ router.post("/addDeclaration", (req, res) => {
   var poid = req.body.poid;
   var taille = req.body.taille;
   var allergie = req.body.allergie;
+  var lang = req.body.lang;
 
   if (id_user != 0) {
     patient
@@ -100,23 +102,51 @@ router.post("/addDeclaration", (req, res) => {
             allergie: allergie,
           })
           .then((r) => {
-            user.findOne({ where: { id_role: 1 } }).then(function (u) {
+            user.findAll({ where: { id_role: [1, 3] } }).then(function (u) {
               /* var hi =
                 lang == "fr"
                   ? `Bonjour ${u.nom} ,`
                   : lang == "en"
                   ? `Hello ${u.nom} ,`
                   : ` ${u.nom} مرحبا`; */
-              var hi = `Bonjour ${u.nom} ,`;
               var msg = "";
-              /* var txt =
+              var txt =
                 lang == "fr"
-                  ? "Il y a une nouvelle déclaration"
-                  : "Il y a une nouvelle déclaration"; */
-              var txt = "Il y a une nouvelle déclaration";
+                  ? "Neapolis | Nouvelle déclaration"
+                  : lang == "en"
+                  ? "Neapolis | New declaration"
+                  : "Neapolis | بيان جديد";
               msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
-              sendMail("Déclaration", msg, u.email, hi);
-              return res.status(200).send(true);
+              var subject =
+                lang == "fr"
+                  ? "Sujet: " + txt
+                  : lang == "en"
+                  ? "Subject: " + txt
+                  : txt + ` :موضوع`;
+              var arrayNotif = []; 
+              u.forEach((element) => {
+                var hi =
+                  lang == "fr"
+                    ? `Bonjour ${
+                        element.dataValues.nom + " " + element.dataValues.prenom
+                      } ,`
+                    : lang == "en"
+                    ? `Hello ${
+                        element.dataValues.nom + " " + element.dataValues.prenom
+                      } ,`
+                    : ` ${
+                        element.dataValues.nom + " " + element.dataValues.prenom
+                      } مرحبا`;
+                sendMail(subject, msg, element.dataValues.email, hi, [], lang);
+                arrayNotif.push({
+                  id_user: element.dataValues.id,
+                  text: "Nouvelle déclaration",
+                  text_ar: "بيان جديد",
+                  text_en: "New declaration",
+                  etat: 3,
+                });
+              });
+              notification.bulkCreate(arrayNotif).then(() => {});
             });
           });
       })
@@ -152,7 +182,7 @@ router.post("/addDeclaration", (req, res) => {
               .create({
                 id_passager: pa.id,
                 id_patient: p.id,
-                id_eff: id_eff,
+                effet: effet,
                 dateDebut: dateDebut,
                 dateFin: dateFin,
                 information: information,
@@ -181,16 +211,62 @@ router.post("/addDeclaration", (req, res) => {
                 allergie: allergie,
               })
               .then((r) => {
-                user.findOne({ where: { id_role: 1 } }).then(function (u) {
+                user.findAll({ where: { id_role: [1, 3] } }).then(function (u) {
+                  /* var hi =
+                    lang == "fr"
+                      ? `Bonjour ${u.nom} ,`
+                      : lang == "en"
+                      ? `Hello ${u.nom} ,`
+                      : ` ${u.nom} مرحبا`; */
                   var msg = "";
-                  var txt = "Il y a une nouvelle déclaration";
+                  var txt =
+                    lang == "fr"
+                      ? "Neapolis | Nouvelle déclaration"
+                      : lang == "en"
+                      ? "Neapolis | New declaration"
+                      : "Neapolis | بيان جديد";
                   msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
-                  sendMail("Déclaration", msg, u.email, u.nom);
-                  return res.status(200).send(true);
+                  var subject =
+                    lang == "fr"
+                      ? "Sujet: " + txt
+                      : lang == "en"
+                      ? "Subject: " + txt
+                      : txt + ` :موضوع`;
+                  var arrayNotif = [];
+                  u.forEach((element) => {
+                    var hi =
+                      lang == "fr"
+                        ? `Bonjour ${
+                            element.dataValues.nom +
+                            " " +
+                            element.dataValues.prenom
+                          } ,`
+                        : lang == "en"
+                        ? `Hello ${
+                            element.dataValues.nom +
+                            " " +
+                            element.dataValues.prenom
+                          } ,`
+                        : ` ${
+                            element.dataValues.nom +
+                            " " +
+                            element.dataValues.prenom
+                          } مرحبا`;
+                    sendMail(subject, msg, element.dataValues.email, hi, [], lang);
+                    arrayNotif.push({
+                      id_user: element.dataValues.id,
+                      text: "Nouvelle déclaration",
+                      text_ar: "بيان جديد",
+                      text_en: "New declaration",
+                      etat: 3,
+                    });
+                  });
+                  notification.bulkCreate(arrayNotif).then(() => {});
                 });
               });
           })
           .catch((error) => {
+            console.log(error);
             return res.status(403).send(error);
           });
       })

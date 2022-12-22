@@ -164,7 +164,15 @@ function Sidebar({ background, users, onlineStatus }) {
         return (
           <Nav.Item className={activeRoute(prop.path)} key={key} as="li">
             {/* {getTitle(prop.path, prop.name)} */}
-            <Nav.Link className={prop.className} to={prop.path} as={Link}>
+            <Nav.Link
+              className={prop.className}
+              to={prop.path}
+              as={Link}
+              onClick={() => {
+                console.log("open")
+                document.documentElement.classList.toggle("nav-open");
+              }}
+            >
               {prop.icon ? (
                 <>
                   <i className={prop.icon} />
@@ -233,6 +241,14 @@ function Sidebar({ background, users, onlineStatus }) {
     <>
       <div className={styleM} data-color={background}>
         <div className="sidebar-wrapper">
+          <div className="close-mobile">
+            <i
+              className="fas fa-times"
+              onClick={() =>
+                document.documentElement.classList.toggle("nav-open")
+              }
+            ></i>
+          </div>
           <div className="logo">
             <div className="bglogo">
               <img src={require("../../assets/img/logo.png")} alt="medicacom" />

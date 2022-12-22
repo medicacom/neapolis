@@ -26,22 +26,13 @@ const sequelize = new Sequelize(
 
 router.get("/getNotification",auth, async(req, res) => {
   /* 
-  1-extration bl 
-  2-valide bl
-  3-refuse bl
-  4-Nouveau produit
-  5-new action
-  6-new todoliste
-  7-tache terminer
-  8-Delegue à accepter commande
-  9-Delegue à refuser commande
-  10-Superviseur à refuser commande
-  11-Superviseur à refuser commande
-  12- action cloturer
+  1-Inscription 
+  2-new actualité
+  3-new declaration
   */
   var token =(req.headers["x-access-token"])
   const decoded = jwt.verify(token, privateKey);
-  var id = decoded.userauth.id;
+  var id = decoded.id;
   var notif = await notification.findAll({ where: {lu:0,id_user:id} ,order: [["id", "DESC"]]});
   return res.status(200).json(notif);
 });

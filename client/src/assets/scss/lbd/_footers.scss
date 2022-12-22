@@ -65,7 +65,7 @@
     nav > ul{
        font-size: $font-size-base;
        li{
-            margin-left: 20px;
+            margin-left: 20px !important;
             float: left;
         }
         a{

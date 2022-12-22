@@ -30,10 +30,12 @@ export const getRootByRole = createAsyncThunk("root/getRootByRole", async (role)
         },
       }
     )
-    .then(response => {return response.json()})
-      .catch((error) => {
-        return { status: 403, error: error };
-      });
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      return { status: 403, error: error };
+    });
     return rootBase;
   }
 );

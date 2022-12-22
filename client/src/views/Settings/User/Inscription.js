@@ -150,6 +150,7 @@ function Inscription() {
           id_gouvernorat,
           valide,
           autre_sp,
+          lang
         })
       ).then((data) => {
         if (data.payload.msg === 1) {

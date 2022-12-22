@@ -29,6 +29,25 @@ import { useTranslation } from "react-multi-lang";
 function Declaration({ obj }) {
   const t = useTranslation();
   /** start init local storage **/
+  let nomStorage = window.localStorage.getItem("nom");
+  let prenomStorage = window.localStorage.getItem("prenom");
+  let emailStorage = window.localStorage.getItem("email");
+  let telStorage = window.localStorage.getItem("tel");
+  let passwordStorage = window.localStorage.getItem("password");
+  let typeSpecialiteStorage = window.localStorage.getItem("typeSpecialite");
+  let idSpecialiteStorage = window.localStorage.getItem("idSpecialite");
+  let nomSpecialiteStorage = window.localStorage.getItem("nomSpecialite");
+  var objSp = nomSpecialiteStorage
+    ? {
+        value: idSpecialiteStorage,
+        label: nomSpecialiteStorage,
+      }
+    : {
+        value: 0,
+        label: t("select"),
+        isDisabled: true,
+      };
+  let autreSpStorage = window.localStorage.getItem("autreSp");
   let initialesStorage = window.localStorage.getItem("initiales");
   let ageStorage = window.localStorage.getItem("age");
   let sexeStorage = window.localStorage.getItem("sexe");
@@ -148,25 +167,23 @@ function Declaration({ obj }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   //Donnes
-  const [nom, setNom] = React.useState("");
-  const [prenom, setPrenom] = React.useState("");
-  const [tel, setTel] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [specialite, setSpecialite] = React.useState({
-    value: 0,
-    label: "Specialite",
-    isDisabled: true,
-  });
-  const [typeSpecialite, setTypeSpecialite] = React.useState(0);
-  const [idSpecialite, setIdSpecialite] = React.useState(0);
-  const [autreSp, setAutreSp] = React.useState("");
+  const [nom, setNom] = React.useState(nomStorage ? (nomStorage) : "");
+  const [prenom, setPrenom] = React.useState(prenomStorage ? (prenomStorage) : "");
+  const [tel, setTel] = React.useState(telStorage ? parseInt(telStorage) : "");
+  const [email, setEmail] = React.useState(emailStorage ? (emailStorage) : "");
+  const [password, setPassword] = React.useState(passwordStorage ? (passwordStorage) : "");
+  const [specialite, setSpecialite] = React.useState(objSp);
+  const [typeSpecialite, setTypeSpecialite] = React.useState(typeSpecialiteStorage ? parseInt(typeSpecialiteStorage) : 0);
+  const [idSpecialite, setIdSpecialite] = React.useState(idSpecialiteStorage ? parseInt(idSpecialiteStorage) : 0);
+  const [autreSp, setAutreSp] = React.useState(autreSpStorage ? parseInt(autreSpStorage) : "");
   //Patient
   const [initiales, setInitiales] = React.useState(
     initialesStorage ? initialesStorage : ""
   );
   const [age, setAge] = React.useState(ageStorage ? parseInt(ageStorage) : "");
-  const [sexe, setSexe] = React.useState(sexeStorage ? parseInt(sexeStorage) : "");
+  const [sexe, setSexe] = React.useState(
+    sexeStorage ? parseInt(sexeStorage) : ""
+  );
   const [dateNaissance, setDateNaissance] = React.useState(
     dateNaissanceStorage ? dateNaissanceStorage : ""
   );
@@ -213,7 +230,9 @@ function Declaration({ obj }) {
   const [description_eff, setDescription_eff] = React.useState(
     description_effStorage ? description_effStorage : ""
   );
-  const [grave, setGrave] = React.useState(graveStorage ? parseInt(graveStorage) : 0);
+  const [grave, setGrave] = React.useState(
+    graveStorage ? parseInt(graveStorage) : 0
+  );
   const [hospitalisation, setHospitalisation] = React.useState(
     hospitalisationStorage ? parseInt(hospitalisationStorage) : 0
   );
@@ -226,8 +245,12 @@ function Declaration({ obj }) {
   const [anomalie, setAnomalie] = React.useState(
     anomalieStorage ? parseInt(anomalieStorage) : 0
   );
-  const [deces, setDeces] = React.useState(decesStorage ? parseInt(decesStorage) : 0);
-  const [autre, setAutre] = React.useState(autreStorage ? parseInt(autreStorage) : 0);
+  const [deces, setDeces] = React.useState(
+    decesStorage ? parseInt(decesStorage) : 0
+  );
+  const [autre, setAutre] = React.useState(
+    autreStorage ? parseInt(autreStorage) : 0
+  );
   const [evolution, setEvolution] = React.useState(
     evolutionStorage ? parseInt(evolutionStorage) : 0
   );
@@ -499,8 +522,8 @@ function Declaration({ obj }) {
           notify(1, t("declaration_send"));
           setTimeout(async () => {
             localStorage.clear();
-            localStorage.setItem("x-access-token",tokenL);
-            localStorage.setItem("lang",langL);
+            if (tokenL) localStorage.setItem("x-access-token", tokenL);
+            localStorage.setItem("lang", langL);
             if (token === null) {
               navigate.push("/login");
             } else {
@@ -521,6 +544,10 @@ function Declaration({ obj }) {
   };
 
   useEffect(() => {
+    /* let element = document.getElementById("declaration-id");
+
+    // removing the class
+    element.className = ""; */
     getAges();
     getIndication();
     getEffet();

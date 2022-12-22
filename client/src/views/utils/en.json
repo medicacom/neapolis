@@ -1,4 +1,6 @@
 {
+  "produit":"Product",
+  "contact":"Contact",
   "save": "Save",
   "add_txt": "Successful insertion",
   "update_txt": "Edit successfully",
@@ -38,9 +40,9 @@
   "demande_insciption": "Your request has been sent successfully",
   "declaration_send": "Your request has been sent successfully",
   "age": {
-    "list": "List of ages",
-    "add": "Add a age",
-    "update": "Edit age"
+    "list": "List of age groups",
+    "add": "Add an age group",
+    "update": "Edit age group"
   },
   "role": {
     "list": "List of role",
@@ -152,9 +154,9 @@
     "survenus_txt4": "Surbosage médicamenteux ",
     "survenus_txt5": "Exposition professionnelle au médicament",
     "survenus_txt6": "Aucune de ces options",
-    "poid": "Poids (en kg)",
+    "poid": "Weight (in kg)",
     "poid_place": "p. ex. 60",
-    "taille": "Taille (en cm)",
+    "taille": "Size (in cm)",
     "taille_place": "ex. 170",
     "allergie_pop": "allergie",
     "allergie": "Affections médicales,allergies,grossesse (durée), historique médical et autres informations telles que tabagisme et consommation d’alcool.",
@@ -166,7 +168,7 @@
     "update": "Edit medicine",
     "list": "List of medicines",
     "voice": "Drug administration",
-    "form": "form",
+    "form": "Pharmaceutical form",
     "dosage": "dosage",
     "indication": "Indication"
   },

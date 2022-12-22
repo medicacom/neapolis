@@ -13,6 +13,7 @@ import Select from "react-select";
 import { getPersonnel } from "../../../Redux/usersReduce";
 import { useTranslation } from "react-multi-lang";
 function AjouterNews({ onlineStatus }) {
+  let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   let db;
   const notify = (type, msg) => {
@@ -98,7 +99,15 @@ function AjouterNews({ onlineStatus }) {
           var filename = value.payload.filename;
           if (filename !== "") {
             dispatch(
-              newsAdded({ date, titre, description, filename, id, userSelect })
+              newsAdded({
+                date,
+                titre,
+                description,
+                filename,
+                id,
+                userSelect,
+                lang,
+              })
             ).then((val) => {
               if (val.payload.msg === true) {
                 if (isNaN(location.id) === true) {

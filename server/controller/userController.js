@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 var user = require("../models/user");
+var notification = require("../models/notification");
 const jwt = require("jsonwebtoken");
 const privateKey = "mySecretKeyabs";
 const multer = require("multer");
@@ -72,6 +73,7 @@ router.post("/addUser", (req, res) => {
   var id_gouvernorat = req.body.id_gouvernorat;
   var valide = req.body.valide;
   var autre_sp = req.body.autre_sp;
+  var lang = req.body.lang;
   user
     .findOne({ where: { email: email, id: { [Op.ne]: id } } })
     .then(function (u1) {
@@ -92,21 +94,81 @@ router.post("/addUser", (req, res) => {
               autre_sp: autre_sp,
             })
             .then((u) => {
-              if (valide == 0)
+              if (valide == 0) {
+                var arrayNotif = [];
                 user.findAll({ where: { id_role: 1 } }).then((u) => {
-                  msg = ` <tr><td style="padding-top:5px;"> Sujet: Incription </td></tr>`;
-                  msg += ` <tr><td style="padding-top:5px;"> Nom: ${nom} </td></tr>`;
-                  msg += ` <tr><td style="padding-top:5px;"> Prenom: ${prenom} </td></tr>`;
-                  msg += ` <tr><td style="padding-top:5px;"> E-mail: ${email} </td></tr>`;
+                  var msg1 =
+                    lang == "fr"
+                      ? "Sujet: une nouvelle inscription"
+                      : lang == "en"
+                      ? "Subject: new registration"
+                      : "الموضوع: تسجيل جديد";
+                  var msg2 =
+                    lang == "fr"
+                      ? `Nom: ${nom}`
+                      : lang == "en"
+                      ? `Name: ${nom}`
+                      : `${nom} :الاسم`;
+                  var msg3 =
+                    lang == "fr"
+                      ? `Prenom: ${prenom}`
+                      : lang == "en"
+                      ? `Last name: ${prenom}`
+                      : `${prenom} :اللقب`;
+                  var msg4 =
+                    lang == "fr"
+                      ? `E-mail: ${email}`
+                      : lang == "en"
+                      ? `E-mail: ${email}`
+                      : `${email} :البريد الإلكتروني`;
+                  var msg = ` <tr><td style="padding-top:5px;"> ${msg1} </td></tr>`;
+                  msg += ` <tr><td style="padding-top:5px;"> ${msg2} </td></tr>`;
+                  msg += ` <tr><td style="padding-top:5px;"> ${msg3} </td></tr>`;
+                  msg += ` <tr><td style="padding-top:5px;"> ${msg4} </td></tr>`;
                   u.forEach((element) => {
+                    var hi =
+                      lang == "fr"
+                        ? `Bonjour ${
+                            element.dataValues.nom +
+                            " " +
+                            element.dataValues.prenom
+                          } ,`
+                        : lang == "en"
+                        ? `Hello ${
+                            element.dataValues.nom +
+                            " " +
+                            element.dataValues.prenom
+                          } ,`
+                        : ` ${
+                            element.dataValues.nom +
+                            " " +
+                            element.dataValues.prenom
+                          } مرحبا`;
+                    var subject =
+                      lang == "fr"
+                        ? "Sujet: une nouvelle inscription"
+                        : lang == "en"
+                        ? "New registration"
+                        : "تسجيل جديد";
                     sendMail(
-                      "Incription",
+                      subject,
                       msg,
                       element.dataValues.email,
-                      element.dataValues.nom + " " + element.dataValues.prenom
+                      hi,
+                      [],
+                      lang
                     );
+                    arrayNotif.push({
+                      id_user: element.dataValues.id,
+                      text: "Inscription",
+                      text_ar: "تسجيل",
+                      text_en: "Registration",
+                      etat: 1,
+                    });
                   });
+                  notification.bulkCreate(arrayNotif).then(() => {});
                 });
+              }
               return res.status(200).send({ error: [], data: u, msg: 1 });
             })
             .catch((error) => {
@@ -173,10 +235,7 @@ router.put("/changeEtat/:id", auth, (req, res) => {
           },
           { where: { id: id } }
         )
-        .then((r2) => {
-          /* var msg = "";
-          msg += ` <tr><td style="padding-top:5px;"> Sujet :jjjjjjj </td></tr>`;
-          sendMail("Nouvelle formation",msg,"feriani.khalil2@gmail.com","feriani khalil2");  */
+        .then(() => {
           return res.status(200).send(true);
         })
         .catch((error) => {
@@ -200,25 +259,25 @@ router.put("/validation/:id", auth, (req, res) => {
       : ` ${nom} مرحبا`;
   var msg = "";
   var txt = "";
-  if (lang == "fr"){
+  if (lang == "fr") {
     txt =
       valider == 1
-        ? "Sujet : Inscription accepté"
-        : "Sujet : Refuser d'inscription";
-  } else if (lang == "en"){
+        ? "Objet : Validation de l'inscription au platform I-declare"
+        : "Objet : Inscription au platform I-declare est refusée";
+  } else if (lang == "en") {
     txt =
       valider == 1
-        ? "Subject: Registration refused"
-        : "Subject: Rejection of registration";
-
-  } else if (lang == "ar"){ 
+        ? "Subject: Validation of registration on the I-declare platform"
+        : "Subject: Registration to the I-declare platform is refused";
+  } else if (lang == "ar") {
     txt =
       valider == 1
-        ? "الموضوع: تم قبول التسجيل"
-        : "الموضوع:تم رفض التسجيل";
-
+        ? `I-DECLARE الموضوع: تم قبول التسجيل في منصة`
+        : `I-DECLARE الموضوع: تم رفض التسجيل في منصة`;
   }
   msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
+  var subject =
+    lang == "fr" ? "Inscription" : lang == "en" ? "Registration" : "التسجيل";
   user.findOne({ where: { id: id } }).then(function (u) {
     if (!u) {
       return res.status(403).send(false);
@@ -232,7 +291,7 @@ router.put("/validation/:id", auth, (req, res) => {
             { where: { id: id } }
           )
           .then(() => {
-            sendMail(txt, msg, email, nom);
+            sendMail(subject, msg, email, hi, [], lang);
             return res.status(200).send(true);
           })
           .catch(() => {
@@ -242,7 +301,7 @@ router.put("/validation/:id", auth, (req, res) => {
         user
           .destroy({ where: { id: id } })
           .then(() => {
-            sendMail("Inscription", msg, email, hi);
+            sendMail(subject, msg, email, hi, [], lang);
             return res.status(200).send(true);
           })
           .catch(() => {

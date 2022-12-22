@@ -31,10 +31,8 @@ function AjouterRole({ onlineStatus }) {
   const location = useParams();
   const navigate = useHistory();
   const [nom, setNom] = React.useState("");
-  const [nomEn, setNomEn] = React.useState("");
-  const [nomAr, setNomAr] = React.useState("");
-  const [role] = React.useState(0);
-  const [order, setOrder] = React.useState("");
+  const [role, setRole] = React.useState(0);
+  const [order] = React.useState(0);
   const [id, setId] = React.useState(0);
 
   async function saveRoleIndex() {
@@ -72,8 +70,8 @@ function AjouterRole({ onlineStatus }) {
   }
   function submitForm() {
     if (onlineStatus === 1) {
-      if (nom !== "" && order !== "") {
-        dispatch(roleAdded({ nom, role, order, id }));
+      if (nom !== "" && role !== 0) {
+        dispatch(roleAdded({ nom, order, role, id }));
         if (isNaN(location.id) === true) {
           notify(1, t("add_txt"));
         } else {
@@ -83,7 +81,7 @@ function AjouterRole({ onlineStatus }) {
         notify(2, t("erreur"));
       }
     } else {
-      if (nom !== "" && order !== "") {
+      if (nom !== "" && role !== 0) {
         saveRoleIndex();
       } else {
         notify(2, t("erreur"));
@@ -102,10 +100,8 @@ function AjouterRole({ onlineStatus }) {
     for await (const cursor of index.iterate(parseInt(location.id))) {
       var objRole = { ...cursor.value };
       setNom(objRole.nom);
-      setOrder(objRole.order);
+      setRole(objRole.role);
       setId(objRole);
-      /* objRole.order = 55;
-      cursor.update(objRole); */
     }
     await tx.done;
   }
@@ -116,7 +112,7 @@ function AjouterRole({ onlineStatus }) {
         var role = await dispatch(roleGetById(location.id));
         var entities = role.payload;
         setNom(entities.nom);
-        setOrder(entities.order);
+        setRole(entities.role);
         setId(location.id);
       }
     }
@@ -181,13 +177,13 @@ function AjouterRole({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>{t("role.order")} * </label>
+                            <label>Groupe * </label>
                             <Form.Control
-                              defaultValue={order}
-                              placeholder={t("role.order")}
+                              defaultValue={role}
+                              placeholder={"Groupe"}
                               type="text"
                               onChange={(value) => {
-                                setOrder(value.target.value);
+                                setRole(value.target.value);
                               }}
                             ></Form.Control>
                           </Form.Group>

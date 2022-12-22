@@ -5,8 +5,8 @@ var app = express();
 const path = require("path");
 app.use("/new", express.static("./new"));
 
-var cors = require("cors");
-app.use(cors());
+/* var cors = require("cors");
+app.use(cors()); */
 /* const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 

@@ -29,6 +29,7 @@ function ListDeclaration({ obj, onlineStatus }) {
   const [alert, setAlert] = React.useState(null);
   const [entities, setEntities] = React.useState([]);
   const [entitiesExcel, setEntitiesExcel] = React.useState([]);
+
   const columns = useMemo(
     () => [
       //column definitions...
@@ -55,7 +56,10 @@ function ListDeclaration({ obj, onlineStatus }) {
           <div className="actions-right block_action">
             <Button
               onClick={() => {
-                confirmMessage(cell.row.original.id);
+                if (onlineStatus === 1) getDetails(cell.row.original.id);
+                else {
+                  initDetail(cell.row.original.id);
+                }
               }}
               variant="warning"
               size="sm"
@@ -74,11 +78,7 @@ function ListDeclaration({ obj, onlineStatus }) {
   function ajouter() {
     navigate.push("/declaration");
   }
-  function getMedName(ligne) {
-    var spliteName = ligne.split("@@");
-    var i = lang === "fr" ? 0 : lang === "fr" ? 1 : 2;
-    return spliteName[i];
-  }
+
   //storeDeclaration
   const storeDeclaration = useCallback(
     async (res) => {
@@ -147,11 +147,13 @@ function ListDeclaration({ obj, onlineStatus }) {
           id_medicament: res[index].id_medicament,
           id: res[index].id,
           id_user: res[index].id_user,
+          users: res[index].users,
           nom_user: res[index].nom + " " + res[index].prenom,
           id_eff: res[index].id_eff,
           id_voix: res[index].id_voix,
           id_patient: res[index].id_patient,
           id_passager: res[index].id_passager,
+          passagers: res[index].passagers,
           description_eff: res[index].description_eff,
           grave: res[index].grave,
           hospitalisation: res[index].hospitalisation,
@@ -189,48 +191,70 @@ function ListDeclaration({ obj, onlineStatus }) {
     storeDeclaration(resUsers);
   }
 
-  const getDeclaration = useCallback(async () => {
-    var response = await dispatch(getDeclarations({ id_role, id }));
-    var dec = response.payload;
-    var array = [];
-    dec.forEach((element) => {
-      var nom = "";
-      nom = element.users
-        ? element.users.nom + " " + element.users.prenom
-        : element.passagers.nom + " " + element.passagers.prenom;
-      var sp = "";
-      sp = element.users
-        ? element.users.specialites.nom
-        : element.passagers.specialites.nom;
-      var med =
-        lang === "fr"
-          ? element.medicaments.nom
-          : lang === "en"
-          ? element.medicaments.nom_en
-          : element.medicaments.nom_ar;
-      var date = new Date(
-        new Date(element.patients.createdAt).getTime() -
-          new Date(element.patients.createdAt).getTimezoneOffset() * 60000
-      )
-        .toISOString()
-        .slice(0, 10);
-      var id = element.id;
-      array.push({
-        id: id,
-        nomNot: nom,
-        medicaments: med,
-        specialite: sp,
-        createdAt: date,
+  const getDeclaration = useCallback(
+    async () => {
+      var response = await dispatch(getDeclarations({ id_role, id }));
+      var dec = response.payload;
+      var array = [];
+      dec.forEach((element) => {
+        var nom = "";
+        nom = element.users
+          ? element.users.nom + " " + element.users.prenom
+          : element.passagers.nom + " " + element.passagers.prenom;
+        var sp = "";
+        sp = element.users
+          ? element.users.specialites.nom
+          : element.passagers.specialites.nom;
+        var med =
+          lang === "fr"
+            ? element.medicaments.nom
+            : lang === "en"
+            ? element.medicaments.nom_en
+            : element.medicaments.nom_ar;
+        var date = new Date(
+          new Date(element.patients.createdAt).getTime() -
+            new Date(element.patients.createdAt).getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, 10);
+        var id = element.id;
+        array.push({
+          id: id,
+          nomNot: nom,
+          medicaments: med,
+          specialite: sp,
+          createdAt: date,
+        });
       });
-    });
-    setEntities(array);
-    setEntitiesExcel(dec);
-    clearDeclaration(dec);
+      setEntities(array);
+      setEntitiesExcel(dec);
+      clearDeclaration(dec);
+    },
+    [dispatch]
+  );
+
+  const getDetails = useCallback(async (idD) => {
+    var dec = await dispatch(getDeclarationsById(idD));
+    var data = await dec.payload;
+    confirmMessage(data);
   }, [dispatch]);
 
-  const confirmMessage = async (id, e) => {
-    var dec = await dispatch(getDeclarationsById(id));
-    var data = await dec.payload;
+  async function initDetail(idD) {
+    db = await openDB("medis", 1, {});
+    const tx = db.transaction("declarations", "readwrite");
+    const index = tx.store.index("id");
+    var array=[];
+    for await (const cursor of index.iterate(parseInt(idD))) {
+      var obj = { ...cursor.value };
+      array.push(obj)
+    }
+    await tx.done;
+    console.log("initDetail",array)
+    confirmMessage(array[0]);
+  }
+
+  const confirmMessage = async (data) => {
+    console.log(data)
     var nomAge = "";
     if (data.patients.ages) {
       nomAge =
@@ -469,6 +493,7 @@ function ListDeclaration({ obj, onlineStatus }) {
       </SweetAlert>
     );
   };
+
   const hideAlert = () => {
     setAlert(null);
   };
@@ -477,7 +502,39 @@ function ListDeclaration({ obj, onlineStatus }) {
     const tx = db.transaction("declarations", "readwrite");
     let store = tx.objectStore("declarations");
     let dec = await store.getAll();
-    setEntities(dec);
+    var array = [];
+    dec.forEach((element) => {
+      var nom = "";
+      nom = element.users
+        ? element.users.nom + " " + element.users.prenom
+        : element.passagers.nom + " " + element.passagers.prenom;
+      var sp = "";
+      sp = element.users
+        ? element.users.specialites.nom
+        : element.passagers.specialites.nom;
+      var med =
+        lang === "fr"
+          ? element.medicaments.nom
+          : lang === "en"
+          ? element.medicaments.nom_en
+          : element.medicaments.nom_ar;
+      var date = new Date(
+        new Date(element.patients.createdAt).getTime() -
+          new Date(element.patients.createdAt).getTimezoneOffset() * 60000
+      )
+        .toISOString()
+        .slice(0, 10);
+      var id = element.id;
+      array.push({
+        id: id,
+        nomNot: nom,
+        medicaments: med,
+        specialite: sp,
+        createdAt: date,
+      });
+    });
+    setEntities(array);
+    setEntitiesExcel(dec);
   }
 
   async function init() {
@@ -487,8 +544,8 @@ function ListDeclaration({ obj, onlineStatus }) {
       initDeclaration();
     }
   }
+
   useEffect(() => {
-    /* getDeclaration(); */
     init();
   }, []); //now shut up eslint
 
@@ -514,6 +571,7 @@ function ListDeclaration({ obj, onlineStatus }) {
       />
     );
   }
+
   //exportEcel
   const exportToExcel = useCallback(async (data) => {
     /* var first = Object.keys(res)[0] */
@@ -647,6 +705,7 @@ function ListDeclaration({ obj, onlineStatus }) {
       writeFile(sheetName, buffer);
     });
   }, []);
+
   const getDetail = useCallback(
     async (res) => {
       var array = [];
@@ -810,39 +869,19 @@ function ListDeclaration({ obj, onlineStatus }) {
         obj[29] = evolution;
         obj[30] = survenus;
         array.push(obj);
-        /* var obj = {
-          nomMed: nomMed,
-          nomInd: nomInd,
-          nomVoix: nomVoix,
-          date: date,
-          sexe: sexe,
-          age: age,
-          effet: effet,
-          poid: poid,
-          taille: taille,
-          allergie: allergie,
-          posologie: posologie,
-          dateDebutAdmin: dateDebutAdmin,
-          dateFinAdmin: dateFinAdmin,
-          dateDebut: dateDebut,
-          dateFin: dateFin,
-          information: information,
-          complementaires: complementaires,
-          grave: grave,
-          initiales: initiales,
-        }; */
       });
       exportToExcel(array);
     },
     [dispatch, exportToExcel, id]
   );
+
   return (
     <>
       {alert}
       <ToastContainer />
       <Container fluid>
         <Row>
-          <Col md="6">
+          <Col md="6" sm="6" xs="12">
             <Button
               className="btn-wd  mr-1 float-left"
               type="button"
@@ -855,20 +894,24 @@ function ListDeclaration({ obj, onlineStatus }) {
               {t("Declaration.add")}
             </Button>
           </Col>
-          <Col md="6">
-            <Button
-              className="btn-wd  mr-1 float-right"
-              type="button"
-              variant="success"
-              onClick={() => {
-                getDetail(entitiesExcel);
-              }}
-            >
-              <span className="btn-label">
-                <i class="fas fa-download"></i>
-              </span>
-              Export déclaration
-            </Button>
+          <Col md="6" sm="6" xs="12">
+            {id_role === 1 || id_role === 3 ? (
+              <Button
+                className="btn-wd  mr-1 float-right"
+                type="button"
+                variant="success"
+                onClick={() => {
+                  getDetail(entitiesExcel);
+                }}
+              >
+                <span className="btn-label">
+                  <i class="fas fa-download"></i>
+                </span>
+                Export déclaration
+              </Button>
+            ) : (
+              ""
+            )}
           </Col>
         </Row>
         <Row>

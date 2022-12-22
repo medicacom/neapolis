@@ -13,6 +13,7 @@ import { openDB } from "idb/with-async-ittr";
 import { useTranslation } from "react-multi-lang";
 
 function AjouterUser({ onlineStatus }) {
+  let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   let db;
   const notify = (type, msg) => {
@@ -205,6 +206,7 @@ function AjouterUser({ onlineStatus }) {
             id_gouvernorat,
             valide,
             autre_sp,
+            lang
           })
         ).then((data) => {
           if (data.payload.msg === 1) {

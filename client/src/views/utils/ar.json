@@ -1,4 +1,6 @@
 {
+  "produit":"المنتج",
+  "contact":"اتصل",
   "save": "سجل",
   "add_txt": "تمت الاضافة بنجاح",
   "update_txt": "تمت التعديل بنجاح",
@@ -38,9 +40,9 @@
   "demande_insciption": "تم ارسال طلبك بنجاح",
   "declaration_send": "تم ارسال بنجاح",
   "age": {
-    "list": "قائمة الأعمار",
-    "add": "أضف عمرًا",
-    "update": "تغيير العمر"
+    "list": "قائمة الفئات العمرية",
+    "add": "أضف فئة عمرية",
+    "update": "تغيير فئة عمرية"
   },
   "role": {
     "list": "قائمة الأدوار",
@@ -152,9 +154,9 @@
     "survenus_txt4": "Surbosage médicamenteux ",
     "survenus_txt5": "Exposition professionnelle au médicament",
     "survenus_txt6": "Aucune de ces options",
-    "poid": "Poids (en kg)",
+    "poid": "الوزن (كجم)",
     "poid_place": "p. ex. 60",
-    "taille": "Taille (en cm)",
+    "taille": "الحجم (سم)",
     "taille_place": "ex. 170",
     "allergie_pop": "allergie",
     "allergie": "Affections médicales,allergies,grossesse (durée), historique médical et autres informations telles que tabagisme et consommation d’alcool.",
@@ -166,7 +168,7 @@
     "update": "تحرير الأدوية",
     "list": "قائمة الأدوية",
     "voice": "طريق تعاطي الدواء",
-    "form": "شكل",
+    "form": "شكل صيدلاني",
     "dosage": "جرعة",
     "indication": "دلالة"
   },

@@ -6,13 +6,13 @@ var app = express();
 app.use(express.json());
 
 //desplay all bl
-const sendMail = function (sujet, msg, mail, nom) {
+const sendMail = function (sujet, msg, mail, nom,img,lang) {
   try {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: "medicacomm@gmail.com",
-        pass: "fyxezohogioxhgdh",
+        pass: "fyxezohogioxhgdh", // plaintext body
         /* user: "opaliablextraction@gmail.com",
         pass: "xloparxehgbdwcvl", */
         /* pass: "op123654", */
@@ -23,13 +23,13 @@ const sendMail = function (sujet, msg, mail, nom) {
       secureConnection: true,
       rejectUnauthorized: false,
     });
-
+    var dir = lang == "ar"?"text-align: right;":"text-align: left;";
     message = {
       from: "medicacomm@gmail.com",
       to: mail,
       subject: sujet,
       html: `
-      <table style="width:500px;padding:20px; font-family:calibri;  margin:0 auto; color:#263476; 
+      <table style="width:500px;padding:20px; font-family:calibri;  margin:0 auto; color:#263476; ${dir}
         border:1px solid rgb(0, 165, 231);">
           <tr>
               <td colspan="4" style="text-align:center;">
@@ -47,7 +47,8 @@ const sendMail = function (sujet, msg, mail, nom) {
           </tr>
          ${msg}
         </table>
-      `,
+      `, // plaintext body
+      attachments:img
     };
     transporter.sendMail(message, function (error, info) {
       if (error) {

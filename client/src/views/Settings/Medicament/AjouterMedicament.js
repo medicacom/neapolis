@@ -396,7 +396,7 @@ function AjouterMedicament({ onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>{t("Drugs.dosage")}* </label>
+                            <label>{t("Drugs.voice")}* </label>
                             <Select
                               placeholder={t("Drugs.voice")}
                               className="react-select primary"
@@ -413,7 +413,7 @@ function AjouterMedicament({ onlineStatus }) {
                       <Row>
                         <Col className="pr-1" md="6">
                           <Form.Group>
-                            <label>{t("Drugs.dosage")}* </label>
+                            <label>{t("Drugs.form")}* </label>
                             <Form.Control
                               defaultValue={form}
                               placeholder={t("Drugs.form")}

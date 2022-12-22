@@ -46,6 +46,16 @@ var Notification = sequelize.define("notifications", {
     unique: false,
     allowNull: true,
   },
+  text_ar: {
+    type: Sequelize.STRING,
+    unique: false,
+    allowNull: true,
+  },
+  text_en: {
+    type: Sequelize.STRING,
+    unique: false,
+    allowNull: true,
+  },
   etat: {
     type: Sequelize.INTEGER,
     unique: false,
@@ -57,7 +67,7 @@ Notification.belongsTo(User, { as: "users", foreignKey: "id_user" });
 
 // create all the defined tables in the specified database. alter:true
 sequelize
-  .sync()
+  .sync({alter:true})
   .then(() =>
     console.log(
       "Notifications table has been successfully created, if one doesn't exist"

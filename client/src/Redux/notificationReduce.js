@@ -2,8 +2,28 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Configuration from "../configuration";
 var token = localStorage.getItem("x-access-token");
 
-export const getNotification = createAsyncThunk("notification/getNotification", async (action) => {
-  const response = await fetch(Configuration.BACK_BASEURL + "notification/getNotification/"+action.id+'/'+action.role+'/'+action.service, {
+export const getNotification = createAsyncThunk(
+  "notification/getNotification",
+  async () => {
+    var notif = await fetch(
+      Configuration.BACK_BASEURL + "notification/getNotification/",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        return { status: 403, error: error };
+      });
+    return notif;
+    /* const notif = await fetch(Configuration.BACK_BASEURL + "notification/getNotification", {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -11,11 +31,44 @@ export const getNotification = createAsyncThunk("notification/getNotification", 
       'x-access-token':token
     },
 
+  })
+  .then((response) => {
+    return response.json();
+  })
+  .catch((error) => {
+    return { status: 403, error: error };
   });
-  const notif = await response.json();
-  return notif;
-});
+  return notif; */
+  }
+);
 
+export const updateNotif = createAsyncThunk(
+  "notification/update",
+  async (action) => {
+    const notif = await fetch(
+      Configuration.BACK_BASEURL +
+        "notification/update/" +
+        action.id +
+        "/" +
+        action.idUser,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        return { status: 403, error: error };
+      });
+    return notif;
+  }
+);
 
 const notificationReduce = createSlice({
   name: "notification",
@@ -23,20 +76,8 @@ const notificationReduce = createSlice({
     entities: [],
     loading: false,
   },
-  reducers: {
-    updateNotif(state, action) {
-      fetch(Configuration.BACK_BASEURL + "notification/update/"+action.payload.id+"/"+action.payload.idUser, {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'x-access-token':token
-        },
-      });
-    },
-  },
+  reducers: {},
   extraReducers: {
-
     [getNotification.pending]: (state, action) => {
       state.loading = true;
     },
@@ -47,10 +88,7 @@ const notificationReduce = createSlice({
     [getNotification.rejected]: (state, action) => {
       state.loading = false;
     },
-    
   },
 });
-
-export const { updateNotif } = notificationReduce.actions;
 
 export default notificationReduce.reducer;

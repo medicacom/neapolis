@@ -269,7 +269,7 @@
 .card{
     &.card-login{
         box-shadow: 0 25px 30px -13px rgba(40, 40, 40, 0.4);
-        border-radius: 10px;
+        border-radius: 20px;
         padding-top: 10px;
         padding-bottom: 30px;
         @include transform-translate-y(0px);
