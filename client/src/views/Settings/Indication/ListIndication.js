@@ -1,10 +1,8 @@
-import SweetAlert from "react-bootstrap-sweetalert";
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback, useMemo } from "react";
 import {
   fetchIndication,
   indicationChangeEtat,
-  indicationDeleted,
 } from "../../../Redux/indicationReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -30,6 +28,12 @@ function ListIndication({ onlineStatus }) {
       {
         header: t("description"),
         accessorKey: "description",
+        Cell: ({ cell }) =>
+          lang === "fr"
+            ? cell.row.original.description
+            : lang === "en"
+            ? cell.row.original.description_en
+            : cell.row.original.description_ar,
       },
       {
         header: t("state"),
@@ -41,6 +45,7 @@ function ListIndication({ onlineStatus }) {
         header: t("actions"),
         accessorKey: "id",
         Cell: ({ cell, row }) => (
+          onlineStatus === 1 ? 
           <div className="actions-right block_action">
             <Button
               onClick={() => {
@@ -70,7 +75,7 @@ function ListIndication({ onlineStatus }) {
                 }
               />
             </Button>
-          </div>
+          </div>:""
         ),
       },
       //end

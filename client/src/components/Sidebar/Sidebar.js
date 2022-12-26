@@ -1,10 +1,11 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 // react-bootstrap components
 import { Collapse, Nav } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { openDB } from "idb/with-async-ittr";
 function Sidebar({ background, users, onlineStatus }) {
+  var navigate = new useHistory();
   let db;
   let lang = window.localStorage.getItem("lang");
   let location = useLocation();
@@ -163,13 +164,11 @@ function Sidebar({ background, users, onlineStatus }) {
         }
         return (
           <Nav.Item className={activeRoute(prop.path)} key={key} as="li">
-            {/* {getTitle(prop.path, prop.name)} */}
             <Nav.Link
               className={prop.className}
               to={prop.path}
               as={Link}
               onClick={() => {
-                console.log("open")
                 document.documentElement.classList.toggle("nav-open");
               }}
             >
@@ -251,7 +250,14 @@ function Sidebar({ background, users, onlineStatus }) {
           </div>
           <div className="logo">
             <div className="bglogo">
-              <img src={require("../../assets/img/logo.png")} alt="medicacom" />
+              <a onClick={()=>{
+                navigate.push("/declaration")
+              }}>
+                <img
+                  src={require("../../assets/img/logo.png")}
+                  alt="medicacom"
+                />
+              </a>
             </div>
           </div>
 

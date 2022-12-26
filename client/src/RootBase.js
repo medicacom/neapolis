@@ -155,6 +155,7 @@ function RootBase({ id }) {
       );
       var effStore = await db.getAllFromIndex("effet_indesirables", "saved", 0);
       var medicamentStore = await db.getAllFromIndex("medicaments", "saved", 0);
+      var declaStore = await db.getAllFromIndex("declarations", "saved", 0);
 
       /** end get all table **/
 
@@ -167,10 +168,11 @@ function RootBase({ id }) {
       var nbV = await updateIndex("voix_administrations");
       var nbE = await updateIndex("effet_indesirables");
       var nbM = await updateIndex("medicaments");
+      var nbD = await updateIndex("declarations");
 
       /** start update all table **/
 
-      var len1 = nbR + nbN + nbU + nbI + nbV + nbE + nbM;
+      var len1 = nbR + nbN + nbU + nbI + nbV + nbE + nbM + nbD;
       var len2 =
         newsStore.length +
         roleStore.length +
@@ -178,7 +180,8 @@ function RootBase({ id }) {
         indicationsStore.length +
         voixStore.length +
         effStore.length +
-        medicamentStore.length;
+        medicamentStore.length +
+        declaStore.length;
       /* var insertRole = [];
       var arrayFinal = []; */
       dispatch(
@@ -190,6 +193,7 @@ function RootBase({ id }) {
           voixStore: voixStore,
           effStore: effStore,
           medicamentStore: medicamentStore,
+          declaStore: declaStore,
           id: user.user.id,
         })
       ).then(() => {

@@ -58,6 +58,8 @@ function AjouterVoix_administration({ onlineStatus }) {
       let voix_administration = await voix_administrationStore.getAll();
       await tx.objectStore("voix_administrations").add({
         description: description,
+        description_en: descriptionEn,
+        description_ar: descriptionAr,
         type_table: 5,
         saved: 0,
         etat: 1,

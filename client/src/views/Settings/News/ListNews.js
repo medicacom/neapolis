@@ -4,7 +4,6 @@ import React, { useEffect, useCallback, useMemo } from "react";
 import {
   fetchNews,
   getFileNews,
-  newsChangeEtat,
   newsDeleted,
 } from "../../../Redux/newsReduce";
 import { useDispatch } from "react-redux";
@@ -20,7 +19,6 @@ import { MRT_Localization_AR } from "../../utils/ar_table";
 function ListNews({ onlineStatus, obj }) {
   let lang = window.localStorage.getItem("lang");
   var idRole = obj.user.id_role;
-  console.log(idRole);
   const t = useTranslation();
   let db;
   const dispatch = useDispatch();
@@ -45,34 +43,37 @@ function ListNews({ onlineStatus, obj }) {
       {
         header: t("actions"),
         accessorKey: "id",
-        Cell: ({ cell, row }) => (
-          <div className="actions-right block_action">
-            <Button
-              onClick={() => {
-                confirmDetail(cell.row.original);
-              }}
-              variant="info"
-              size="sm"
-              className={"text-info btn-link"}
-            >
-              <i className={"fa fa-eye"} />
-            </Button>
-            {idRole != 2 ? (
+        Cell: ({ cell, row }) =>
+          onlineStatus === 1 ? (
+            <div className="actions-right block_action">
               <Button
                 onClick={() => {
-                  confirmDelete(cell.row.original.id);
+                  confirmDetail(cell.row.original);
                 }}
-                variant="danger"
+                variant="info"
                 size="sm"
-                className={"text-danger btn-link"}
+                className={"text-info btn-link"}
               >
-                <i className={"fa fa-trash-alt"} />
+                <i className={"fa fa-eye"} />
               </Button>
-            ) : (
-              ""
-            )}
-          </div>
-        ),
+              {idRole != 2 ? (
+                <Button
+                  onClick={() => {
+                    confirmDelete(cell.row.original.id);
+                  }}
+                  variant="danger"
+                  size="sm"
+                  className={"text-danger btn-link"}
+                >
+                  <i className={"fa fa-trash-alt"} />
+                </Button>
+              ) : (
+                ""
+              )}
+            </div>
+          ) : (
+            ""
+          ),
       },
       //end
     ],
@@ -111,21 +112,6 @@ function ListNews({ onlineStatus, obj }) {
     );
   };
 
-  /* const getFile = React.useCallback(
-    async (id) => {
-      dispatch(getFileNews(id)).then(async (e1) => {
-        var ff = null;
-        ff = new Blob([e1.payload], {
-          type: "application/*",
-        });
-
-        const f = await URL.createObjectURL(ff);
-        console.log("await",f);
-        return f;
-      });
-    },
-    [dispatch]
-  ); */
   const confirmDetail = React.useCallback(
     async (ligne) => {
       dispatch(getFileNews(ligne.id)).then(async (e1) => {
@@ -160,44 +146,12 @@ function ListNews({ onlineStatus, obj }) {
               <i className="fas fa-file"></i>
               <br></br> Télécharger
             </a>
-            {/* <ul>
-              <li>Titre: {ligne.titre}</li>
-              <li>Description: {ligne.description}</li>
-              <li>Date: {ligne.date}</li>
-            </ul> */}
           </SweetAlert>
         );
       });
     },
     [dispatch]
   );
-  /* const confirmDetail = async (ligne) => {
-    var fileURL = await getFile(ligne.id);
-    console.log(fileURL)
-    setAlert(
-      <SweetAlert
-        style={{ display: "block", marginTop: "-100px" }}
-        title="Vous éte sure de supprime cette ligne?"
-        onCancel={() => hideAlert()}
-        confirmBtnBsStyle="info"
-        cancelBtnBsStyle="danger"
-        confirmBtnText="Oui"
-        cancelBtnText="Non"
-        showCancel
-      >
-        <a
-          download={ligne.file}
-          rel="noreferrer"
-          href={fileURL}
-          target="_blank"
-          className="btn btn-info"
-        >
-          <i className="fas fa-download"></i> Télécharger
-        </a>
-        :
-      </SweetAlert>
-    );
-  }; */
 
   function deleteNews(id) {
     dispatch(newsDeleted({ id })).then((val) => {
@@ -293,7 +247,7 @@ function ListNews({ onlineStatus, obj }) {
         <ToastContainer />
         <Row>
           <Col md="12">
-            {idRole != 2 ? (
+            {idRole != 2 && onlineStatus === 1 ? (
               <Button
                 className="btn-wd  mr-1 float-left"
                 type="button"

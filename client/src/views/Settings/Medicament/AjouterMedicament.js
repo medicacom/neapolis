@@ -9,6 +9,7 @@ import {
 } from "../../../Redux/medicamentReduce";
 import { getActiveVoix } from "../../../Redux/voix_administrationReduce";
 import { getActiveIndication } from "../../../Redux/indicationReduce";
+import { fetchPays } from "../../../Redux/paysReduce";
 import Select from "react-select";
 
 import { useDispatch } from "react-redux";
@@ -57,6 +58,18 @@ function AjouterMedicament({ onlineStatus }) {
     label: lang === "fr" ? "Voix" : lang === "en" ? "Voice" : "صوت",
   });
 
+  const [optionsPays, setOptionsPays] = React.useState([
+    {
+      value: "",
+      label: lang === "fr" ? "Pays" : lang === "en" ? "Country" : "دولة",
+      isDisabled: true,
+    },
+  ]);
+  const [paysSelect, setPaysSelect] = React.useState({
+    value: 0,
+    label: lang === "fr" ? "Pays" : lang === "en" ? "Country" : "دولة",
+  });
+
   const [optionsIndication, setOptionsIndication] = React.useState([
     {
       value: "",
@@ -94,12 +107,15 @@ function AjouterMedicament({ onlineStatus }) {
       let medicament = await medicamentStore.getAll();
       await tx.objectStore("medicaments").add({
         nom: nom,
+        nom_en: nomEn,
+        nom_ar: nomAr,
         form: form,
         dosage: dosage,
         id_voix: voixSelect.value,
         nom_voix: voixSelect.label,
         id_indication: indicationSelect.value,
         nom_indication: indicationSelect.label,
+        id_pays: paysSelect.value,
         type_table: 4,
         saved: 0,
         etat: 1,
@@ -119,7 +135,15 @@ function AjouterMedicament({ onlineStatus }) {
     if (onlineStatus === 1) {
       var id_voix = voixSelect.value;
       var id_indication = indicationSelect.value;
-      if (nom !== "" && form !== "" && dosage !== "") {
+      var id_pays = paysSelect.value;
+      if (
+        nom !== "" &&
+        form !== "" &&
+        dosage !== "" &&
+        id_indication !== 0 &&
+        id_voix !== 0 &&
+        id_pays !== 0
+      ) {
         dispatch(
           medicamentAdded({
             nom,
@@ -129,6 +153,7 @@ function AjouterMedicament({ onlineStatus }) {
             dosage,
             id_voix,
             id_indication,
+            id_pays,
             id,
           })
         ).then((val) => {
@@ -141,16 +166,23 @@ function AjouterMedicament({ onlineStatus }) {
           } else {
             notify(2, t("problem"));
           }
+
+          setTimeout(async () => {
+            listeMedicament();
+          }, 1500);
         });
       } else {
         notify(2, t("erreur"));
       }
-
-      setTimeout(async () => {
-        listeMedicament();
-      }, 1500);
     } else {
-      if (nom !== "" && form !== "" && dosage !== "") {
+      if (
+        nom !== "" &&
+        form !== "" &&
+        dosage !== "" &&
+        indicationSelect.value !== 0 &&
+        voixSelect.value !== 0 &&
+        paysSelect.value !== 0
+      ) {
         saveMedicamentIndex();
       } else {
         notify(2, t("erreur"));
@@ -181,10 +213,10 @@ function AjouterMedicament({ onlineStatus }) {
     db = await openDB("medis", 1, {});
     const tx = db.transaction("indications", "readwrite");
     let voixStore = tx.objectStore("indications");
-    let medicament = await voixStore.getAll();
+    let entities = await voixStore.getAll();
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Indications" });
-    medicament.forEach((e) => {
+    entities.forEach((e) => {
       if (e.etat === 1) arrayOption.push({ value: e.id, label: e.description });
     });
     setOptionsIndication(arrayOption);
@@ -216,13 +248,41 @@ function AjouterMedicament({ onlineStatus }) {
     db = await openDB("medis", 1, {});
     const tx = db.transaction("voix_administrations", "readwrite");
     let voixStore = tx.objectStore("voix_administrations");
-    let medicament = await voixStore.getAll();
+    let entities = await voixStore.getAll();
     var arrayOption = [];
     arrayOption.push({ value: 0, label: "Voix" });
-    medicament.forEach((e) => {
+    entities.forEach((e) => {
       if (e.etat === 1) arrayOption.push({ value: e.id, label: e.description });
     });
     setOptionsVoix(arrayOption);
+  }, []);
+
+  /** end getVoix **/
+
+  /** start getPays **/
+
+  const getPays = useCallback(async () => {
+    var req = await dispatch(fetchPays());
+    var entities = req.payload;
+    var arrayOption = [];
+    entities.forEach((e) => {
+      var desc = e.nom_en;
+      arrayOption.push({ value: e.id, label: desc });
+    });
+    setOptionsPays(arrayOption);
+  }, [dispatch]);
+
+  const initPays = useCallback(async () => {
+    db = await openDB("medis", 1, {});
+    const tx = db.transaction("pays", "readwrite");
+    let voixStore = tx.objectStore("pays");
+    let entities = await voixStore.getAll();
+    var arrayOption = [];
+    entities.forEach((e) => {
+      var desc = e.nom_en;
+      arrayOption.push({ value: e.id, label: desc });
+    });
+    setOptionsPays(arrayOption);
   }, []);
 
   /** end getVoix **/
@@ -266,6 +326,10 @@ function AjouterMedicament({ onlineStatus }) {
       value: entities.voix_administrations.id,
       label: entities.voix_administrations.description,
     });
+    setPaysSelect({
+      value: entities.pays.id,
+      label: entities.pays.nom_en,
+    });
     setId(location.id);
   }, [dispatch]);
 
@@ -275,10 +339,12 @@ function AjouterMedicament({ onlineStatus }) {
     if (onlineStatus === 1) {
       getVoix();
       getIndication();
+      getPays();
       if (isNaN(location.id) === false) getMedicament();
     } else {
       initIndication();
       initVoix();
+      initPays();
       if (isNaN(location.id) === false) initMedicament();
     }
   }, [location.id, dispatch]);
@@ -422,6 +488,21 @@ function AjouterMedicament({ onlineStatus }) {
                                 setForm(value.target.value);
                               }}
                             ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col className="pl-1" md="6">
+                          <Form.Group>
+                            <label>{t("Drugs.country")}* </label>
+                            <Select
+                              placeholder={t("Drugs.country")}
+                              className="react-select primary"
+                              classNamePrefix="react-select"
+                              value={paysSelect}
+                              onChange={(value) => {
+                                setPaysSelect(value);
+                              }}
+                              options={optionsPays}
+                            />
                           </Form.Group>
                         </Col>
                       </Row>

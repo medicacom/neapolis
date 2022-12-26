@@ -70,100 +70,68 @@ function ListPersonel({ onlineStatus }) {
       Cell: ({ cell }) =>
         cell.row.original.etat === 1 ? t("enabled") : t("disabled"),
     },
-    /* {
-      header: t("actions"),
-      accessorKey: "id",
-      Cell: ({ cell, row }) => (
-        <div className="actions-right block_action">
-          <Button
-            onClick={() => {
-              navigate.push("/utilisateur/update/" + cell.row.original.id);
-            }}
-            variant="warning"
-            size="sm"
-            className="text-warning btn-link edit"
-          >
-            <i className="fa fa-edit" />
-          </Button>
-          <Button
-            onClick={(event) => {
-              changeEtat(cell.row.original.id, cell.row.original.etat);
-            }}
-            variant="danger"
-            size="sm"
-            className={
-              cell.row.original.etat === 1
-                ? "text-success btn-link delete"
-                : "text-danger btn-link delete"
-            }
-          >
-            <i
-              className={
-                cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
-              }
-            />
-          </Button>
-        </div>
-      ),
-    }, */
     {
       header: t("User.validation"),
       accessorKey: "valider",
       Cell: ({ cell, row }) =>
-        cell.row.original.valider === 0 ? (
-          <div className="actions-right block_action">
-            <Button
-              onClick={(event) => {
-                confirmMessage(cell.row.original, 1);
-              }}
-              variant="success"
-              size="sm"
-            >
-              {t("validate")} <i className={"fa fa-check"} />
-            </Button>
-            <br></br>
-            <Button
-              onClick={(event) => {
-                confirmMessage(cell.row.original, 2);
-              }}
-              variant="danger"
-              size="sm"
-              className={"btn-danger"}
-            >
-              {t("refuse")} <i className={"fa fa-times"} />
-            </Button>
-          </div>
-        ) : (
-          <div className="actions-right block_action">
-            <Button
-              onClick={() => {
-                navigate.push("/utilisateur/update/" + cell.row.original.id);
-              }}
-              variant="warning"
-              size="sm"
-              className="text-warning btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              onClick={(event) => {
-                changeEtat(cell.row.original.id, cell.row.original.etat);
-              }}
-              variant="danger"
-              size="sm"
-              className={
-                cell.row.original.etat === 1
-                  ? "text-success btn-link delete"
-                  : "text-danger btn-link delete"
-              }
-            >
-              <i
+        onlineStatus === 1 ? (
+          cell.row.original.valider === 0 ? (
+            <div className="actions-right block_action">
+              <Button
+                onClick={(event) => {
+                  confirmMessage(cell.row.original, 1);
+                }}
+                variant="success"
+                size="sm"
+              >
+                {t("validate")} <i className={"fa fa-check"} />
+              </Button>
+              <br></br>
+              <Button
+                onClick={(event) => {
+                  confirmMessage(cell.row.original, 2);
+                }}
+                variant="danger"
+                size="sm"
+                className={"btn-danger"}
+              >
+                {t("refuse")} <i className={"fa fa-times"} />
+              </Button>
+            </div>
+          ) : (
+            <div className="actions-right block_action">
+              <Button
+                onClick={() => {
+                  navigate.push("/utilisateur/update/" + cell.row.original.id);
+                }}
+                variant="warning"
+                size="sm"
+                className="text-warning btn-link edit"
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
+                onClick={(event) => {
+                  changeEtat(cell.row.original.id, cell.row.original.etat);
+                }}
+                variant="danger"
+                size="sm"
                 className={
-                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  cell.row.original.etat === 1
+                    ? "text-success btn-link delete"
+                    : "text-danger btn-link delete"
                 }
-              />
-            </Button>
-          </div>
+              >
+                <i
+                  className={
+                    cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  }
+                />
+              </Button>
+            </div>
+          )
+        ) : (
+          ""
         ),
     },
     //end
@@ -175,15 +143,15 @@ function ListPersonel({ onlineStatus }) {
         style={{ display: "block", marginTop: "-100px" }}
         title={
           e === 1
-            ? "Vous éte sure de valider ce utilisateur?"
-            : "Vous éte sure de refuser ce utilisateur?"
+            ? t("validate_txt")
+            : t("refuse_txt")
         }
         onConfirm={() => valideEtat(ligne, e)}
         onCancel={() => hideAlert()}
         confirmBtnBsStyle="info"
         cancelBtnBsStyle="danger"
-        confirmBtnText="Oui"
-        cancelBtnText="Non"
+        confirmBtnText={t("Declaration.yes")}
+        cancelBtnText={t("Declaration.no")}
         showCancel
       ></SweetAlert>
     );
@@ -218,7 +186,7 @@ function ListPersonel({ onlineStatus }) {
   function valideEtat(ligne, etat) {
     dispatch(
       validationUser({
-        lang:lang,
+        lang: lang,
         id: ligne.id,
         valider: etat,
         email: ligne.email,
@@ -262,10 +230,20 @@ function ListPersonel({ onlineStatus }) {
           updated: 0,
           valider: resUsers[index].valider,
           id_gouvernorat: resUsers[index].id_role,
-          nom_gouvernorat: resUsers[index].gouvernorats.libelle+"@@"+resUsers[index].gouvernorats.libelle_en+"@@"+resUsers[index].gouvernorats.libelle_ar,
+          nom_gouvernorat:
+            resUsers[index].gouvernorats.libelle +
+            "@@" +
+            resUsers[index].gouvernorats.libelle_en +
+            "@@" +
+            resUsers[index].gouvernorats.libelle_ar,
           id_sp: resUsers[index].id_role,
-          nom_sp: resUsers[index].specialites.nom+"@@"+resUsers[index].specialites.nom_en+"@@"+resUsers[index].specialites.nom_ar,
-          autre_sp: resUsers[index].autre_sp
+          nom_sp:
+            resUsers[index].specialites.nom +
+            "@@" +
+            resUsers[index].specialites.nom_en +
+            "@@" +
+            resUsers[index].specialites.nom_ar,
+          autre_sp: resUsers[index].autre_sp,
         });
       }
     },
@@ -284,7 +262,7 @@ function ListPersonel({ onlineStatus }) {
     var findNonValider = await response.payload.findNonValider;
     setEntities(resUsers);
     setEntitiesNo(findNonValider);
-    let merged_arr = resUsers.concat(findNonValider)
+    let merged_arr = resUsers.concat(findNonValider);
     clearUsers(merged_arr);
   }, [dispatch]);
 

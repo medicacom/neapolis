@@ -2,6 +2,7 @@ var Sequelize = require("sequelize");
 var configuration = require("../config");
 var indication = require("./indication");
 var voix_administration = require("./voix_administration");
+var pays = require("./pays");
 var config = configuration.connection;
 
 // create a sequelize instance with our local postgres database information.
@@ -72,6 +73,15 @@ var medicaments = sequelize.define(
         key: "id",
       },
     },
+    id_pays: {
+      type: Sequelize.INTEGER,
+      unique: false,
+      allowNull: true,
+      references: {
+        model: pays,
+        key: "id",
+      },
+    },
     etat: {
       type: Sequelize.INTEGER,
       unique: false,
@@ -92,9 +102,14 @@ medicaments.belongsTo(indication, {
   foreignKey: "id_indication",
 });
 
+medicaments.belongsTo(pays, {
+  as: "pays",
+  foreignKey: "id_pays",
+});
+
 // create all the defined tables in the specified database.
 sequelize
-  .sync()
+  .sync({alter:true}) 
   .then(() => {
     console.log(
       "medicaments table has been successfully created, if one doesn't exist"

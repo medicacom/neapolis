@@ -249,12 +249,10 @@ function ListDeclaration({ obj, onlineStatus }) {
       array.push(obj)
     }
     await tx.done;
-    console.log("initDetail",array)
     confirmMessage(array[0]);
   }
 
   const confirmMessage = async (data) => {
-    console.log(data)
     var nomAge = "";
     if (data.patients.ages) {
       nomAge =
@@ -416,33 +414,33 @@ function ListDeclaration({ obj, onlineStatus }) {
               <li>
                 <strong>{t("Declaration.gravite")}: </strong>
                 <br></br>
-                {t("Declaration.grave") + ": "}
+                <strong>{t("Declaration.grave") + ": "}</strong>
                 {data.grave === 1 ? t("Declaration.yes") : t("Declaration.no")}
                 <br></br>
-                {t("Declaration.hospitalisation") + ": "}
+                <strong>{t("Declaration.hospitalisation") + ": "}</strong>
                 {data.hospitalisation === 1
                   ? t("Declaration.yes")
                   : t("Declaration.no")}
                 <br></br>
-                {t("Declaration.pronostic") + ": "}
+                <strong>{t("Declaration.pronostic") + ": "}</strong>
                 {data.pronostic === 1
                   ? t("Declaration.yes")
                   : t("Declaration.no")}
                 <br></br>
-                {t("Declaration.deces") + ": "}
+                <strong>{t("Declaration.deces") + ": "}</strong>
                 {data.deces === 1 ? t("Declaration.yes") : t("Declaration.no")}
                 <br></br>
-                {t("Declaration.incapacite") + ": "}
+                <strong>{t("Declaration.incapacite") + ": "}</strong>
                 {data.incapacite === 1
                   ? t("Declaration.yes")
                   : t("Declaration.no")}
                 <br></br>
-                {t("Declaration.anomalie") + ": "}
+                <strong>{t("Declaration.anomalie") + ": "}</strong>
                 {data.anomalie === 1
                   ? t("Declaration.yes")
                   : t("Declaration.no")}
                 <br></br>
-                {t("Declaration.autre") + ": "}
+                <strong>{t("Declaration.autre") + ": "}</strong>
                 {data.autre === 1 ? t("Declaration.yes") : t("Declaration.no")}
               </li>
               <li>
@@ -455,7 +453,6 @@ function ListDeclaration({ obj, onlineStatus }) {
               </li>
               <li>
                 <strong>{t("Declaration.evolution")}: </strong>
-                <br></br>
                 {data.evolution === 1
                   ? t("Declaration.evolution_txt1")
                   : data.evolution === 2
@@ -654,7 +651,6 @@ function ListDeclaration({ obj, onlineStatus }) {
       columns: [{ name: "Déclaration" }],
       rows: [[``]],
     });
-    console.log(columnArr, data);
     sheet.addTable({
       name: headerName,
       ref: "A3",
@@ -681,7 +677,6 @@ function ListDeclaration({ obj, onlineStatus }) {
     /* const table = sheet.getTable(headerName);
     for (let i = 0; i < table.table.columns.length; i++) {
       for (let j = 0; j <= table.table.rows.length; j++) {
-        console.log(`${String.fromCharCode(65 + i)}3`)
         sheet.getCell(`${String.fromCharCode(65 + i)}${j + 3}`).border = {
           top: { style: "thin" },
           left: { style: "thin" },
@@ -709,7 +704,6 @@ function ListDeclaration({ obj, onlineStatus }) {
   const getDetail = useCallback(
     async (res) => {
       var array = [];
-      console.log(res);
       res.forEach((data) => {
         var nomAge = "";
 

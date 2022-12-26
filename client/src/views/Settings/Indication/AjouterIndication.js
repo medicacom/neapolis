@@ -57,6 +57,8 @@ function AjouterIndication({ onlineStatus }) {
       let indication = await indicationStore.getAll();
       await tx.objectStore("indications").add({
         description: description,
+        description_en: descriptionEn,
+        description_ar: descriptionAr,
         type_table: 6,
         saved: 0,
         etat: 1,

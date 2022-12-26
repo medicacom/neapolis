@@ -7,10 +7,12 @@ var indication = require("../models/indication");
 var voix_administration = require("../models/voix_administration");
 var effet_indesirable = require("../models/effet_indesirable");
 var medicaments = require("../models/medicament");
+var patient = require("../models/patient");
+var rapport = require("../models/rapport");
+var notification = require("../models/notification");
 
 var bcrypt = require("bcrypt");
-const webpush = require("web-push");
-var fs = require("fs");
+const sendMail = require("./sendMailController");
 module.exports = router;
 /****
  * type_table
@@ -21,41 +23,9 @@ module.exports = router;
  * 5-voix
  * 6-indications
  * 7-effet
+ * 8-declaration
+ * 10-notifiacation
  ****/
-const publicVapidKey =
-  "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo";
-const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
-
-webpush.setVapidDetails(
-  "mailto:feriani.khalil2@gmail.com",
-  publicVapidKey,
-  privateVapidKey
-);
-// Subscribe Route
-router.post("/subscribe", (req, res) => {
-  // Get pushSubscription object
-  const subscription = req.body;
-  console.log(subscription);
-  // Send 201 - resource created
-  res.status(201).json({});
-  /* const data = fs.readFileSync('../client/src/assets/img/logo.png');
-  console.log("first",data) */
-  // Create payload
-  const payload = JSON.stringify({
-    title: "Push Test",
-    body: {
-      body: "Notified by khalil1",      
-      icon: "/logo.png",
-      /* icon: "http://image.ibb.co/frYOFd/tmlogo.png", */
-    },
-  });
-
-  // Pass object into sendNotification
-  webpush
-    .sendNotification(subscription, payload)
-    .catch((err) => console.error(err));
-});
-
 
 router.post("/updateBDOld/:idUser", async (req, res) => {
   var insertRole = req.body.insertRole;
@@ -154,6 +124,109 @@ router.post("/updateBD/:idUser", async (req, res) => {
   var voixStore = req.body.voixStore;
   var effStore = req.body.effStore;
   var medicamentStore = req.body.medicamentStore; 
+  var declaStore = req.body.declaStore; 
+
+  if(declaStore.length !== 0) {
+    for (const key in declaStore) { 
+      const element1 = declaStore[key];
+      patient
+        .create({
+          id_user: element1.patients.id_user,
+          initiales: element1.patients.initiales,
+          age: element1.patients.age,
+          sexe: element1.patients.sexe,
+          dateNaissance: element1.patients.dateNaissance,
+          agePatient: element1.patients.agePatient,
+          ageCategorie: element1.patients.ageCategorie != 0 ? element1.patients.ageCategorie : null,
+          id_indication: element1.patients.id_indication,
+          poid: element1.patients.poid,
+          taille: element1.patients.taille,
+          allergie: element1.patients.allergie,
+        })
+        .then((p) => {
+          rapport
+            .create({
+              id_user: element1.id_user,
+              id_patient: p.id,
+              effet: element1.effet,
+              dateDebut: element1.dateDebut,
+              dateFin: element1.dateFin,
+              information: element1.information,
+              complementaires: element1.complementaires,
+              id_medicament: element1.id_medicament,
+              dateDebutAdmin: element1.dateDebutAdmin,
+              dateFinAdmin: element1.dateFinAdmin,
+              id_voix: element1.id_voix,
+              posologie: element1.posologie,
+              numero: element1.numero,
+              grave: element1.grave,
+              hospitalisation: element1.hospitalisation,
+              pronostic: element1.pronostic,
+              incapacite: element1.incapacite,
+              anomalie: element1.anomalie,
+              autre: element1.autre,
+              evolution: element1.evolution,
+              traites: element1.traites,
+              survenus: element1.survenus,
+              deces: element1.deces,
+              date_admin: element1.date_admin,
+              therapeutique: element1.therapeutique,
+              description_eff: element1.description_eff,
+              poid: element1.poid,
+              taille: element1.taille,
+              allergie: element1.allergie,
+            })
+            .then((r) => {
+              user.findAll({ where: { id_role: [1, 3] } }).then(function (u) {
+                var msg = "";
+                var txt =
+                  element1.lang == "fr"
+                    ? "Neapolis | Nouvelle déclaration"
+                    : element1.lang == "en"
+                    ? "Neapolis | New declaration"
+                    : "Neapolis | بيان جديد";
+                msg += ` <tr><td style="padding-top:5px;"> ${txt} </td></tr>`;
+                var subject =
+                  element1.lang == "fr"
+                    ? "Sujet: " + txt
+                    : element1.lang == "en"
+                    ? "Subject: " + txt
+                    : txt + ` :موضوع`;
+                var arrayNotif = [];
+                u.forEach((element) => {
+                  var hi =
+                    element1.lang == "fr"
+                      ? `Bonjour ${
+                          element.dataValues.nom +
+                          " " +
+                          element.dataValues.prenom
+                        } ,`
+                      : element1.lang == "en"
+                      ? `Hello ${
+                          element.dataValues.nom +
+                          " " +
+                          element.dataValues.prenom
+                        } ,`
+                      : ` ${
+                          element.dataValues.nom +
+                          " " +
+                          element.dataValues.prenom
+                        } مرحبا`;
+                  sendMail(subject, msg, element.dataValues.email, hi, [], element1.lang);
+                  arrayNotif.push({
+                    id_user: element.dataValues.id,
+                    text: "Nouvelle déclaration",
+                    text_ar: "بيان جديد",
+                    text_en: "New declaration",
+                    etat: 3,
+                  });
+                });
+                notification.bulkCreate(arrayNotif).then(() => {});
+              });
+            });
+        })
+    }
+  }
   var objRole = new Object();
   if (roleStore.length !== 0) {
     var rolesCreate = await role.bulkCreate(roleStore);

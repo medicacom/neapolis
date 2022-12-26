@@ -116,6 +116,10 @@ function AjouterNews({ onlineStatus }) {
                   notify(1, t("update_txt"));
                 }
                 send(val.payload.data.id);
+
+                setTimeout(async () => {
+                  listeNews();
+                }, 1500);
               } else {
                 notify(2, t("problem"));
               }
@@ -127,10 +131,6 @@ function AjouterNews({ onlineStatus }) {
       } else {
         notify(2, t("erreur"));
       }
-
-      setTimeout(async () => {
-        listeNews();
-      }, 1500);
     } else {
       if (date !== "" && description !== "" && titre !== "") {
         saveNewsIndex();

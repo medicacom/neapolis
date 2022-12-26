@@ -436,7 +436,7 @@ router.get("/getDetailUser/:id", auth, async (req, res) => {
   var id = req.params.id;
   try {
     var findUser = await user.findOne({
-      include: ["roles"],
+      include: ["roles","specialites","gouvernorats"],
       where: { id: id },
     });
     return res.status(200).send({

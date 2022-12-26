@@ -13,8 +13,13 @@ import { openDB } from "idb";
 import { fetchAnnee } from "../Redux/anneeReduce";
 import { fetchGouvernorat } from "../Redux/gouvernoratReduce";
 import { useTranslation } from "react-multi-lang";
+import { fetchAge } from "../Redux/ageReduce";
+import { fetchVoix_administration } from "../Redux/voix_administrationReduce";
+import { fetchIndication } from "../Redux/indicationReduce";
+import { fetchMedicament } from "../Redux/medicamentReduce";
+import { fetchPays } from "../Redux/paysReduce";
 
-function Profile({ obj,onlineStatus }) {
+function Profile({ obj, onlineStatus }) {
   const t = useTranslation();
   let db;
   const notify = (type, msg) => {
@@ -34,11 +39,11 @@ function Profile({ obj,onlineStatus }) {
       );
   };
   const dispatch = useDispatch();
-  var id = onlineStatus === 1?obj.user.id:obj.id;
-  var nomStore = onlineStatus === 1?obj.user.nom:obj.nom;
-  var prenomStore = onlineStatus === 1?obj.user.prenom:obj.prenom;
-  var telStore = onlineStatus === 1?obj.user.tel:obj.tel;
-  var emailStore = onlineStatus === 1?obj.user.email:obj.email;
+  var id = onlineStatus === 1 ? obj.user.id : obj.id;
+  var nomStore = onlineStatus === 1 ? obj.user.nom : obj.nom;
+  var prenomStore = onlineStatus === 1 ? obj.user.prenom : obj.prenom;
+  var telStore = onlineStatus === 1 ? obj.user.tel : obj.tel;
+  var emailStore = onlineStatus === 1 ? obj.user.email : obj.email;
 
   const [nom, setNom] = React.useState(nomStore);
   const [prenom, setPrenom] = React.useState(prenomStore);
@@ -70,10 +75,10 @@ function Profile({ obj,onlineStatus }) {
         order: resRole[index].order,
         role: resRole[index].role,
         id: resRole[index].id,
-        saved:1,
-        updated:0,
-        deleted:0,
-        type_table:2
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 2,
       });
     }
   }, [dispatch]);
@@ -147,7 +152,7 @@ function Profile({ obj,onlineStatus }) {
     var resRoots = await root.payload;
     const tx = db.transaction("rootBase", "readwrite");
     for (let index = 0; index < resRoots.length; index++) {
-      await tx.objectStore('rootBase').add({
+      await tx.objectStore("rootBase").add({
         id: resRoots[index].id,
         name: resRoots[index].name,
         name_en: resRoots[index].name_en,
@@ -155,16 +160,15 @@ function Profile({ obj,onlineStatus }) {
         className: resRoots[index].className,
         path: resRoots[index].path,
         component: resRoots[index].component,
-        icon:resRoots[index].icon,
+        icon: resRoots[index].icon,
         role: resRoots[index].role,
         ordre: resRoots[index].ordre,
         parent: resRoots[index].parent,
-        saved:1,
-        updated:0,
-        deleted:0,
-        type_table:1
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 1,
       });
-      
     }
   }, [dispatch]);
 
@@ -176,7 +180,7 @@ function Profile({ obj,onlineStatus }) {
 
   async function storeDetailUser() {
     let tx = db.transaction("detailUser", "readwrite");
-    const index = tx.store.index('email');
+    const index = tx.store.index("email");
     for await (let cursor of index.iterate(obj.user.email)) {
       var objDetail = { ...cursor.value };
       objDetail.id = obj.user.id;
@@ -187,25 +191,162 @@ function Profile({ obj,onlineStatus }) {
       objDetail.etat = obj.user.etat;
       objDetail.token = obj.user.token;
       objDetail.code = obj.user.code;
+      objDetail.specialites = obj.user.specialites;
+      objDetail.gouvernorats = obj.user.gouvernorats;
+      objDetail.roles = obj.user.roles;
       cursor.update(objDetail);
     }
     await tx.done;
   }
 
+  //storeAge
+  const storeAge = useCallback(async () => {
+    var age = await dispatch(fetchAge());
+    var res = await age.payload;
+    const tx = db.transaction("ages", "readwrite");
+    for (let index = 0; index < res.length; index++) {
+      await tx.objectStore("ages").add({
+        description: res[index].description,
+        description_en: res[index].description_en,
+        description_ar: res[index].description_ar,
+        etat: res[index].etat,
+        id: res[index].id,
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 9,
+      });
+    }
+  }, []);
+
+  async function clearAge() {
+    let txMedicament = db.transaction("ages", "readwrite");
+    await txMedicament.objectStore("ages").clear();
+    storeAge();
+  }
+
+  //storeVoix
+  const storeVoix = useCallback(async () => {
+    var age = await dispatch(fetchVoix_administration());
+    var res = await age.payload;
+    const tx = db.transaction("voix_administrations", "readwrite");
+    for (let index = 0; index < res.length; index++) {
+      await tx.objectStore("voix_administrations").add({
+        description: res[index].description,
+        description_en: res[index].description_en,
+        description_ar: res[index].description_ar,
+        etat: res[index].etat,
+        id: res[index].id,
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 9,
+      });
+    }
+  }, []);
+
+  async function clearVoix() {
+    let tx = db.transaction("voix_administrations", "readwrite");
+    await tx.objectStore("voix_administrations").clear();
+    storeVoix();
+  }
+
+  //storeAge
+  const storeIndication = useCallback(async () => {
+    var age = await dispatch(fetchIndication());
+    var res = await age.payload;
+    const tx = db.transaction("indications", "readwrite");
+    for (let index = 0; index < res.length; index++) {
+      await tx.objectStore("indications").add({
+        description: res[index].description,
+        description_en: res[index].description_en,
+        description_ar: res[index].description_ar,
+        etat: res[index].etat,
+        id: res[index].id,
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 9,
+      });
+    }
+  }, []);
+
+  async function clearIndications() {
+    let tx = db.transaction("indications", "readwrite");
+    await tx.objectStore("indications").clear();
+    storeIndication();
+  }
+
+  //storeMedicament
+  const storeMedicament = useCallback(async () => {
+    var age = await dispatch(fetchMedicament());
+    var res = await age.payload;
+    const tx = db.transaction("medicaments", "readwrite");
+    for (let index = 0; index < res.length; index++) {
+      await tx.objectStore("medicaments").add({
+        nom: res[index].nom,
+        nom_en: res[index].nom_en,
+        nom_ar: res[index].nom_ar,
+        etat: res[index].etat,
+        dosage: res[index].dosage,
+        id: res[index].id,
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 9,
+      });
+    }
+  }, []);
+  async function clearMedicament() {
+    let tx = db.transaction("medicaments", "readwrite");
+    await tx.objectStore("medicaments").clear();
+    storeMedicament();
+  }
+  const storePays = useCallback(async () => {
+    var age = await dispatch(fetchPays());
+    var res = await age.payload;
+    const tx = db.transaction("pays", "readwrite");
+    for (let index = 0; index < res.length; index++) {
+      await tx.objectStore("pays").add({
+        code: res[index].code,
+        nom: res[index].nom,
+        nom_en: res[index].nom_en,
+        alpha2: res[index].alpha2,
+        alpha3: res[index].alpha3,
+        etat: res[index].etat,
+        id: res[index].id,
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 9,
+      });
+    }
+  }, []);
+  async function clearPays() {
+    let tx = db.transaction("pays", "readwrite");
+    await tx.objectStore("pays").clear();
+    storePays();
+  }
+
   async function init() {
     db = await openDB("medis", 1, {});
-    if(onlineStatus === 1){
+    if (onlineStatus === 1) {
       clearRole();
       clearRoots();
       clearAnnee();
       clearGouvernorats();
       clearSpecialite();
+      clearAge();
+      clearVoix();
+      clearIndications();
+      clearMedicament();
+      clearPays();
       storeDetailUser();
     }
   }
 
   React.useEffect(() => {
-    if(onlineStatus === 1){
+    if (onlineStatus === 1) {
       init();
     }
   }, [init]);
@@ -270,7 +411,9 @@ function Profile({ obj,onlineStatus }) {
                         </Col>
                         <Col className="pl-1" md="6">
                           <Form.Group>
-                            <label>{t("User.password")}* ({t("User.password_err")})</label>
+                            <label>
+                              {t("User.password")}* ({t("User.password_err")})
+                            </label>
                             <Form.Control
                               id="mdp_user"
                               defaultValue=""

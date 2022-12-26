@@ -143,7 +143,6 @@ function Header({ users, onlineStatus }) {
 
   //storeNotif
   const storeNotif = useCallback(async (res) => {
-    console.log(res)
     const tx = db.transaction("notifications", "readwrite");
     for (let index = 0; index < res.length; index++) {
       await tx.objectStore("notifications").add({
@@ -177,7 +176,6 @@ function Header({ users, onlineStatus }) {
       notifs.push(obj)
     }
     await tx.done;
-    console.log("notifs",notifs)
     setData(notifs);
     /* let notifs = await store.getAll();
     setData(notifs); */

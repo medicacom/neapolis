@@ -147,6 +147,7 @@ router.post("/addDeclaration", (req, res) => {
                 });
               });
               notification.bulkCreate(arrayNotif).then(() => {});
+              return res.status(200).send(true);
             });
           });
       })
@@ -262,6 +263,7 @@ router.post("/addDeclaration", (req, res) => {
                     });
                   });
                   notification.bulkCreate(arrayNotif).then(() => {});
+                  return res.status(200).send(true);
                 });
               });
           })

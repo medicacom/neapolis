@@ -1,10 +1,8 @@
-import SweetAlert from "react-bootstrap-sweetalert";
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback, useMemo } from "react";
 import {
   fetchEffet_indesirable,
   effet_indesirableChangeEtat,
-  effet_indesirableDeleted,
 } from "../../../Redux/effet_indesirableReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -40,51 +38,43 @@ function ListEffet_indesirable({ onlineStatus }) {
       {
         header: t("actions"),
         accessorKey: "id",
-        Cell: ({ cell, row }) => (
-          <div className="actions-right block_action">
-            <Button
-              onClick={() => {
-                navigate.push(
-                  "/effet_indesirable/update/" + cell.row.original.id
-                );
-              }}
-              variant="warning"
-              size="sm"
-              className="text-warning btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              onClick={(event) => {
-                changeEtat(cell.row.original.id, cell.row.original.etat);
-              }}
-              variant="danger"
-              size="sm"
-              className={
-                cell.row.original.etat === 1
-                  ? "text-success btn-link delete"
-                  : "text-danger btn-link delete"
-              }
-            >
-              <i
+        Cell: ({ cell, row }) =>
+          onlineStatus === 1 ? (
+            <div className="actions-right block_action">
+              <Button
+                onClick={() => {
+                  navigate.push(
+                    "/effet_indesirable/update/" + cell.row.original.id
+                  );
+                }}
+                variant="warning"
+                size="sm"
+                className="text-warning btn-link edit"
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
+                onClick={(event) => {
+                  changeEtat(cell.row.original.id, cell.row.original.etat);
+                }}
+                variant="danger"
+                size="sm"
                 className={
-                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  cell.row.original.etat === 1
+                    ? "text-success btn-link delete"
+                    : "text-danger btn-link delete"
                 }
-              />
-            </Button>
-            {/*  <Button
-              id={"idLigne_" + cell.row.original.id}
-              onClick={(e) => {
-                confirmMessage(cell.row.original.id,e);
-              }}
-              variant="danger"
-              size="sm"
-              className="text-danger btn-link delete"
-            >
-              <i className="fa fa-trash" id={"idLigne_" + cell.row.original.id}/>
-            </Button> */}
-          </div>
-        ),
+              >
+                <i
+                  className={
+                    cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  }
+                />
+              </Button>
+            </div>
+          ) : (
+            ""
+          ),
       },
       //end
     ],
@@ -106,7 +96,7 @@ function ListEffet_indesirable({ onlineStatus }) {
         </strong>
       );
   };
-  
+
   const hideAlert = () => {
     setAlert(null);
   };

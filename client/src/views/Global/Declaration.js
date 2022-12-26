@@ -14,7 +14,6 @@ import Medicament from "./Medicament";
 import { useEffect, useCallback } from "react";
 import { fetchAge } from "../../Redux/ageReduce";
 import { getActiveMedicament } from "../../Redux/medicamentReduce";
-import { getActiveEffet } from "../../Redux/effet_indesirableReduce";
 import { getActiveIndication } from "../../Redux/indicationReduce";
 import { getActiveVoix } from "../../Redux/voix_administrationReduce";
 import { declarationAdded } from "../../Redux/declarationReduce";
@@ -25,8 +24,10 @@ import { Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
 import { useTranslation } from "react-multi-lang";
+import { openDB } from "idb";
 
-function Declaration({ obj }) {
+function Declaration({ obj, onlineStatus }) {
+  let db;
   const t = useTranslation();
   /** start init local storage **/
   let nomStorage = window.localStorage.getItem("nom");
@@ -137,8 +138,13 @@ function Declaration({ obj }) {
   var nom_prenom = "";
   if (token !== null) {
     var decoded = jwt_decode(token);
-    id = decoded.id;
-    nom_prenom = obj.user.nom + " " + obj.user.prenom;
+    if (onlineStatus === 1) {
+      id = decoded.id;
+      nom_prenom = obj.user.nom + " " + obj.user.prenom;
+    } else {
+      id = obj.id;
+      nom_prenom = obj.nom + " " + obj.prenom;
+    }
   }
   const dispatch = useDispatch();
   const navigate = useHistory();
@@ -167,15 +173,25 @@ function Declaration({ obj }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   //Donnes
-  const [nom, setNom] = React.useState(nomStorage ? (nomStorage) : "");
-  const [prenom, setPrenom] = React.useState(prenomStorage ? (prenomStorage) : "");
+  const [nom, setNom] = React.useState(nomStorage ? nomStorage : "");
+  const [prenom, setPrenom] = React.useState(
+    prenomStorage ? prenomStorage : ""
+  );
   const [tel, setTel] = React.useState(telStorage ? parseInt(telStorage) : "");
-  const [email, setEmail] = React.useState(emailStorage ? (emailStorage) : "");
-  const [password, setPassword] = React.useState(passwordStorage ? (passwordStorage) : "");
+  const [email, setEmail] = React.useState(emailStorage ? emailStorage : "");
+  const [password, setPassword] = React.useState(
+    passwordStorage ? passwordStorage : ""
+  );
   const [specialite, setSpecialite] = React.useState(objSp);
-  const [typeSpecialite, setTypeSpecialite] = React.useState(typeSpecialiteStorage ? parseInt(typeSpecialiteStorage) : 0);
-  const [idSpecialite, setIdSpecialite] = React.useState(idSpecialiteStorage ? parseInt(idSpecialiteStorage) : 0);
-  const [autreSp, setAutreSp] = React.useState(autreSpStorage ? parseInt(autreSpStorage) : "");
+  const [typeSpecialite, setTypeSpecialite] = React.useState(
+    typeSpecialiteStorage ? parseInt(typeSpecialiteStorage) : 0
+  );
+  const [idSpecialite, setIdSpecialite] = React.useState(
+    idSpecialiteStorage ? parseInt(idSpecialiteStorage) : 0
+  );
+  const [autreSp, setAutreSp] = React.useState(
+    autreSpStorage ? parseInt(autreSpStorage) : ""
+  );
   //Patient
   const [initiales, setInitiales] = React.useState(
     initialesStorage ? initialesStorage : ""
@@ -312,8 +328,15 @@ function Declaration({ obj }) {
 
   /** start Age **/
   const getAges = useCallback(async () => {
-    var res = await dispatch(fetchAge());
-    var entities = res.payload;
+    var entities = [];
+    if (onlineStatus === 1) {
+      var res = await dispatch(fetchAge());
+      entities = res.payload;
+    } else {
+      var tx = db.transaction("ages", "readwrite");
+      let store = tx.objectStore("ages");
+      entities = await store.getAll();
+    }
     var arrayOption = [];
     entities.forEach((e) => {
       var description =
@@ -330,8 +353,26 @@ function Declaration({ obj }) {
 
   /** start Indication **/
   const getIndication = useCallback(async () => {
-    var res = await dispatch(getActiveIndication());
-    var entities = res.payload;
+    var entities = [];
+    if (onlineStatus === 1) {
+      var res = await dispatch(getActiveIndication());
+      entities = res.payload;
+      /* if (entities.length !== 0) {
+        var tx = db.transaction("indications", "readwrite");
+        for (let index = 0; index < entities.length; index++) {
+          await tx.objectStore("indications").add({
+            id: entities[index].id,
+            description: entities[index].description,
+            description_en: entities[index].description_en,
+            description_ar: entities[index].description_ar,
+          });
+        }
+      } */
+    } else {
+      var tx = db.transaction("indications", "readwrite");
+      let store = tx.objectStore("indications");
+      entities = await store.getAll();
+    }
     var arrayOption = [];
     entities.forEach((e) => {
       var description =
@@ -346,32 +387,36 @@ function Declaration({ obj }) {
   }, [dispatch]);
   /** end Indication **/
 
-  /** start Effet **/
-  const getEffet = useCallback(async () => {
-    var res = await dispatch(getActiveEffet());
-    var entities = res.payload;
-    var arrayOption = [];
-    entities.forEach((e) => {
-      var description =
-        lang === "fr"
-          ? e.description
-          : lang === "en"
-          ? e.description_en
-          : e.description_ar;
-      arrayOption.push({ value: e.id, label: description });
-    });
-    setOptionsEffet(arrayOption);
-  }, [dispatch]);
-  /** end Effet **/
-
   /** start Medicament **/
   const getMedicament = useCallback(async () => {
-    var res = await dispatch(getActiveMedicament());
-    var entities = res.payload;
+    var entities = [];
+    if (onlineStatus === 1) {
+      var res = await dispatch(getActiveMedicament());
+      entities = res.payload;
+      /* if (entities.length !== 0) {
+        const tx = db.transaction("medicaments", "readwrite");
+        for (let index = 0; index < entities.length; index++) {
+          await tx.objectStore("medicaments").add({
+            id: entities[index].id,
+            dosage: entities[index].dosage,
+            nom: entities[index].nom,
+            nom_ar: entities[index].nom_ar,
+            nom_en: entities[index].nom_en,
+          });
+        }
+      } */
+    } else {
+      const tx = db.transaction("medicaments", "readwrite");
+      let store = tx.objectStore("medicaments");
+      entities = await store.getAll();
+    }
     var arrayOption = [];
     entities.forEach((e) => {
       var nomMed = lang === "fr" ? e.nom : lang === "en" ? e.nom_en : e.nom_ar;
-      arrayOption.push({ value: e.id, label: nomMed + "( " + e.dosage + ")" });
+      arrayOption.push({
+        value: e.id,
+        label: nomMed + "( " + e.dosage + ")",
+      });
     });
     setOptionsMedicament(arrayOption);
   }, [dispatch]);
@@ -379,8 +424,26 @@ function Declaration({ obj }) {
 
   /** start Medicament **/
   const getVoix = useCallback(async () => {
-    var res = await dispatch(getActiveVoix());
-    var entities = res.payload;
+    var entities = [];
+    if (onlineStatus === 1) {
+      var res = await dispatch(getActiveVoix());
+      var entities = res.payload;
+      /* if (entities.length !== 0) {
+        const tx = db.transaction("voix_administrations", "readwrite");
+        for (let index = 0; index < entities.length; index++) {
+          await tx.objectStore("voix_administrations").add({
+            id: entities[index].id,
+            description: entities[index].description,
+            description_en: entities[index].description_en,
+            description_ar: entities[index].description_ar,
+          });
+        }
+      } */
+    } else {
+      var tx = db.transaction("voix_administrations", "readwrite");
+      let store = tx.objectStore("voix_administrations");
+      entities = await store.getAll();
+    }
     var arrayOption = [];
     entities.forEach((e) => {
       var description =
@@ -473,65 +536,69 @@ function Declaration({ obj }) {
       } else {
         var tokenL = localStorage.getItem("x-access-token");
         let langL = window.localStorage.getItem("lang");
-        dispatch(
-          declarationAdded({
-            id_user: id,
-            nom: nom,
-            prenom: prenom,
-            tel: tel,
-            email: email,
-            id_sp: id_sp,
-            initiales: initiales,
-            age: age,
-            sexe: sexe,
-            dateNaissance: dateNaissance,
-            agePatient: agePatient,
-            ageCategorie: ageCategorie.value,
-            id_indication: id_indication,
-            /* id_eff: id_eff, */
-            effet: effet,
-            dateDebut: dateDebut,
-            dateFin: dateFin,
-            information: information,
-            complementaires: complementaires,
-            id_medicament: id_medicament,
-            dateDebutAdmin: dateDebutAdmin,
-            dateFinAdmin: dateFinAdmin,
-            id_voix: id_voix,
-            numero: numero,
-            posologie: posologie,
-            grave: grave,
-            hospitalisation: hospitalisation,
-            pronostic: pronostic,
-            incapacite: incapacite,
-            anomalie: anomalie,
-            autre: autre,
-            evolution: evolution,
-            traites: traites,
-            survenus: survenus,
-            deces: deces,
-            date_admin: date_admin,
-            therapeutique: therapeutique,
-            description_eff: description_eff,
-            poid: poid,
-            taille: taille,
-            allergie: allergie,
-            lang: lang,
-          })
-        ).then(() => {
-          notify(1, t("declaration_send"));
-          setTimeout(async () => {
-            localStorage.clear();
-            if (tokenL) localStorage.setItem("x-access-token", tokenL);
-            localStorage.setItem("lang", langL);
-            if (token === null) {
-              navigate.push("/login");
-            } else {
-              navigate.push("/listDeclaration");
-            }
-            /* window.location.reload(); */
-          }, 1500);
-        });
+
+        if (onlineStatus === 1) {
+          dispatch(
+            declarationAdded({
+              id_user: id,
+              nom: nom,
+              prenom: prenom,
+              tel: tel,
+              email: email,
+              id_sp: id_sp,
+              initiales: initiales,
+              age: age,
+              sexe: sexe,
+              dateNaissance: dateNaissance,
+              agePatient: agePatient,
+              ageCategorie: ageCategorie.value,
+              id_indication: id_indication,
+              /* id_eff: id_eff, */
+              effet: effet,
+              dateDebut: dateDebut,
+              dateFin: dateFin,
+              information: information,
+              complementaires: complementaires,
+              id_medicament: id_medicament,
+              dateDebutAdmin: dateDebutAdmin,
+              dateFinAdmin: dateFinAdmin,
+              id_voix: id_voix,
+              numero: numero,
+              posologie: posologie,
+              grave: grave,
+              hospitalisation: hospitalisation,
+              pronostic: pronostic,
+              incapacite: incapacite,
+              anomalie: anomalie,
+              autre: autre,
+              evolution: evolution,
+              traites: traites,
+              survenus: survenus,
+              deces: deces,
+              date_admin: date_admin,
+              therapeutique: therapeutique,
+              description_eff: description_eff,
+              poid: poid,
+              taille: taille,
+              allergie: allergie,
+              lang: lang,
+            })
+          ).then(() => {
+            notify(1, t("declaration_send"));
+            setTimeout(async () => {
+              localStorage.clear();
+              if (tokenL) localStorage.setItem("x-access-token", tokenL);
+              localStorage.setItem("lang", langL);
+              if (token === null) {
+                navigate.push("/login");
+              } else {
+                navigate.push("/listDeclaration");
+              }
+            }, 1500);
+          });
+        } else {
+          saveDeclarationIndex();
+        }
       }
     }
 
@@ -543,23 +610,121 @@ function Declaration({ obj }) {
     }
   };
 
-  useEffect(() => {
-    /* let element = document.getElementById("declaration-id");
+  async function saveDeclarationIndex() {
+    db = await openDB("medis", 1, {});
+    const tx = db.transaction("declarations", "readwrite");
+    let store = tx.objectStore("declarations");
+    let declarations = await store.getAll();
+    var date1 = new Date(); // Or the date you'd like converted.
+    var date = new Date(date1.getTime() - date1.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 10);
+    await tx.objectStore("declarations").add({
+      id: declarations[declarations.length - 1].id + 1,
+      id_user: id,
+      users: obj,
+      patients: {
+        createdAt: date,
+        id: declarations[declarations.length - 1].id + 1,
+        id_user: id,
+        users: obj,
+        initiales: initiales,
+        age: age,
+        sexe: sexe,
+        dateNaissance: dateNaissance,
+        agePatient: agePatient,
+        ageCategorie: ageCategorie.value,
+        ages: ageCategorie
+          ? {
+              id: ageCategorie.value,
+              nom: ageCategorie.label,
+              nom_ar: ageCategorie.label,
+              nom_en: ageCategorie.label,
+            }
+          : null,
+        id_indication: indication.value,
+        indications: {
+          id: indication.value,
+          description: indication.label,
+          description_ar: indication.label,
+          description_en: indication.label,
+        },
+        poid: poid,
+        taille: taille,
+        allergie: allergie,
+      },
+      effet: effet,
+      dateDebut: dateDebut,
+      dateFin: dateFin,
+      information: information,
+      complementaires: complementaires,
+      id_medicament: medicament.value,
+      medicaments: {
+        id: medicament.value,
+        nom: medicament.label,
+        nom_ar: medicament.label,
+        nom_en: medicament.label,
+      },
+      dateDebutAdmin: dateDebutAdmin,
+      dateFinAdmin: dateFinAdmin,
+      id_voix: voix.value,
+      voix_administrations: {
+        id: voix.value,
+        description: voix.label,
+        description_ar: voix.label,
+        description_en: voix.label,
+      },
+      numero: numero,
+      posologie: posologie,
+      grave: grave,
+      hospitalisation: hospitalisation,
+      pronostic: pronostic,
+      incapacite: incapacite,
+      anomalie: anomalie,
+      autre: autre,
+      evolution: evolution,
+      traites: traites,
+      survenus: survenus,
+      deces: deces,
+      date_admin: date_admin,
+      therapeutique: therapeutique,
+      description_eff: description_eff,
+      lang: lang,
+      type_table: 8,
+      saved: 0,
+    });
+    notify(1, t("declaration_send"));
 
-    // removing the class
-    element.className = ""; */
-    getAges();
+    setTimeout(async () => {
+      if (token === null) {
+        navigate.push("/login");
+      } else {
+        navigate.push("/listDeclaration");
+      }
+    }, 1500);
+  }
+
+  async function init() {
+    db = await openDB("medis", 1, {});
     getIndication();
-    getEffet();
     getMedicament();
     getVoix();
+    getAges();
+  }
+
+  useEffect(() => {
+    let element = document.getElementById("declaration-id");
+    // removing the class
+    if(element)
+      element.className = "";
+    init();
     if (token !== null) {
       var newCompleted = completed;
       newCompleted[activeStep] = true;
       setCompleted(newCompleted);
       handleNext();
     }
-  }, [getAges, getIndication, getEffet, getMedicament, getVoix]);
+  }, [getAges, getIndication, getMedicament, getVoix]);
 
   const onClick = () => {
     if (token === null) {

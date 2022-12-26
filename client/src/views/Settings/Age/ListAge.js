@@ -1,9 +1,8 @@
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback } from "react";
-import { fetchAge, deleteAge, ageChangeEtat } from "../../../Redux/ageReduce";
+import { fetchAge, ageChangeEtat } from "../../../Redux/ageReduce";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import SweetAlert from "react-bootstrap-sweetalert";
 import { toast, ToastContainer } from "react-toastify";
 import MaterialReactTable from "material-react-table";
 import { useMemo } from "react";
@@ -11,9 +10,11 @@ import { useTranslation } from "react-multi-lang";
 import { MRT_Localization_FR } from "material-react-table/locales/fr";
 import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_AR } from "../../utils/ar_table";
+import { openDB } from "idb";
 
 // core components
-function ListAge() {
+function ListAge({ onlineStatus }) {
+  let db;
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   const dispatch = useDispatch();
@@ -41,6 +42,12 @@ function ListAge() {
       {
         header: t("description"),
         accessorKey: "description",
+        Cell: ({ cell }) =>
+          lang === "fr"
+            ? cell.row.original.description
+            : lang === "en"
+            ? cell.row.original.description_en
+            : cell.row.original.description_ar,
       },
       {
         header: t("state"),
@@ -51,38 +58,41 @@ function ListAge() {
       {
         header: t("actions"),
         accessorKey: "id",
-        Cell: ({ cell, row }) => (
-          <div className="actions-right block_action">
-            <Button
-              onClick={() => {
-                navigate("/age/update/" + cell.row.original.id);
-              }}
-              variant="warning"
-              size="sm"
-              className="text-warning btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              onClick={() => {
-                changeEtat(cell.row.original.id, cell.row.original.etat);
-              }}
-              variant="danger"
-              size="sm"
-              className={
-                cell.row.original.etat === 1
-                  ? "text-success btn-link"
-                  : "text-danger btn-link"
-              }
-            >
-              <i
+        Cell: ({ cell, row }) =>
+          onlineStatus === 1 ? (
+            <div className="actions-right block_action">
+              <Button
+                onClick={() => {
+                  navigate("/age/update/" + cell.row.original.id);
+                }}
+                variant="warning"
+                size="sm"
+                className="text-warning btn-link edit"
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
+                onClick={() => {
+                  changeEtat(cell.row.original.id, cell.row.original.etat);
+                }}
+                variant="danger"
+                size="sm"
                 className={
-                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  cell.row.original.etat === 1
+                    ? "text-success btn-link"
+                    : "text-danger btn-link"
                 }
-              />
-            </Button>
-          </div>
-        ),
+              >
+                <i
+                  className={
+                    cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  }
+                />
+              </Button>
+            </div>
+          ) : (
+            ""
+          ),
       },
       //end
     ],
@@ -92,16 +102,56 @@ function ListAge() {
     navigate.push("/ajouterAge");
   }
 
-  const getAge = useCallback(
-    async (titre) => {
-      var age = await dispatch(fetchAge());
-      setEntities(age.payload);
-    },
-    [dispatch]
-  );
+  //storeMedicament
+  const storeAge = useCallback(async (res) => {
+    const tx = db.transaction("ages", "readwrite");
+    for (let index = 0; index < res.length; index++) {
+      await tx.objectStore("ages").add({
+        description: res[index].description,
+        description_en: res[index].description_en,
+        description_ar: res[index].description_ar,
+        etat: res[index].etat,
+        id: res[index].id,
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 9,
+      });
+    }
+  }, []);
+
+  async function clearAge(res) {
+    let txMedicament = db.transaction("ages", "readwrite");
+    await txMedicament.objectStore("ages").clear();
+    if (res.length != 0) storeAge(res);
+  }
+
+  const getAge = useCallback(async () => {
+    var age = await dispatch(fetchAge());
+    var res = await age.payload;
+    setEntities(res);
+    if (res.length !== 0) {
+      clearAge(res);
+    }
+  }, [dispatch]);
+
+  async function initAge() {
+    const tx = db.transaction("ages", "readwrite");
+    let ageStore = tx.objectStore("ages");
+    let ages = await ageStore.getAll();
+    setEntities(ages);
+  }
+
+  async function init() {
+    db = await openDB("medis", 1, {});
+    if (onlineStatus === 1) getAge();
+    else {
+      initAge();
+    }
+  }
 
   useEffect(() => {
-    getAge();
+    init();
   }, [getAge]); //now shut up eslint
 
   function changeEtat(id, e) {
@@ -149,18 +199,22 @@ function ListAge() {
       <Container fluid>
         <Row>
           <Col md="12">
-            <Button
-              id="saveBL"
-              className="btn-wd  mr-1 float-left"
-              type="button"
-              variant="success"
-              onClick={ajouter}
-            >
-              <span className="btn-label">
-                <i className="fas fa-plus"></i>
-              </span>
-              {t("age.add")}
-            </Button>
+            {onlineStatus === 1 ? (
+              <Button
+                id="saveBL"
+                className="btn-wd  mr-1 float-left"
+                type="button"
+                variant="success"
+                onClick={ajouter}
+              >
+                <span className="btn-label">
+                  <i className="fas fa-plus"></i>
+                </span>
+                {t("age.add")}
+              </Button>
+            ) : (
+              ""
+            )}
           </Col>
           <Col md="12">
             <h4 className="title">{t("age.list")}</h4>

@@ -9,12 +9,14 @@ import { useHistory } from "react-router-dom";
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import { useTranslation } from "react-multi-lang";
-import { MRT_Localization_FR } from 'material-react-table/locales/fr';
-import { MRT_Localization_EN } from 'material-react-table/locales/en';
-import { MRT_Localization_AR } from '../../utils/ar_table';
+import { MRT_Localization_FR } from "material-react-table/locales/fr";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
+import { MRT_Localization_AR } from "../../utils/ar_table";
+import { openDB } from "idb";
 
 // core components
-function ListSpecialite() {
+function ListSpecialite({ onlineStatus }) {
+  let db;
   let lang = window.localStorage.getItem("lang");
   const t = useTranslation();
   document.title = "Liste des specialites";
@@ -43,6 +45,12 @@ function ListSpecialite() {
       {
         header: t("name"),
         accessorKey: "nom",
+        Cell: ({ cell }) =>
+          lang === "fr"
+            ? cell.row.original.nom
+            : lang === "en"
+            ? cell.row.original.nom_en
+            : cell.row.original.nom_ar,
       },
       {
         header: t("state"),
@@ -53,40 +61,43 @@ function ListSpecialite() {
       {
         header: t("actions"),
         accessorKey: "id",
-        Cell: ({ cell, row }) => (
-          <div className="actions-right block_action">
-            <Button
-              onClick={() => {
-                navigate.push("/specialite/update/" + cell.row.original.id);
-              }}
-              variant="warning"
-              size="sm"
-              className="text-warning btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              id={"idLigne_" + cell.row.original.id}
-              onClick={(e) => {
-                changeEtat(cell.row.original.id, cell.row.original.etat);
-              }}
-              variant="danger"
-              size="sm"
-              className={
-                cell.row.original.etat === 1
-                  ? "text-success btn-link"
-                  : "text-danger btn-link"
-              }
-            >
-              <i
-                className={
-                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
-                }
+        Cell: ({ cell, row }) =>
+          onlineStatus === 1 ? (
+            <div className="actions-right block_action">
+              <Button
+                onClick={() => {
+                  navigate.push("/specialite/update/" + cell.row.original.id);
+                }}
+                variant="warning"
+                size="sm"
+                className="text-warning btn-link edit"
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
                 id={"idLigne_" + cell.row.original.id}
-              />
-            </Button>
-          </div>
-        ),
+                onClick={(e) => {
+                  changeEtat(cell.row.original.id, cell.row.original.etat);
+                }}
+                variant="danger"
+                size="sm"
+                className={
+                  cell.row.original.etat === 1
+                    ? "text-success btn-link"
+                    : "text-danger btn-link"
+                }
+              >
+                <i
+                  className={
+                    cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  }
+                  id={"idLigne_" + cell.row.original.id}
+                />
+              </Button>
+            </div>
+          ) : (
+            ""
+          ),
       },
       //end
     ],
@@ -111,17 +122,55 @@ function ListSpecialite() {
     });
   }
 
-  const getSpecialite = useCallback(
-    async (titre) => {
-      var specialite = await dispatch(fetchSpecialite());
-      setEntities(specialite.payload);
-    },
-    [dispatch]
-  );
+  //storeMedicament
+  const storeSp = useCallback(async (res) => {
+    const tx = db.transaction("specialites", "readwrite");
+    for (let index = 0; index < res.length; index++) {
+      await tx.objectStore("specialites").add({
+        nom: res[index].nom,
+        nom_en: res[index].nom_en,
+        nom_ar: res[index].nom_ar,
+        etat: res[index].etat,
+        id: res[index].id,
+        saved: 1,
+        updated: 0,
+        deleted: 0,
+        type_table: 9,
+      });
+    }
+  }, []);
+
+  async function clearSp(res) {
+    let txMedicament = db.transaction("specialites", "readwrite");
+    await txMedicament.objectStore("specialites").clear();
+    if (res.length != 0) storeSp(res);
+  }
+
+  const getSpecialite = useCallback(async () => {
+    var specialite = await dispatch(fetchSpecialite());
+    var res = await specialite.payload;
+    setEntities(res);
+    clearSp(res);
+  }, [dispatch]);
+
+  async function initSp() {
+    const tx = db.transaction("specialites", "readwrite");
+    let spStore = tx.objectStore("specialites");
+    let sp = await spStore.getAll();
+    setEntities(sp);
+  }
+
+  async function init() {
+    db = await openDB("medis", 1, {});
+    if (onlineStatus === 1) getSpecialite();
+    else {
+      initSp();
+    }
+  }
 
   useEffect(() => {
-    getSpecialite();
-  }, [getSpecialite]); //now shut up eslint
+    init();
+  }, []); //now shut up eslint
 
   function ListTable({ list }) {
     return (
@@ -152,18 +201,22 @@ function ListSpecialite() {
         <ToastContainer />
         <Row>
           <Col md="12">
-            <Button
-              id="saveBL"
-              className="btn-wd  mr-1 float-left"
-              type="button"
-              variant="success"
-              onClick={ajouter}
-            >
-              <span className="btn-label">
-                <i className="fas fa-plus"></i>
-              </span>
-              {t("speciality.add")}
-            </Button>
+            {onlineStatus === 1 ? (
+              <Button
+                id="saveBL"
+                className="btn-wd  mr-1 float-left"
+                type="button"
+                variant="success"
+                onClick={ajouter}
+              >
+                <span className="btn-label">
+                  <i className="fas fa-plus"></i>
+                </span>
+                {t("speciality.add")}
+              </Button>
+            ) : (
+              ""
+            )}
           </Col>
           <Col md="12">
             <h4 className="title">{t("speciality.list")}</h4>

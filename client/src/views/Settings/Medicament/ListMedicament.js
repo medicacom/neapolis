@@ -1,13 +1,10 @@
-import SweetAlert from "react-bootstrap-sweetalert";
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback, useMemo } from "react";
 import {
   fetchMedicament,
   medicamentChangeEtat,
-  medicamentDeleted,
 } from "../../../Redux/medicamentReduce";
 import { useDispatch } from "react-redux";
-import { verification } from "../../../Redux/usersReduce";
 import { toast, ToastContainer } from "react-toastify";
 import MaterialReactTable from "material-react-table";
 import { useHistory } from "react-router";
@@ -31,6 +28,12 @@ function ListMedicament({ onlineStatus }) {
       {
         header: t("name"),
         accessorKey: "nom",
+        Cell: ({ cell }) =>
+          lang === "fr"
+            ? cell.row.original.nom
+            : lang === "en"
+            ? cell.row.original.nom_en
+            : cell.row.original.nom_ar,
       },
       {
         header: t("Drugs.form"),
@@ -49,38 +52,41 @@ function ListMedicament({ onlineStatus }) {
       {
         header: t("actions"),
         accessorKey: "id",
-        Cell: ({ cell, row }) => (
-          <div className="actions-right block_action">
-            <Button
-              onClick={() => {
-                navigate.push("/medicament/update/" + cell.row.original.id);
-              }}
-              variant="warning"
-              size="sm"
-              className="text-warning btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              onClick={(event) => {
-                changeEtat(cell.row.original.id, cell.row.original.etat);
-              }}
-              variant="danger"
-              size="sm"
-              className={
-                cell.row.original.etat === 1
-                  ? "text-success btn-link delete"
-                  : "text-danger btn-link delete"
-              }
-            >
-              <i
+        Cell: ({ cell, row }) =>
+          onlineStatus === 1 ? (
+            <div className="actions-right block_action">
+              <Button
+                onClick={() => {
+                  navigate.push("/medicament/update/" + cell.row.original.id);
+                }}
+                variant="warning"
+                size="sm"
+                className="text-warning btn-link edit"
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
+                onClick={(event) => {
+                  changeEtat(cell.row.original.id, cell.row.original.etat);
+                }}
+                variant="danger"
+                size="sm"
                 className={
-                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  cell.row.original.etat === 1
+                    ? "text-success btn-link delete"
+                    : "text-danger btn-link delete"
                 }
-              />
-            </Button>
-          </div>
-        ),
+              >
+                <i
+                  className={
+                    cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  }
+                />
+              </Button>
+            </div>
+          ) : (
+            ""
+          ),
       },
       //end
     ],

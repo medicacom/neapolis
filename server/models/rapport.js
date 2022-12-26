@@ -118,6 +118,7 @@ var rapport = sequelize.define(
       type: Sequelize.INTEGER,
       unique: false,
       allowNull: true,
+      onDelete: "cascade",
       references: {
         model: patient,
         key: "id",
@@ -221,7 +222,7 @@ rapport.belongsTo(passager, { as: "passagers", foreignKey: "id_passager" });
 
 // create all the defined tables in the specified database.
 sequelize
-  .sync()
+  .sync({alter:true})
   .then(() => {
     console.log(
       "rapports table has been successfully created, if one doesn't exist"

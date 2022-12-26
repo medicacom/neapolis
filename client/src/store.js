@@ -11,6 +11,7 @@ import effet_indesirableReducer from "./Redux/effet_indesirableReduce";
 import medicamentReducer from "./Redux/medicamentReduce";
 import specialiteReducer from "./Redux/specialiteReduce";
 import ageReducer from "./Redux/ageReduce";
+import paysReducer from "./Redux/paysReduce";
 export default configureStore({
   reducer: {
     users: usersReducer,
@@ -24,6 +25,7 @@ export default configureStore({
     effet_indesirable: effet_indesirableReducer,
     medicament: medicamentReducer,
     specialite: specialiteReducer,
+    pays: paysReducer,
     age: ageReducer,
   },
   middleware: (getDefaultMiddleware) =>

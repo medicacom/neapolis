@@ -7,9 +7,9 @@ import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import { openDB } from "idb";
 import { useTranslation } from "react-multi-lang";
-import { MRT_Localization_FR } from 'material-react-table/locales/fr';
-import { MRT_Localization_EN } from 'material-react-table/locales/en';
-import { MRT_Localization_AR } from '../../utils/ar_table';
+import { MRT_Localization_FR } from "material-react-table/locales/fr";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
+import { MRT_Localization_AR } from "../../utils/ar_table";
 // core components
 function ListUser({ onlineStatus }) {
   let lang = window.localStorage.getItem("lang");
@@ -65,38 +65,41 @@ function ListUser({ onlineStatus }) {
     {
       header: t("actions"),
       accessorKey: "id",
-      Cell: ({ cell, row }) => (
-        <div className="actions-right block_action">
-          <Button
-            onClick={() => {
-              navigate.push("/utilisateur/update/" + cell.row.original.id);
-            }}
-            variant="warning"
-            size="sm"
-            className="text-warning btn-link edit"
-          >
-            <i className="fa fa-edit" />
-          </Button>
-          <Button
-            onClick={(event) => {
-              changeEtat(cell.row.original.id, cell.row.original.etat);
-            }}
-            variant="danger"
-            size="sm"
-            className={
-              cell.row.original.etat === 1
-                ? "text-success btn-link delete"
-                : "text-danger btn-link delete"
-            }
-          >
-            <i
+      Cell: ({ cell, row }) =>
+        onlineStatus === 1 ? (
+          <div className="actions-right block_action">
+            <Button
+              onClick={() => {
+                navigate.push("/utilisateur/update/" + cell.row.original.id);
+              }}
+              variant="warning"
+              size="sm"
+              className="text-warning btn-link edit"
+            >
+              <i className="fa fa-edit" />
+            </Button>
+            <Button
+              onClick={(event) => {
+                changeEtat(cell.row.original.id, cell.row.original.etat);
+              }}
+              variant="danger"
+              size="sm"
               className={
-                cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                cell.row.original.etat === 1
+                  ? "text-success btn-link delete"
+                  : "text-danger btn-link delete"
               }
-            />
-          </Button>
-        </div>
-      ),
+            >
+              <i
+                className={
+                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                }
+              />
+            </Button>
+          </div>
+        ) : (
+          ""
+        ),
     },
     //end
   ]);
@@ -171,10 +174,20 @@ function ListUser({ onlineStatus }) {
           updated: 0,
           valider: resUsers[index].valider,
           id_gouvernorat: resUsers[index].id_role,
-          nom_gouvernorat: resUsers[index].gouvernorats.libelle+"@@"+resUsers[index].gouvernorats.libelle_en+"@@"+resUsers[index].gouvernorats.libelle_ar,
+          nom_gouvernorat:
+            resUsers[index].gouvernorats.libelle +
+            "@@" +
+            resUsers[index].gouvernorats.libelle_en +
+            "@@" +
+            resUsers[index].gouvernorats.libelle_ar,
           id_sp: resUsers[index].id_role,
-          nom_sp: resUsers[index].specialites.nom+"@@"+resUsers[index].specialites.nom_en+"@@"+resUsers[index].specialites.nom_ar,
-          autre_sp: resUsers[index].autre_sp
+          nom_sp:
+            resUsers[index].specialites.nom +
+            "@@" +
+            resUsers[index].specialites.nom_en +
+            "@@" +
+            resUsers[index].specialites.nom_ar,
+          autre_sp: resUsers[index].autre_sp,
         });
       }
     },

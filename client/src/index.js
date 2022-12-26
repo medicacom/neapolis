@@ -38,7 +38,7 @@ var dir = lang !== "ar" ? "ltr" : "rtl";
 if (lang) setLanguage(lang);
 else window.localStorage.setItem("lang", "fr");
 var testLogin = 0;
-console.log("voice");
+console.log("fetchPays");
 
 openDB("medis", 1, {
   upgrade(db) {
@@ -150,13 +150,27 @@ openDB("medis", 1, {
     });
     storePersonel.createIndex("id", "id");
 
-    //create personels store
+    //create notifications store
     var storeNotifications = db.createObjectStore("notifications", {
       keyPath: "id",
       autoIncrement: true,
     });
     storeNotifications.createIndex("id", "id");
     storeNotifications.createIndex("id_user", "id_user");
+
+    //create ages store
+    var storeAges = db.createObjectStore("ages", {
+      keyPath: "id",
+      autoIncrement: true,
+    });
+    storeAges.createIndex("id", "id");
+
+    //create pays store
+    var storePays = db.createObjectStore("pays", {
+      keyPath: "id",
+      autoIncrement: true,
+    });
+    storePays.createIndex("id", "id");
   },
 });
 var id = 0;

@@ -1,10 +1,8 @@
-import SweetAlert from "react-bootstrap-sweetalert";
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useCallback, useMemo } from "react";
 import {
   fetchVoix_administration,
   voix_administrationChangeEtat,
-  voix_administrationDeleted,
 } from "../../../Redux/voix_administrationReduce";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,9 +10,9 @@ import MaterialReactTable from "material-react-table";
 import { useHistory } from "react-router";
 import { openDB } from "idb";
 import { useTranslation } from "react-multi-lang";
-import { MRT_Localization_FR } from 'material-react-table/locales/fr';
-import { MRT_Localization_EN } from 'material-react-table/locales/en';
-import { MRT_Localization_AR } from '../../utils/ar_table';
+import { MRT_Localization_FR } from "material-react-table/locales/fr";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
+import { MRT_Localization_AR } from "../../utils/ar_table";
 // core components
 function ListVoix_administration({ onlineStatus }) {
   let lang = window.localStorage.getItem("lang");
@@ -30,6 +28,12 @@ function ListVoix_administration({ onlineStatus }) {
       {
         header: t("description"),
         accessorKey: "description",
+        Cell: ({ cell }) =>
+          lang === "fr"
+            ? cell.row.original.description
+            : lang === "en"
+            ? cell.row.original.description_en
+            : cell.row.original.description_ar,
       },
       {
         header: t("state"),
@@ -40,51 +44,43 @@ function ListVoix_administration({ onlineStatus }) {
       {
         header: t("actions"),
         accessorKey: "id",
-        Cell: ({ cell, row }) => (
-          <div className="actions-right block_action">
-            <Button
-              onClick={() => {
-                navigate.push(
-                  "/voix_administration/update/" + cell.row.original.id
-                );
-              }}
-              variant="warning"
-              size="sm"
-              className="text-warning btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              onClick={(event) => {
-                changeEtat(cell.row.original.id, cell.row.original.etat);
-              }}
-              variant="danger"
-              size="sm"
-              className={
-                cell.row.original.etat === 1
-                  ? "text-success btn-link delete"
-                  : "text-danger btn-link delete"
-              }
-            >
-              <i
+        Cell: ({ cell, row }) =>
+          onlineStatus === 1 ? (
+            <div className="actions-right block_action">
+              <Button
+                onClick={() => {
+                  navigate.push(
+                    "/voix_administration/update/" + cell.row.original.id
+                  );
+                }}
+                variant="warning"
+                size="sm"
+                className="text-warning btn-link edit"
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
+                onClick={(event) => {
+                  changeEtat(cell.row.original.id, cell.row.original.etat);
+                }}
+                variant="danger"
+                size="sm"
                 className={
-                  cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  cell.row.original.etat === 1
+                    ? "text-success btn-link delete"
+                    : "text-danger btn-link delete"
                 }
-              />
-            </Button>
-            {/*  <Button
-              id={"idLigne_" + cell.row.original.id}
-              onClick={(e) => {
-                confirmMessage(cell.row.original.id,e);
-              }}
-              variant="danger"
-              size="sm"
-              className="text-danger btn-link delete"
-            >
-              <i className="fa fa-trash" id={"idLigne_" + cell.row.original.id}/>
-            </Button> */}
-          </div>
-        ),
+              >
+                <i
+                  className={
+                    cell.row.original.etat === 1 ? "fa fa-check" : "fa fa-times"
+                  }
+                />
+              </Button>
+            </div>
+          ) : (
+            ""
+          ),
       },
       //end
     ],
@@ -106,7 +102,7 @@ function ListVoix_administration({ onlineStatus }) {
         </strong>
       );
   };
-  
+
   const hideAlert = () => {
     setAlert(null);
   };

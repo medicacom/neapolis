@@ -14,6 +14,7 @@ router.post("/addMedicament", auth, (req, res) => {
   var dosage = req.body.dosage;
   var id_indication = req.body.id_indication;
   var id_voix = req.body.id_voix;
+  var id_pays = req.body.id_pays;
   if (id == 0) {
     medicament
       .create({
@@ -24,6 +25,7 @@ router.post("/addMedicament", auth, (req, res) => {
         dosage: dosage,
         id_voix: id_voix,
         id_indication: id_indication,
+        id_pays: id_pays,
         etat: 1,
       })
       .then((r) => {
@@ -47,6 +49,7 @@ router.post("/addMedicament", auth, (req, res) => {
               dosage: dosage,
               id_voix: id_voix,
               id_indication: id_indication,
+              id_pays: id_pays,
               etat: 1,
             },
             { where: { id: id } }
@@ -95,7 +98,7 @@ router.post("/getMedicament", auth, (req, res) => {
   medicament
     .findOne({
       where: { id: id },
-      include: ["voix_administrations", "indications"],
+      include: ["voix_administrations", "indications","pays"],
     })
     .then(function (r1) {
       if (!r1) {

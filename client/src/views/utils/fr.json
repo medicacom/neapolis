@@ -1,6 +1,6 @@
 {
-  "produit":"Produit",
-  "contact":"Contact",
+  "produit": "Produit",
+  "contact": "Contact",
   "save": "Enregistrer",
   "add_txt": "Insertion avec succes",
   "update_txt": "Modifier avec succes",
@@ -35,13 +35,15 @@
   "disabled": "Désactivé",
   "validate": "Valider",
   "refuse": "Refuser",
+  "validate_txt": "Vous êtes sure de valider ce utilisateur?",
+  "refuse_txt": "Vous éte sure de refuser ce utilisateur?",
   "envoyer": "Envoyer",
   "close": "Fermer",
   "demande_insciption": "Votre demande a été envoyé avec succes",
   "declaration_send": "Votre déclaration a été envoyé avec succes",
   "age": {
     "list": "Liste des tranches d'âges",
-    "add": "Ajouter un tranche d'âge",
+    "add": "Ajouter une tranche d'âge",
     "update": "Modifier âge"
   },
   "role": {
@@ -130,7 +132,7 @@
     "description_eff": "Description des effets indésirables",
     "gravite": "Quel est (était) le niveau de gravité des effets indésirables ?",
     "grave": "Non grave",
-    "hospitalisation": "Hospitialisation ou prolongation de l’hospitalisation",
+    "hospitalisation": "Hospitalisation ou prolongation de l'hospitalisation",
     "pronostic": "Mise en jeu du pronostic",
     "deces": "Décès",
     "incapacite": "Incapacité ou invalidité durable ou importante",
@@ -142,23 +144,23 @@
     "traites_inc": "Inconnu",
     "evolution": "Évolution",
     "evolution_txt1": "Guérison",
-    "evolution_txt2": "En cours d’amelioration",
+    "evolution_txt2": "En cours d'amélioration",
     "evolution_txt3": "Guérison avec séquelles",
-    "evolution_txt4": "Pas d’amelioration",
+    "evolution_txt4": "Pas d'amélioration",
     "evolution_txt5": "Aggravation",
     "evolution_txt6": "Décès",
     "survenus": "Les effets indésirables sont-ils survenus, selon vous, dans l’une des situations suivantes ?",
     "survenus_txt1": "Mésusage d’un médicament",
     "survenus_txt2": "Erreur médicamenteuse",
     "survenus_txt3": "Abus médicamenteux",
-    "survenus_txt4": "Surbosage médicamenteux",
+    "survenus_txt4": "Surdosage médicamenteux",
     "survenus_txt5": "Exposition professionnelle au médicament",
     "survenus_txt6": "Aucune de ces options",
     "poid": "Poids (en kg)",
     "poid_place": "p. ex. 60",
     "taille": "Taille (en cm)",
     "taille_place": "ex. 170",
-    "allergie_pop": "allergie",
+    "allergie_pop": "Allergie",
     "allergie": "Affections médicales,allergies,grossesse (durée), historique médical et autres informations telles que tabagisme et consommation d’alcool.",
     "date_admin": "Si vous ne connaissez pas la date exacte de début et/ou de fin du traitement, vous pouvez donner plus d’informations sur le lien temporel ici .",
     "therapeutique": "Quelle est l’indication thérapeutique du médicament ?"
@@ -170,7 +172,8 @@
     "voice": "Voix administrations",
     "form": "Forme galénique",
     "dosage": "dosage",
-    "indication": "Indication"
+    "indication": "Indication",
+    "country": "pays"
   },
   "news": {
     "add": "Ajouter une nouvelle",
@@ -180,7 +183,18 @@
     "description": "Description",
     "file": "Fichier",
     "user": "Utilisateur",
-    "date": "date"
+    "date": "date",
+    "detail": "Détails"
+  },
+  "pays": {
+    "add": "Ajouter un pays",
+    "update": "Modifier pays",
+    "list": "Liste des pays",
+    "nom": "Nom",
+    "nom_en": "Nom en anglais",
+    "code": "Code",
+    "alpha2": "Alpha2",
+    "alpha3": "Alpha3"
   },
   "lang": {
     "en": "Anglais",

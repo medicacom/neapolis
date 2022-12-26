@@ -54,6 +54,10 @@ import ListAge from "./views/Settings/Age/ListAge";
 import Declaration from "./views/Global/Declaration";
 import ListDeclaration from "./views/Global/ListDeclaration";
 
+//MarcheIms
+import ListPays from "./views/Settings/Pays/ListPays";
+import AjouterPays from "./views/Settings/Pays/AjouterPays";
+
 const Components = {
   ListUser,
   AjouterUser,
@@ -82,6 +86,8 @@ const Components = {
   Declaration,
   AjouterAge,
   ListAge,
-  ListDeclaration
+  ListDeclaration,
+  AjouterPays,
+  ListPays
 };
 export default Components;
